@@ -33,8 +33,8 @@
           <h2 class="card-title">PoSStore</h2>
           <form action="authenticate.php" method="post">
             <div class="form-group">
-              <label for="companyname">Company Name</label>
-              <input type="text" class="form-control" id="companyname" name="companyname" required>
+              <label for="company">Company Name</label>
+              <input type="text" class="form-control" id="company" name="company" required>
             </div>
             <div class="form-group">
               <label for="username">Username</label>
