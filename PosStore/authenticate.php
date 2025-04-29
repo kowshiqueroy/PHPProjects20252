@@ -33,8 +33,9 @@ include_once('conn.php');
             header("Location: notice.php?msg=Your+account+is+currently+blocked.+Please+contact+the+admin+for+more+information.");
             exit();
         }
-        $_SESSION['user'] = true;
+       
         $_SESSION['uid'] = $row['id'];
+        $_SESSION['username'] = $row['username'];
         $_SESSION['company'] = $companyid;
         $_SESSION['role'] = $row['role'];
         $sql = "SELECT status FROM company WHERE id = '$companyid'";
