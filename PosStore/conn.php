@@ -5,4 +5,7 @@
     die("Connection failed: " . mysqli_connect_error());
   }
   session_start();
+
+  date_default_timezone_set('Asia/Dhaka');
+  
 ?>

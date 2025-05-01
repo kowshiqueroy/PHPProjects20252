@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
@@ -36,7 +36,7 @@
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet"> -->
 
     <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
@@ -65,18 +65,16 @@
                 <div class="navbar-nav ms-auto p-4 p-lg-0">
                     <a href="pos.php" class="nav-item nav-link active">POS</a>
                     <a href="users.php" class="nav-item nav-link">Users</a>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Requisition</a>
-                        <div class="dropdown-menu rounded-0 m-0">
-                            <a href="radd.php" class="dropdown-item">Add</a>
-                            <a href="rlist.php" class="dropdown-item">List</a>
-                        </div>
-                    </div>
+                    
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">In</a>
                         <div class="dropdown-menu rounded-0 m-0">
                             <a href="inadd.php" class="dropdown-item">Add</a>
                             <a href="inlist.php" class="dropdown-item">List</a>
+                            <a href="type.php" class="dropdown-item">Type</a>
+                            <a href="unit.php" class="dropdown-item">Unit</a>
+                            <a href="product.php" class="dropdown-item">Product</a>
+
                         </div>
                     </div>
                     <div class="nav-item dropdown">
