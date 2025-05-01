@@ -111,6 +111,41 @@ include 'header.php';
 <?php
 if (isset($_GET['delid'])) {
     $delid = $_GET['delid'];
+
+
+
+
+
+
+    $sql = "SELECT id FROM productin WHERE personid = '$delid'";
+    $result = mysqli_query($conn, $sql);
+    while ($row = mysqli_fetch_assoc($result)) {
+        echo $row['id']."<br>";
+
+        $sql = "SELECT type, productname, unit, quantity FROM productin WHERE id = '".$row['id']."'";
+        $result2 = mysqli_query($conn, $sql);
+        $row2 = mysqli_fetch_assoc($result2);
+        $stype = $row2['type'];
+        $pname = $row2['productname'];
+        $punit = $row2['unit'];
+        $pquantity = $row2['quantity'];
+        $sql = "SELECT id, stock FROM product WHERE type = '$stype' AND name = '$pname' AND unit = '$punit' and company = '".$_SESSION['company']."'";
+        $result2 = mysqli_query($conn, $sql);
+        $row2 = mysqli_fetch_assoc($result2);
+        $squantity = $row2['stock'];
+        $psid= $row2['id'];
+
+
+        $sql = "UPDATE product SET stock = '$squantity' - '$pquantity' WHERE id = '$psid'";
+        if (mysqli_query($conn, $sql)) {}
+        
+
+    }
+
+
+
+
+
     $sql = "DELETE FROM invoicein WHERE id = '$delid'";
     if (mysqli_query($conn, $sql)) {
         $sql = "DELETE FROM productin WHERE personid = '$delid'";

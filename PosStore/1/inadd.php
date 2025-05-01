@@ -159,6 +159,35 @@ if (isset($_GET['id'])) {
         $paymentmethod = $_GET['paymentmethod'];
         $remarks = $_GET['remarks'];
 
+
+
+        $sql = "SELECT id FROM productin WHERE personid = '$id'";
+        $result = mysqli_query($conn, $sql);
+        while ($row = mysqli_fetch_assoc($result)) {
+            echo $row['id']."<br>";
+
+            $sql = "SELECT type, productname, unit, quantity FROM productin WHERE id = '".$row['id']."'";
+            $result2 = mysqli_query($conn, $sql);
+            $row2 = mysqli_fetch_assoc($result2);
+            $stype = $row2['type'];
+            $pname = $row2['productname'];
+            $punit = $row2['unit'];
+            $pquantity = $row2['quantity'];
+            $sql = "SELECT id, stock FROM product WHERE type = '$stype' AND name = '$pname' AND unit = '$punit' and company = '".$_SESSION['company']."'";
+            $result2 = mysqli_query($conn, $sql);
+            $row2 = mysqli_fetch_assoc($result2);
+            $squantity = $row2['stock'];
+            $psid= $row2['id'];
+
+
+            $sql = "UPDATE product SET stock = '$squantity' + '$pquantity' WHERE id = '$psid'";
+            if (mysqli_query($conn, $sql)) {}
+            
+
+        }
+
+       
+
         $sql = "UPDATE invoicein SET  confirm = 1, paymentmethod = '$paymentmethod', remarks = '$remarks' WHERE id = '$id'";
         if (mysqli_query($conn, $sql)) {
             echo "<script>window.location.href = 'inlist.php';</script>";
