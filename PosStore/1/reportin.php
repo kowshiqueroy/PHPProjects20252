@@ -75,7 +75,7 @@ include 'header.php';
         $where .= " AND status = ".$_GET['status']." ";
     }
    
-    $sql = "SELECT * FROM invoicein WHERE confirm = 1 AND company = '".$_SESSION['company']."'".$where;
+    $sql = "SELECT * FROM invoicein WHERE confirm = 1 AND company = '".$_SESSION['company']."'".$where." ORDER BY id DESC";
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) {
       
@@ -99,22 +99,26 @@ include 'header.php';
             WHERE p.personid = '".$row['id']."'".$where2;
             $result2 = mysqli_query($conn, $sql2);
             if (mysqli_num_rows($result2) > 0) {
-                echo "<div style='text-align: center;'>";
-                echo "ID: ".$row['id'];
-                echo " Person: ".$row['person'];
-                echo " Total Price: ".$row['totalprice'];
-                echo " Date: ".$row['date'];
-                echo " Status: ".($row['status'] == 0 ? "IN" : "Back");
-                echo " Payment Method: ".$row['paymentmethod'];
-                echo " Remarks: ".$row['remarks'];
-                echo " Updated: ".date('d-m-Y H:i:s', strtotime($row['timestamp']));
-                echo "</div>";
+             
               
 
 
-                echo "<tr><td colspan='8'>";
-                echo "<table class='table table-striped'>";
-                echo "<thead><tr>";
+               
+                echo "<table class='table table-bordered'>";
+
+
+                echo "<tr><td colspan='11' style='text-align: center;'>";
+                echo "ID: ".$row['id'];
+                echo " <i class='fa fa-user'></i> ".$row['person'];
+                echo " <i class='fa fa-wallet'></i> ".$row['totalprice'];
+                echo " <i class='fa fa-calendar'></i> ".$row['date'];
+                echo " <i class='fa ".($row['status'] == 0 ? "fa-arrow-up" : "fa-arrow-down")."'></i> ".($row['status'] == 0 ? "OUT" : "Back");
+                echo " <i class='fa fa-money'></i> ".$row['paymentmethod'];
+                echo " <i class='fa fa-comment'></i> ".$row['remarks'];
+                echo " <i class='fa fa-clock'></i> ".date('d-m-Y H:i:s', strtotime($row['timestamp']));
+                echo "</td></tr>";
+
+                echo "<tr>";
                 echo "<th>ID</th>";
                 echo "<th>Type</th>";
                 echo "<th>Product Name</th>";
@@ -126,8 +130,8 @@ include 'header.php';
                 echo "<th>Mfg</th>"; 
                  echo "<th>Exp</th>";
                 echo "<th>Remarks</th>";
-                echo "</tr></thead>";
-                echo "<tbody>";
+                echo "</tr>";
+               
                 while ($row2 = mysqli_fetch_assoc($result2)) {
                     echo "<tr>";
                     echo "<td>".$row2['id']."</td>";
@@ -146,7 +150,7 @@ include 'header.php';
 
                 
                 
-                echo "</tbody>";
+              
                 echo "</table>";
               
             }

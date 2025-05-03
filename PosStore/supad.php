@@ -5,15 +5,20 @@ if(isset($_SESSION['supad'])){
     header("Location: supad/index.php");
     exit;
 }
-
 ?>
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <title>Super Admin Login - PoSStore</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
   <style>
+    body {
+      background: linear-gradient(to right, #8B9467, #F7D2C4);
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+    }
     .container {
       display: flex;
       justify-content: center;
@@ -23,49 +28,78 @@ if(isset($_SESSION['supad'])){
     .card {
       width: 100%;
       max-width: 400px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 20px;
     }
     .card-header {
-      background-color: #007bff;
-      color: white;
-      border-bottom: none;
-      padding: 15px;
-      border-radius: 10px 10px 0 0;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
     }
     .btn-primary {
-      background-color: #007bff;
+      background: linear-gradient(to right, #FFC107, #FFA07A);
       border: none;
-      border-radius: 50px;
-      padding: 10px 20px;
+      border-radius: 30px;
+      padding: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      color: #fff;
     }
     .btn-primary:hover {
-      background-color: #0056b3;
+      background: linear-gradient(to right, #FF9900, #FFC107);
+    }
+    .form-control {
+      border-radius: 30px;
+      padding: 12px;
+      background-color: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      border: none;
+    }
+    .form-control::placeholder {
+      color: #ddd;
+    }
+    .card-footer {
+      text-align: center;
+      margin-top: 15px;
+    }
+    .card-footer a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .card-footer a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="card">
-      <div class="card-header text-center">
-        <h3>Super Admin Login</h3>
+      <div class="card-header">
+        Super Admin Login
       </div>
       <div class="card-body">
         <form action="super_admin_authenticate.php" method="post">
-          <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" class="form-control" id="username" name="username" required>
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required>
           </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" name="password" required>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
           </div>
-          <button type="submit" class="btn btn-primary btn-block">Login</button>
+          <button type="submit" class="btn btn-primary w-100">Login</button>
         </form>
       </div>
-      <div class="card-footer text-center">
+      <div class="card-footer">
         <a href="index.php">Back to Home</a>
-       
       </div>
     </div>
-
+  </div>
+</body>
+</html>

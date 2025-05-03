@@ -29,13 +29,19 @@ if (mysqli_query($conn, $sql)) {
 }
 
 
-$sql = "INSERT INTO user (company,username, password, role, status)
-VALUES ('0','kowshiqueroy', md5('5877'), 6, 1)
-ON DUPLICATE KEY UPDATE id=id";
-if (mysqli_query($conn, $sql)) {
-    echo "User created successfully";
+$sql = "SELECT * FROM user WHERE username = 'kowshiqueroy'";
+$result = mysqli_query($conn, $sql);
+
+if (mysqli_num_rows($result) > 0) {
+    echo "User already exists";
 } else {
-    echo "Error creating user: " . mysqli_error($conn);
+    $sql = "INSERT INTO user (company, username, password, role, status)
+            VALUES ('0', 'kowshiqueroy', md5('5877'), 6, 1)";
+    if (mysqli_query($conn, $sql)) {
+        echo "User created successfully";
+    } else {
+        echo "Error creating user: " . mysqli_error($conn);
+    }
 }
 
 

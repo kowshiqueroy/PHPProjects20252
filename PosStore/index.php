@@ -1,68 +1,97 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>PoSStore</title>
+  <title>PoSStore - Smart Business Solution</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-+YgY+qJKHgaqTKdVtau4JKUHQ95DP5uUJIE7VGD/lSrdc4bqwno6votZBQIUZrV" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
-    .container{
-      margin-top: 10px;
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
     }
-    .form-control{
-      width: 300px;
+    .container {
+      margin-top: 60px;
     }
-    .card{
-      margin: 0 auto; /* Added */
-      float: none; /* Added */
-      margin-bottom: 10px; /* Added */
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease-in-out;
+    }
+    .card:hover {
+      box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.15);
+      transform: translateY(-5px);
+    }
+    .icon {
+      font-size: 2rem;
+      color: #007bff;
+      margin-right: 10px;
+    }
+    .btn-primary {
+      background-color: #007bff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 18px;
+      border-radius: 30px;
+      transition: background 0.3s ease-in-out;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+    .form-control {
+      background: #f1f3f5;
+      border: 1px solid #ddd;
+      padding: 12px;
+      border-radius: 8px;
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1 class="text-center">Manage Your Store with Us</h1>
+  <header class="text-center py-4">
+    <h1><i class="fa-solid fa-store"></i> PoSStore - Manage Your Business Effortlessly</h1>
   </header>
+
   <div class="container">
-    <div class="row">
-      <div class="col-md-4 col-md-offset-4">
-        <div class="card card-block">
-          <h2 class="card-title">PoSStore</h2>
+    <div class="row justify-content-center">
+      <div class="col-md-5">
+        <div class="card text-center">
+          <h2><i class="fa-solid fa-lock"></i> Login</h2>
           <form action="authenticate.php" method="post">
-            <div class="form-group">
+            <div class="form-group mb-3">
               <label for="company">Company Name</label>
-              <input type="text" class="form-control" id="company" name="company" required>
+              <input type="text" class="form-control" id="company" name="company" placeholder="Enter company name" required>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
               <label for="username">Username</label>
-              <input type="text" class="form-control" id="username" name="username" required>
+              <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
               <label for="password">Password</label>
-              <input type="password" class="form-control" id="password" name="password" required>
+              <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
             </div>
-            <button type="submit" class="btn btn-primary">Login</button>
+            <button type="submit" class="btn btn-primary w-100"><i class="fa-solid fa-sign-in-alt"></i> Login</button>
           </form>
         </div>
       </div>
-      <div class="col-md-8">
-        <div class="card card-block">
-          <h4 class="card-title">Cloud Data</h4>
+
+      <div class="col-md-6">
+        <div class="card">
+          <h4><i class="fa-solid fa-cloud"></i> Why PoSStore?</h4>
           <div class="card-text">
-            <p id="compname">Any Device</p>
-            <p id="compaddress">Barcode</p>
-            <p id="compemail">Fully Free</p>
-            <p id="compphone">01632950179</p>
+            <p><i class="fa-solid fa-mobile-alt icon"></i> Access from Any Device</p>
+            <p><i class="fa-solid fa-barcode icon"></i> Easy Inventory Management</p>
+            <p><i class="fa-solid fa-barcode icon"></i> Quick Sales with Barcode Scanner</p>
+            <p><i class="fa-solid fa-chart-line icon"></i> Custom Reports & Analytics</p>
           </div>
         </div>
       </div>
     </div>
-
-
   </div>
+
 </body>
 </html>
-

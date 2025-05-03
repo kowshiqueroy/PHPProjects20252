@@ -85,7 +85,7 @@ include 'header.php';
                             <td><?php echo $row['date']; ?></td>
                             <td><?php echo $row['person']; ?></td>
                             <td><?php echo $row['totalprice']; ?></td>
-                            <td><?php echo $row['status'] ? 'Out' : 'In'; ?></td>
+                            <td><?php echo $row['status'] ? 'Back' : 'Out'; ?></td>
                             <td>
                                 <?php if ($row['confirm'] == 0): ?>
                                     <a href="outadd.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-secondary"><i class="fa fa-edit"></i></a>

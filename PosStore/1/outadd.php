@@ -159,7 +159,7 @@ if (isset($_GET['id'])) {
         $sql = "SELECT id FROM productout WHERE personid = '$id'";
         $result = mysqli_query($conn, $sql);
         while ($row = mysqli_fetch_assoc($result)) {
-            echo $row['id']."<br>";
+            
 
             $sql = "SELECT type, productname, unit, quantity FROM productout WHERE id = '".$row['id']."'";
             $result2 = mysqli_query($conn, $sql);
@@ -183,7 +183,7 @@ if (isset($_GET['id'])) {
 
         $sql = "UPDATE invoiceout SET  confirm = 1, paymentmethod = '$paymentmethod', remarks = '$remarks' WHERE id = '$id'";
         if (mysqli_query($conn, $sql)) {
-          //  echo "<script>window.location.href = 'outlist.php';</script>";
+            echo "<script>window.location.href = 'outlist.php';</script>";
         } else {
             echo "Error: " . $sql . "<br>" . mysqli_error($conn);
         }
@@ -316,7 +316,7 @@ if (isset($_GET['id'])) {
                             <input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
                             <div class="row g-2 align-items-center">
                                 <div class="col-md-2">
-                                    <label for="barcode" class="form-label">Barcode</label>
+                                   
                                     <input type="number" class="form-control border-0" id="barcode" name="barcode" placeholder="Barcode" onkeydown="if(event.keyCode==13){this.form.submit();}">
                                     <script>
                                         const barcodeInput = document.getElementById('barcode');
@@ -386,35 +386,7 @@ if (isset($_GET['id'])) {
                                         
                                     </select>
                                 </div>
-                                <script>
-    function getLastCostPrice() {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                 console.log("Raw Response:", this.responseText); 
-                var response = JSON.parse(this.responseText);
-                document.getElementById('costprice').value = response.costprice.toString().split('').map(digit => {
-                                                switch (digit) {
-                                                    case '0': return 'A';
-                                                    case '1': return 'B';
-                                                    case '2': return 'C';
-                                                    case '3': return 'D';
-                                                    case '4': return 'E';
-                                                    case '5': return 'F';
-                                                    case '6': return 'G';
-                                                    case '7': return 'H';
-                                                    case '8': return 'I';
-                                                    case '9': return 'j';
-                                                }
-                                            }).join('');
-                document.getElementById("sellprice").value = response.sellprice;
-                console.log(response);
-            }
-        };
-        xhttp.open("GET", "lastcostprice.php?name="+document.getElementById("pname").value+"&type="+document.getElementById("type").value+"&unit="+document.getElementById("unit").value, true);
-        xhttp.send();
-    }
-</script>
+                                
                                 <div class="col-md-2">
                                     <label for="costprice" class="form-label">Get Price</label>
                                     <input type="text" class="form-control" id="costprice" name="costprice" placeholder="" required readonly onclick="getLastCostPrice();">
@@ -423,15 +395,15 @@ if (isset($_GET['id'])) {
 
                                 <div class="col-md-2">
                                     <label for="sellprice" class="form-label">Sell Price</label>
-                                    <input type="number" class="form-control" id="sellprice" name="sellprice" placeholder="Sell Price" required>
+                                    <input type="number" step="0.01" class="form-control" id="sellprice" name="sellprice" placeholder="Sell Price" required>
                                 </div>
                                 <div class="col-md-2">
                                     <label for="quantity" class="form-label">Quantity</label>
-                                    <input type="number" class="form-control" id="quantity" name="quantity" placeholder="Quantity" required>
+                                    <input type="number" step="0.01" class="form-control" id="quantity" name="quantity" value="1" required>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="remarks" class="form-label">Remarks</label>
-                                    <textarea class="form-control" id="remarks" name="remarks" placeholder="Remarks"></textarea>
+                                    <input type="text" class="form-control" id="remarks" name="remarks" placeholder="Remarks">
                                 </div>
 
                                 <div class="col-md-2 text-end">
@@ -483,8 +455,21 @@ if (isset($_GET['id'])) {
                                                 }
                                             }).join('');
                                             document.getElementById('sellprice').value = data.sellprice;
+                                            if (data.stock <= 0) {
+                    document.getElementById("remarks").style.backgroundColor = 'red';
+
+
+                    document.getElementById("remarks").placeholder = data.stock + ' Stock Available';
+                } else {
+ document.getElementById("remarks").style.backgroundColor = 'white';
+                    document.getElementById("remarks").placeholder = data.stock + ' Stock Available';     
+                
+                }
                                         } else {
-                                            document.querySelector('.result').innerHTML = '<p>No data found for this barcode.</p>';
+                                            document.getElementById('costprice').value = '';
+                                            document.getElementById("sellprice").value = '';
+                                            document.getElementById("remarks").placeholder = '';
+
                                         }
                                     })
                                     .catch(error => {
@@ -493,7 +478,60 @@ if (isset($_GET['id'])) {
                                     });
                             });
                         </script>
+<script>
+    function getLastCostPrice() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                 console.log("Raw Response:", this.responseText); 
+                var response = JSON.parse(this.responseText);
+                document.getElementById('costprice').value = response.costprice.toString().split('').map(digit => {
+                                                switch (digit) {
+                                                    case '0': return 'A';
+                                                    case '1': return 'B';
+                                                    case '2': return 'C';
+                                                    case '3': return 'D';
+                                                    case '4': return 'E';
+                                                    case '5': return 'F';
+                                                    case '6': return 'G';
+                                                    case '7': return 'H';
+                                                    case '8': return 'I';
+                                                    case '9': return 'j';
+                                                }
+                                            }).join('');
+                document.getElementById("sellprice").value = response.sellprice;
 
+                if (response.stock <= 0) {
+                    document.getElementById("remarks").style.backgroundColor = 'red';
+                    document.getElementById("remarks").placeholder = response.stock + ' Stock Available';
+                } else {
+ document.getElementById("remarks").style.backgroundColor = 'white';
+                    document.getElementById("remarks").placeholder = response.stock + ' Stock Available';     
+                
+                }
+                console.log(response);
+            }
+            else {
+                document.getElementById('costprice').value = '';
+                document.getElementById("sellprice").value = '';
+                document.getElementById("remarks").placeholder = '';
+
+            }
+        };
+
+
+
+        var pname = document.getElementById("pname").value;
+        var type = document.getElementById("type").value;
+        var unit = document.getElementById("unit").value;
+        var barcode = document.getElementById("barcode").value;
+
+        xhttp.open("GET", `lastcostprice.php?name=${pname}&type=${type}&unit=${unit}&id=${barcode}`, true);
+       
+       
+        xhttp.send();
+    }
+</script>
 
 
                     </div>
