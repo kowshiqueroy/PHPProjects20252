@@ -230,21 +230,21 @@ if (isset($_GET['id'])) {
                         <div class="row g-2">
                             <div class="col-md-9">
                                 <label for="name" class="form-label text-white">Name Shop/Address Contact Details ID</label>
-                                <select class="form-select border-0 select2" id="name" name="name">
-                                    <?php
-                                    if (isset($_GET['id'])) {
-                                        $id = $_GET['id'];
-                                        $sql = "SELECT * FROM invoicein WHERE id = '$id'";
-                                        $result = mysqli_query($conn, $sql);
-                                        if ($row = mysqli_fetch_assoc($result)) {
-                                            echo "<option  selected>".$row['person']."</option>";
-                                        }
+                                <select class="form-select border-0 select2p" id="name" name="name">
+                                      <?php 
+                                   if (isset($_GET['id'])) {
+                                    $id = $_GET['id'];
+                                       $sql = "SELECT * FROM invoicein WHERE id = '$id'";
+                                     $result = mysqli_query($conn, $sql);
+                                      if ($row = mysqli_fetch_assoc($result)) {
+                                            echo "<option selected>".$row['person']."</option>";
+                                       }
                                     } else {
                                         echo "<option value='-' selected>Example: Kowshique Roy Babu Para, Nilphamari 01632950179 4322</option>";
                                     }
-                                    ?>
-                                    <?php
-                                    $sql = "SELECT * FROM person WHERE company = '".$_SESSION['company']."' order by name DESC";
+                                
+                                   
+                                    $sql = "SELECT * FROM person WHERE company = '".$_SESSION['company']."' ORDER BY name DESC";
                                     $result = mysqli_query($conn, $sql);
                                     while ($row = mysqli_fetch_assoc($result)) {
                                         echo "<option>".$row['name']."</option>";
@@ -252,7 +252,7 @@ if (isset($_GET['id'])) {
                                     ?>
                                 </select>
                             </div>
-
+                    
                             <div class="col-md-2">
                                 <label for="date" class="form-label text-white">Date</label>
 

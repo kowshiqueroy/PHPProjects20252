@@ -332,6 +332,20 @@ if (isset($_GET['id'])) {
                                     <select class="form-select border-0 select2n" id="type" name="type" onChange="this.form.submit()" required>
                                         <option value="">Select Type</option>
                                         <?php
+
+
+                                        if (isset($_GET['type'])) {
+                                            $selectedType = $_GET['type'];
+                                            echo "<option value='$selectedType' selected>".$selectedType."</option>";
+                                        }
+
+
+
+
+
+
+
+
                                             $sql = "SELECT DISTINCT type FROM product WHERE company = '".$_SESSION['company']."' ORDER BY type ASC";
                                             $result = mysqli_query($conn, $sql);
                                             while ($row = mysqli_fetch_assoc($result)) {
@@ -339,7 +353,13 @@ if (isset($_GET['id'])) {
                                                 $typeSql = "SELECT name FROM type WHERE id = '$typeName'";
                                                 $typeResult = mysqli_query($conn, $typeSql);
                                                 $typeRow = mysqli_fetch_assoc($typeResult);
-                                                echo "<option value='".$typeName."' ".(isset($_GET['type']) && $_GET['type'] == $typeName ? 'selected' : '').">".$typeRow['name']."</option>";
+                                                echo "<option>".$typeRow['name']."</option>";
+
+
+
+                                               
+                                               
+                                           
                                             }
                                         ?>
                                     </select>
@@ -349,7 +369,11 @@ if (isset($_GET['id'])) {
                                         <option value="">Select Product Name</option>
                                         <?php
                                             if (isset($_GET['type'])) {
-                                                $sql = "SELECT DISTINCT name FROM product WHERE type = '".$_GET['type']."' AND company = '".$_SESSION['company']."' ORDER BY name ASC";
+                                                $typeSql = "SELECT id FROM type WHERE name = '".$_GET['type']."' AND company = '".$_SESSION['company']."'";
+                                                $typeResult = mysqli_query($conn, $typeSql);
+                                                $typeRow = mysqli_fetch_assoc($typeResult);
+                                                $typeId = $typeRow['id'];
+                                                $sql = "SELECT DISTINCT name FROM product WHERE type = '$typeId' AND company = '".$_SESSION['company']."' ORDER BY name ASC";
                                                 $result = mysqli_query($conn, $sql);
                                                 while ($row = mysqli_fetch_assoc($result)) {
                                                     $productName = $row['name'];
@@ -372,13 +396,13 @@ if (isset($_GET['id'])) {
                                                     $unitSql = "SELECT name FROM unit WHERE id = '".$unit['unit']."'";
                                                     $unitResult = mysqli_query($conn, $unitSql);
                                                     $unitRow = mysqli_fetch_assoc($unitResult);
-                                                    echo "<option value='".$unit['unit']."' selected readonly>".$unitRow['name']."</option>";
+                                                    echo "<option  selected readonly>".$unitRow['name']."</option>";
                                                 } else {
                                                     foreach ($units as $unit) {
                                                         $unitSql = "SELECT name FROM unit WHERE id = '".$unit['unit']."'";
                                                         $unitResult = mysqli_query($conn, $unitSql);
                                                         $unitRow = mysqli_fetch_assoc($unitResult);
-                                                        echo " <option value=''>Select Unit</option> <option value='".$unit['unit']."' ".(isset($_GET['unit']) && $_GET['unit'] == $unit['unit'] ? 'selected' : '').">".$unitRow['name']."</option>";
+                                                        echo " <option value=''>Select Unit</option> <option  ".(isset($_GET['unit']) && $_GET['unit'] == $unit['unit'] ? 'selected' : '').">".$unitRow['name']."</option>";
                                                     }
                                                 }
                                             }

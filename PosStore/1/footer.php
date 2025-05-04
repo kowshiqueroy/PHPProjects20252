@@ -14,7 +14,13 @@
         });
     });
 </script>
-
+<script>
+    $(document).ready(function() {
+        $('.select2p').select2({
+            tags: true
+        });
+    });
+</script>
 <script>
     $(document).ready(function() {
         $('.select2n').select2({
