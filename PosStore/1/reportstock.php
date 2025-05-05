@@ -14,7 +14,7 @@ include 'header.php';
                 <thead class="table-dark">
                     <tr>
                         <th>Type</th>
-                        <th>Unit</th>
+                        
                         <th>Product</th>
                         <th>Stock</th>
                     </tr>
@@ -32,9 +32,9 @@ include 'header.php';
                     while ($row = mysqli_fetch_assoc($result)) {
                         echo "<tr class='table-light border-bottom'>
                                 <td>".$row['type']."</td>
-                                <td>".$row['unit']."</td>
+                              
                                 <td>".$row['productname']."</td>
-                                <td>".$row['stock']."</td>
+                                <td>".$row['stock']." ".$row['unit']."</td>
                               </tr>";
                     }
                     ?>
