@@ -230,7 +230,7 @@ if (isset($_GET['id'])) {
                         <div class="row g-2">
                             <div class="col-md-9">
                                 <label for="name" class="form-label text-white">Name Shop/Address Contact Details ID</label>
-                                <select class="form-select border-0 select2p" id="name" name="name">
+                                <select class="form-select border-0 select2" id="pname" name="name">
                                       <?php 
                                    if (isset($_GET['id'])) {
                                     $id = $_GET['id'];
@@ -251,6 +251,8 @@ if (isset($_GET['id'])) {
                                     }
                                     ?>
                                 </select>
+
+                               
                             </div>
                     
                             <div class="col-md-2">
