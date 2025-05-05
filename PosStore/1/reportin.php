@@ -112,7 +112,7 @@ include 'header.php';
                 echo " <i class='fa fa-user'></i> ".$row['person'];
                 echo " <i class='fa fa-wallet'></i> ".$row['totalprice'];
                 echo " <i class='fa fa-calendar'></i> ".$row['date'];
-                echo " <i class='fa ".($row['status'] == 0 ? "fa-arrow-up" : "fa-arrow-down")."'></i> ".($row['status'] == 0 ? "OUT" : "Back");
+                echo " <i class='fa ".($row['status'] == 0 ? "fa-arrow-down" : "fa-undo")."'></i> ".($row['status'] == 0 ? "IN" : "Back");
                 echo " <i class='fa fa-money'></i> ".$row['paymentmethod'];
                 echo " <i class='fa fa-comment'></i> ".$row['remarks'];
                 echo " <i class='fa fa-clock'></i> ".date('d-m-Y H:i:s', strtotime($row['timestamp']));

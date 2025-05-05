@@ -5,7 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = $_POST['name'];
     $type = $_POST['type'];
     $unit = $_POST['unit'];
-    $sql = "SELECT * FROM product WHERE name = '$name' AND type = (SELECT id FROM type WHERE name = '$type' AND company = '" . $_SESSION['company'] . "') AND unit = (SELECT id FROM unit WHERE name = '$unit' AND company = '" . $_SESSION['company'] . "') AND company = '" . $_SESSION['company'] . "'";
+    $sql = "SELECT * FROM product WHERE name = '$name' AND type = (SELECT id FROM type WHERE name = '$type' AND company = '" . $_SESSION['company'] . "')  AND company = '" . $_SESSION['company'] . "'";
     $result = mysqli_query($conn, $sql);
 
     if (mysqli_num_rows($result) > 0) {

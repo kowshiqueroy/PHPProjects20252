@@ -89,10 +89,10 @@ include 'header.php';
                             <td>
                                 <?php if ($row['confirm'] == 0): ?>
                                     <a href="outadd.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-secondary"><i class="fa fa-edit"></i></a>
-                                    <a href="print.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-info"><i class="fa fa-print"></i> Print</a>
+                                    <a href="invoice.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-info"><i class="fa fa-print"></i> Print</a>
                                 <?php else: ?>
                                     <a href="outadd.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning"><i class="fa fa-eye"></i></a>
-                                    <a href="print.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-info"><i class="fa fa-print"></i> Print</a>
+                                    <a href="invoice.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-info"><i class="fa fa-print"></i> Print</a>
                                 <?php endif; ?>
                                 <a href="outlist.php?delid=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure to delete this invoiceout?');"><i class="fa fa-trash"></i></a>
                             </td>

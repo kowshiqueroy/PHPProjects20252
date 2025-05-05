@@ -19,32 +19,57 @@
         body {
             font-family: Arial, sans-serif;
             font-size: 12px;
+            width: 90vw;
+            margin: 0 auto;
+            background-color: #f2f2f2;
         }
         .container {
             width: 100%;
             height: 100%;
             padding: 20px;
             box-sizing: border-box;
+            
+            border-radius: 10px;
         }
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .header .logo {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background-color: #f2f2f2;
+        .header img {
+            max-height: 200px;
+            width: 200px;
         }
-        .header .address {
-            padding-left: 20px;
+        .header .company-info {
+            text-align: center;
+            flex: 1;
         }
-        .header .address p {
+        .header .company-info h1 {
+            font-size: 24px;
+            font-weight: bold;
             margin: 0;
         }
+        .header .company-info p {
+            font-size: 12px;
+            margin: 0;
+        }
+        .header .qr {
+            max-height: 100px;
+            width: 200px;
+            text-align: right;
+        }
+        .header .qr img {
+            height: 100px;
+            width: 100px;
+        }
+        
         .invoice {
-            margin-top: 20px;
+            margin-top: 0px;
+        }
+        .invoice .details{
+
+            width: 100%;
+            
         }
         .invoice table {
             width: 100%;
@@ -73,7 +98,6 @@
             width: 15%;
             text-align: right;
         }
-     
         .footer {
             margin-top: 20px;
             display: flex;
@@ -86,21 +110,32 @@
     <div class="container">
         <div class="page">
             <div class="header">
-                <div>
-                    <h1>Company name</h1>
-                    <p>City, State, Zip Phone: 123-456-7890</p>
-                    <p>Customer Name</p>
+                <img src="https://www.ovijatfood.com/images/logo.png" alt="logo">
+                <div class="company-info">
+                    <h1>Company Name</h1>
+                    <p>Address</p>
+                    <p>Contact</p>
                 </div>
-                <div class="address">
-                    <p>Invoice: 123</p>
-                    <p><?php echo date('Y-m-d h:m:s'); ?></p>
-                    <p>Status:</p>
+
+                <div class="qr">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=<?php echo urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); ?>" alt="" >
+
                 </div>
+
             </div>
-
-
             <div class="invoice">
-                <table class="table table-hover  table-bordered mt-3">
+                
+
+                <div class="details" style="text-align: center;">
+                    <div style="text-align: left; display: inline-block; width: 30%; ">Drafted by Userjagdgasd<br>2022-01-01 12:00:00</div>
+                    <div style="  text-align: center; display: inline-block; width: 30%; "><h3>INVOICE <?php echo $_GET['id']; ?></h3></div>
+                    <div style="text-align: right; display: inline-block; width: 30%;">Date: 2025-01-01<br>Back</div>
+                </div>
+                <div style=" margin-top: -20px; text-align: center;"><h3>Customer: Example Customer with Address and Contact xxxxx</h3></div>
+               
+               
+               
+                <table class="table table-hover table-bordered mt-3">
                     <thead>
                         <tr>
                             <th>Item</th>
@@ -110,18 +145,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <tr>
+                        <tr>
                             <td>Sample Item 1</td>
                             <td>2</td>
                             <td>15.00</td>
                             <td>30.00</td>
                         </tr>
-                       
-                    
                         <tr>
                             <td colspan="2" class="text-end">Taka in Words</td>
-                
-                            <td  class="text-end">Total</td>
+                            <td class="text-end">Total</td>
                             <td>110.00</td>
                         </tr>
                     </tbody>
