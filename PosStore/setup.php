@@ -3,7 +3,11 @@ include_once('conn.php');
 $sql = "CREATE TABLE IF NOT EXISTS company (
 id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-company VARCHAR(50),
+company VARCHAR(10),
+companyname VARCHAR(50) default 'Company',
+address VARCHAR(50) default 'Address',
+phone VARCHAR(20) default 'Phone',
+photo VARCHAR(200) default 'photo.jpg',
 status INT(1)
 )";
 if (mysqli_query($conn, $sql)) {
@@ -70,7 +74,8 @@ status BOOLEAN,
 paymentmethod VARCHAR(50) DEFAULT NULL,
 remarks VARCHAR(100) DEFAULT NULL,
 confirm BOOLEAN DEFAULT 0,
-company INT(6)
+company INT(6),
+user INT(6)
 
 
 )";
@@ -159,7 +164,8 @@ $sql = "CREATE TABLE IF NOT EXISTS invoiceout (
     paymentmethod VARCHAR(50) DEFAULT NULL,
     remarks VARCHAR(100) DEFAULT NULL,
     confirm BOOLEAN DEFAULT 0,
-    company INT(6)
+    company INT(6),
+user INT(6)
     
     
     )";

@@ -188,7 +188,7 @@ if (isset($_GET['id'])) {
 
        
 
-        $sql = "UPDATE invoicein SET  confirm = 1, paymentmethod = '$paymentmethod', remarks = '$remarks' WHERE id = '$id'";
+        $sql = "UPDATE invoicein SET  confirm = 1, paymentmethod = '$paymentmethod', remarks = '$remarks', user = '".$_SESSION['uid']."' WHERE id = '$id'";
         if (mysqli_query($conn, $sql)) {
             echo "<script>window.location.href = 'inlist.php';</script>";
         } else {

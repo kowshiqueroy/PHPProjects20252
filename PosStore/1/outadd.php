@@ -175,13 +175,13 @@ if (isset($_GET['id'])) {
             $psid= $row2['id'];
 
 
-            $sql = "UPDATE product SET stock = '$squantity' - '$pquantity' WHERE id = '$psid'";
+            $sql = "UPDATE product SET stock = '$squantity' - '$pquantity'  WHERE id = '$psid'";
             if (mysqli_query($conn, $sql)) {}
             
 
         }
 
-        $sql = "UPDATE invoiceout SET  confirm = 1, paymentmethod = '$paymentmethod', remarks = '$remarks' WHERE id = '$id'";
+        $sql = "UPDATE invoiceout SET  confirm = 1, paymentmethod = '$paymentmethod', remarks = '$remarks' , user = '".$_SESSION['uid']."' WHERE id = '$id'";
         if (mysqli_query($conn, $sql)) {
             echo "<script>window.location.href = 'outlist.php';</script>";
         } else {
