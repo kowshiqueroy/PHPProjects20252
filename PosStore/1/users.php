@@ -207,7 +207,7 @@ include 'header.php';
             $result = mysqli_query($conn, $sql);
             if (mysqli_num_rows($result) > 0) {
                 echo "<table class='table'>";
-                echo "<tr><th>ID</th><th>Username</th><th>Role</th><th>Status</th><th>Action</th></tr>";
+                echo "<tr><th>ID</th><th>Username</th><th>Role</th><th>Status</th><th>Action</th><th>Last Login</th><th>Created At</th></tr>";
                 while ($row = mysqli_fetch_assoc($result)) {
                     echo "<tr>";
                     echo "<td>".$row['id']."</td>";
@@ -242,6 +242,8 @@ include 'header.php';
                         echo "<a href='?uid=".$row['id']."' class='btn btn-success'>Active</a>";
                     }
                     echo "</td>";
+                    echo "<td>".$row['lastlogin']."</td>";
+                    echo "<td>".$row['reg_date']."</td>";
                     echo "</tr>";
                 }
                 echo "</table>";
