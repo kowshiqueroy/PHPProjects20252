@@ -17,7 +17,7 @@ include_once('conn.php');
     $username = $_POST['username'];
     $password = md5($_POST['password']); // assuming passwords are stored as md5 hash
 
-    $sql = "SELECT * FROM user WHERE username = '$username'  AND company = '$companyid'";
+    $sql = "SELECT * FROM user WHERE username = '$username'  AND company = '$companyid' AND status = 1";
     $result = mysqli_query($conn, $sql);
     
     if (mysqli_num_rows($result) > 0) {
