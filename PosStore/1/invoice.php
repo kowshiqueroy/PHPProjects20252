@@ -24,10 +24,12 @@ include '../conn.php';
             $phone = $row['phone'];
             $photo = $row['photo'];
 
+            $user = "";
             $sql = "SELECT * FROM user WHERE id = '$user'";
             $result = mysqli_query($conn, $sql);
-            $row = mysqli_fetch_assoc($result);
-            $user = $row['username'];
+            if ($row = mysqli_fetch_assoc($result)) {
+                $user = $row['username'];
+            }
 
 
 function convertNumberToWords($number) {
@@ -292,7 +294,7 @@ $totalpriceWords = convertNumberToWords($totalprice);
             <div class="invoice">
                 
 
-                <div class="details" style="margin-top: -50px;">
+                <div class="details" style="margin-top: 0px;">
                     <div style="float: left; width: 50%;">
                         <p><?php echo $confirm == 0 ? "Drafted" : "Created"; ?> by <?php echo $user; ?> @ <?php echo $timestamp; ?></p>
                     </div>
