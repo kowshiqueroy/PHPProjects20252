@@ -64,10 +64,11 @@
                 <ul class="list-unstyled ms-3">
                     <li><a href="#">IN</a></li>
                     <li><a href="#">OUT</a></li>
-                    <li><a href="#">Stock</a></li>
+                    <li><a href="stocks.php">Stock</a></li>
                     <li><a href="productnew.php">New Product</a></li>
                 </ul>
            </li>
+           <li><a href="orders.php">Orders</a></li>
         </ul>
     </div>
 

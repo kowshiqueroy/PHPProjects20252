@@ -16,6 +16,9 @@
             width: 250px; position: fixed; left: -260px; top: 0; height: 100vh; 
             background: #212529; color: white; transition: 0.4s ease-in-out; z-index: 999;
             box-shadow: 3px 0px 10px rgba(0,0,0,0.2);
+            overflow-y: auto;
+            overflow-x: hidden;
+            
         }
         .menu-box.show { left: 0; }
         .menu-box span { display: block; text-align: center; }
@@ -41,76 +44,36 @@
         <button class="btn btn-primary" id="menuToggle">☰</button>
         <span class="navbar-brand">Dashboard</span>
         <div class="user-info">
-            <span class="text-white desktop-items">Username</span>
-            <span class="text-white small desktop-items">Admin Role</span>
-            <button class="btn btn-danger">Logout</button>
+        <span class="text-white small desktop-items"><?php echo $_SESSION['rolename'];?></span>
+  
+        <button class="btn btn-danger" onclick="window.location.href='../logout.php'">Logout</button>
         </div>
     </nav>
 
     <div class="menu-box p-3" id="menuBox">
         <button class="btn btn-secondary w-100" id="closeMenu">Close</button>
         <ul>
-        <span class="text-white small">Username Admin Role</span>
+        <span class="text-white small"><?php echo $_SESSION['username']." (".$_SESSION['id'].") ".$_SESSION['rolename'];?></span>
         
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Settings</a></li>
+            <li><a href="home.php">Home</a></li>
+            <li><a href="users.php">Users</a></li>
+            <li><a href="settings.php">Settings</a></li>
+            <li><a href="uploads.php">Uploads</a></li>
             <li>
-                <a href="#">Reports ▼</a>
+                <a href="#">Products ▼</a>
                 <ul class="list-unstyled ms-3">
-                    <li><a href="#">Monthly</a></li>
-                    <li><a href="#">Yearly</a></li>
+                    <li><a href="#">IN</a></li>
+                    <li><a href="#">OUT</a></li>
+                    <li><a href="stocks.php">Stock</a></li>
+                    <li><a href="productnew.php">New Product</a></li>
                 </ul>
-            </li>
+           </li>
+           <li><a href="orders.php">Orders</a></li>
         </ul>
     </div>
 
     <div class="container mt-3">
         <div class="content">
-            <div class="card p-3">Content Area</div>
-
-
-
-
-            
-            <div class="d-flex two-columns gap-3 mt-3">
-                <div class="card p-3 flex-fill">Div 1</div>
-                <div class="card p-3 flex-fill">Div 2</div>
-            </div>
-
-
-
-
-
-
-            <table class="table table-striped mt-3">
-                <thead class="table-dark">
-                    <tr><th>ID</th><th>Name</th><th>Actions</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>1</td><td>Demo</td><td></td></tr>
-                </tbody>
-            </table>
-            <button class="btn btn-secondary mt-2" id="toggleActions">Toggle Actions</button>
-            <form class="mt-3">
-                <select class="form-select select2">
-                    <option value="1">Option 1</option>
-                    <option value="2">Option 2</option>
-                </select>
-            </form>
-        </div>
-    </div>
-
-    <script>
-        $(document).ready(function () {
-            $("#menuToggle").click(function () {
-                $("#menuBox").toggleClass("show");
-            });
-            $("#closeMenu").click(function () {
-                $("#menuBox").removeClass("show");
-            });
            
-            $(".select2").select2();
-        });
-    </script>
-</body>
-</html>
+            
+       
