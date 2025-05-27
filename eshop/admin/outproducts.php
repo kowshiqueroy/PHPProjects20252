@@ -3,7 +3,7 @@ require_once '../conn.php';
 require_once 'header.php';
 ?>
 
-<div class="card p-1 text-center">In</div>
+<div class="card p-1 text-center">Out</div>
 
 
 <form method="GET" action="" class="d-md-flex flex-md-row flex-column">
@@ -25,7 +25,7 @@ require_once 'header.php';
     </div>
     <div class="form-group mb-2 mb-md-0">
         <button type="submit" class="btn btn-primary mt-3 mt-md-0">Search</button>
-        <button type="button" class="btn btn-primary mt-3 mt-md-0" onclick="window.location.href='innew.php'">Add New</button>
+        <button type="button" class="btn btn-primary mt-3 mt-md-0" onclick="window.location.href='outnew.php'">Add New</button>
     </div>
 </form>
 
@@ -42,7 +42,7 @@ require_once 'header.php';
     <tbody>
         <?php
         $where = "";
-           if (!empty($_GET['from'])) {
+        if (!empty($_GET['from'])) {
             $where .= " AND purchase_date >= '" . $_GET['from'] . "'";
         }
         else {
@@ -55,8 +55,9 @@ require_once 'header.php';
         else {
             $where .= " AND purchase_date <= '" . date('Y-m-d') . "'";
         }
+
         if (!empty($_GET['id'])) $where .= " AND id = '" . $_GET['id'] . "'";
-       if (!empty($_GET['person'])) {
+        if (!empty($_GET['person'])) {
             $personSearch = $_GET['person'];
             $sqlPerson = "SELECT id FROM person WHERE details LIKE '%" . $personSearch . "%'";
             $resultPerson = $conn->query($sqlPerson);
@@ -70,7 +71,7 @@ require_once 'header.php';
             }
         }
 
-        $sql = "SELECT * FROM indetails WHERE 1=1" . $where . " ORDER BY id DESC";
+        $sql = "SELECT * FROM outdetails WHERE 1=1" . $where . " ORDER BY id DESC";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
@@ -88,9 +89,9 @@ require_once 'header.php';
                 
                 echo "</td><td>".($row['type'] == 0 ? " (In)" : " (Back)") . " ".$row['total']."/= " .$row['payment_method']." ".$row['payment_details']." ". $row['remarks'] .  "</td><td>";
                 if ($row['type'] == 0) {
-                    echo "<a href='innew.php?id=".$row['id']."' class='btn btn-primary'>Edit</a>";
+                    echo "<a href='outnew.php?id=".$row['id']."' class='btn btn-primary'>Edit</a>";
                 }
-                echo "<a href='inprint.php?id=".$row['id']."' class='btn btn-success'>Print</a></td></tr>";
+                echo "<a href='outprint.php?id=".$row['id']."' class='btn btn-success'>Print</a></td></tr>";
             }
         } else {
             echo "<tr><td colspan='5'>No results found</td></tr>";

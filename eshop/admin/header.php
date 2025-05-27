@@ -68,7 +68,7 @@
                     <li><a href="productnew.php">New Product</a></li>
                 </ul>
            </li>
-           <li><a href="orders.php">Orders</a></li>
+           <li><a href="outproducts.php">Orders</a></li>
         </ul>
     </div>
 

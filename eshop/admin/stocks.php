@@ -55,22 +55,31 @@ require_once 'header.php';
     <tbody>
         <?php
             $where = '';
+
+
+
             if (isset($_GET['id']) && !empty($_GET['id'])) {
-                $where .= " id = '" . $_GET['id'] . "' AND";
+                $where .= "AND id = '" . $_GET['id'] . "' ";
             }
+
+
             if (isset($_GET['productname']) && !empty($_GET['productname'])) {
-                $where .= " productname LIKE '%" . $_GET['productname'] . "%' AND";
+                $where .= "AND productname LIKE '%" . $_GET['productname'] . "%' ";
             }
             if (isset($_GET['category']) && !empty($_GET['category'])) {
-                $where .= " category LIKE '%" . $_GET['category'] . "%' AND";
+                $where .= "AND category LIKE '%" . $_GET['category'] . "%' ";
             }
             if (isset($_GET['brand']) && !empty($_GET['brand'])) {
-                $where .= " brand LIKE '%" . $_GET['brand'] . "%' AND";
+                $where .= "AND brand LIKE '%" . $_GET['brand'] . "%' ";
             }
             if (isset($_GET['maker']) && !empty($_GET['maker'])) {
-                $where .= " maker LIKE '%" . $_GET['maker'] . "%' AND";
+                $where .= "AND maker LIKE '%" . $_GET['maker'] . "%' ";
             }
-            $where = rtrim($where, ' AND');
+
+
+
+
+         
             $sql = "SELECT id, productname, category, brand, maker, unitname, stock, details, review, costprice, showprice, sellprice, photo FROM products WHERE status = 1"; 
             if ($where) {
                 $sql .= " " . $where;
