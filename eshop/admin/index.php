@@ -136,6 +136,58 @@ if ($conn->query($sql) === TRUE) {
     $msg .= "Error creating table: " . $conn->error;
 }
 $msg .= "<br>";
+
+
+$sql = "CREATE TABLE IF NOT EXISTS person (
+  id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  details VARCHAR(255) NOT NULL
+  
+)";
+if ($conn->query($sql) === TRUE) {
+    $msg .= "Table person";
+} else {
+    $msg .= "Error creating table: " . $conn->error;
+}
+$msg .= "<br>";
+
+$sql = "CREATE TABLE IF NOT EXISTS indetails (
+  id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  person_id INT(11) NOT NULL,
+  product_id INT(11) NOT NULL,
+  quantity INT(11) NOT NULL DEFAULT 0,
+  total DECIMAL(15,2) NOT NULL DEFAULT 0.00,
+  purchase_date DATE NOT NULL DEFAULT CURRENT_DATE,
+  type BOOLEAN NOT NULL DEFAULT 0,
+  status BOOLEAN NOT NULL DEFAULT 0,
+  payment_method VARCHAR(10) DEFAULT NULL,
+  payment_details VARCHAR(100) DEFAULT NULL,
+  remarks VARCHAR(255) DEFAULT NULL,
+  timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+
+  
+)";
+if ($conn->query($sql) === TRUE) {
+    $msg .= "Table indetails";
+} else {
+    $msg .= "Error creating table: " . $conn->error;
+}
+$msg .= "<br>";
+
+$sql = "CREATE TABLE IF NOT EXISTS inproducts (
+  id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  product_id INT(11) NOT NULL,
+  price DECIMAL(15,2) NOT NULL DEFAULT 0.00,
+  quantity INT(11) NOT NULL DEFAULT 0,
+  indetails_id INT(11) NOT NULL
+  
+)";
+if ($conn->query($sql) === TRUE) {
+    $msg .= "Table inproducts";
+} else {
+    $msg .= "Error creating table: " . $conn->error;
+}
+$msg .= "<br>";
+
 ?>
 
 <?php

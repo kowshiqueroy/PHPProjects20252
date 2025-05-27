@@ -27,6 +27,7 @@ if (isset($_GET['id'])) {
             max-width: 100% !important;
         }
     }
+    
 </style>
 <form action="" method="post">
     <div class="row mb-3">

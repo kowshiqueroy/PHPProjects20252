@@ -62,8 +62,8 @@
             <li>
                 <a href="#">Products ▼</a>
                 <ul class="list-unstyled ms-3">
-                    <li><a href="#">IN</a></li>
-                    <li><a href="#">OUT</a></li>
+                    <li><a href="inproducts.php">IN</a></li>
+                  
                     <li><a href="stocks.php">Stock</a></li>
                     <li><a href="productnew.php">New Product</a></li>
                 </ul>
