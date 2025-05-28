@@ -153,7 +153,7 @@ if (isset($_GET['id'])) {
             <input class="form-control" type="text" name="details" id="details" value="<?php echo isset($row) ? $row['details'] : ''; ?>" required>
         </div>
         <div class="col">
-            <label for="review" class="form-label">Review:</label>
+            <label for="review" class="form-label">Others:</label>
             <input class="form-control" type="text" name="review" id="review" value="<?php echo isset($row) ? $row['review'] : ''; ?>" required>
         </div>
     </div>
@@ -350,7 +350,7 @@ if (isset($_POST['update'])) {
 </div>
 <table id="myTable" class="table table-striped mt-3">
     <thead class="table-dark">
-        <tr><th>ID</th><th>Name</th><th>Category</th><th>Brand</th><th>Maker</th><th>Unit Name</th><th>Stock</th><th>Details</th><th>Review</th><th>Cost Price</th><th>Show Price</th><th>Sell Price</th><th>Photo</th><th>Status</th><th>Actions</th></tr>
+        <tr><th>ID</th><th>Name</th><th>Category</th><th>Brand</th><th>Maker</th><th>Unit Name</th><th>Stock</th><th>Details</th><th>Others</th><th>Cost Price</th><th>Show Price</th><th>Sell Price</th><th>Photo</th><th>Status</th><th>Actions</th></tr>
     </thead>
     <tbody>
         <?php
@@ -358,7 +358,12 @@ if (isset($_POST['update'])) {
             $result = $conn->query($sql);
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
-                    echo "<tr ><td>" . $row['id'] . "</td><td>" . $row['productname'] . "</td><td>" . $row['category'] . "</td><td>" . $row['brand'] 
+                    echo "<tr >
+                    
+                    
+                  <td><a href='../p.php?id=" . $row['id'] . "'>" . $row['id'] . "</a></td>
+                    
+                    <td>" . $row['productname'] . "</td><td>" . $row['category'] . "</td><td>" . $row['brand'] 
                     . "</td><td>" . $row['maker'] . "</td><td>" . $row['unitname'] . "</td><td>" . $row['stock'] . "</td><td>" . $row['details'] 
                     . "</td><td>" . $row['review'] . "</td><td>" . $row['costprice'] . "</td><td>" . $row['showprice'] . "</td><td>" . $row['sellprice'] 
                     . "</td><td><img width='100' src='" . $row['photo'] . "'></td><td><a href='productnew.php?toggle=" . $row['id'] . "'>" 

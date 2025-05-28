@@ -1,7 +1,7 @@
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2025 Book Haven. All rights reserved.</p>
+        <p>&copy; 2025 kowshiqueroy@gmail.com. All rights reserved.</p>
     </footer>
 
     <script>

@@ -69,8 +69,8 @@
                 </ul>
            </li>
            <li><a href="outproducts.php">Orders</a></li>
-           <li><a href="outproducts.php">Trending</a></li>
-           <li><a href="outproducts.php">Reviews</a></li>
+           <li><a href="featured.php">Featured</a></li>
+           <li><a href="reviews.php">Reviews</a></li>
         </ul>
     </div>
 

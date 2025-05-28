@@ -6,6 +6,25 @@ require_once 'head.php';
 
 
 <?php
+
+if (isset($_GET['submit'])) {
+    // Handle form submission logic here
+    $productId = $_GET['id'];
+    $name = $_GET['name'];
+    $address = $_GET['address'];
+    $contact = $_GET['contact'];
+    $star = $_GET['stars'];
+    $review = $_GET['review'];
+    $sql = "INSERT INTO review (product_id, name, address, contact, star, review) VALUES ('$productId', '$name', '$address', '$contact', '$star', '$review')";
+    if ($conn->query($sql) === TRUE) {
+       // echo "<script>window.location.href='p.php?id=".$_GET['id']."';</script>";
+       
+    } else {
+        echo "Error submitting review: " . $conn->error;
+    }
+}
+
+
 $id = $_GET['id'];
 
   $sql = "SELECT * FROM products WHERE id = '$id'";
@@ -152,7 +171,7 @@ $id = $_GET['id'];
                 <p><?php echo $row['review']; ?></p>
                 <hr>
 
-                <button class="add-to-cart" id="<?php echo $row['id']; ?>">Add to Cart</button>
+                <button  class="add-to-cart" id="<?php echo $row['id']; ?>">Add to Cart</button>
             </div>
         </div>
         
@@ -256,7 +275,7 @@ input[type="radio"]:checked ~ label {
 
 <input type="text" name="review" placeholder="Write your review here..." required>
 <input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
-      <button type="submit">Submit Review</button>
+      <button name="submit" type="submit">Submit Review</button>
                 </div>
                 
           
@@ -265,23 +284,34 @@ input[type="radio"]:checked ~ label {
 
         <div class="reviews">
             <h2>Reviews</h2>
-            <div class="review-item">
-                <div class="review-info">
-                    <p><strong>John Doe</strong> ★★★★★</p>
-                    <span class="timestamp">May 28, 2025 | 15:30</span>
-                </div>
-                <p>"Amazing book! Highly recommended."</p>
-               
-            </div>
+            <?php
+    $productId = $_GET['id'];
+    $sql = "SELECT name, star, review, timestamp FROM review WHERE product_id = '$productId' AND status = 1 AND type = 0 ORDER BY id DESC";
+    $result = $conn->query($sql);
 
-            <div class="review-item">
-                <div class="review-info">
-                    <p><strong>Sarah Ahmed</strong> ★★★★☆</p>
-                    <span class="timestamp">May 28, 2025 | 14:45</span>
-                </div>
-                <p>"Very informative, but delivery was slow."</p>
-                
-            </div>
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo '<div class="review-item">';
+            echo '<div class="review-info">';
+            echo '<p><strong>' . htmlspecialchars($row['name']) . '</strong> ';
+            for ($i = 0; $i < $row['star']; $i++) {
+                echo '★';
+            }
+            for ($i = $row['star']; $i < 5; $i++) {
+                echo '☆';
+            }
+            echo '</p>';
+            echo '<span class="timestamp">' . date('F j, Y | H:i', strtotime($row['timestamp'])) . '</span>';
+            echo '</div>';
+            echo '<p>"' . htmlspecialchars($row['review']) . '"</p>';
+            echo '</div>';
+        }
+    } else {
+        echo '<p>No reviews yet.</p>';
+    }
+?>
+
+
         </div>
     </div>
 

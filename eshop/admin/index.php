@@ -195,6 +195,7 @@ $sql = "CREATE TABLE IF NOT EXISTS outdetails (
   payment_method VARCHAR(10) DEFAULT NULL,
   payment_details VARCHAR(100) DEFAULT NULL,
   remarks VARCHAR(255) DEFAULT NULL,
+  session_id VARCHAR(255) DEFAULT NULL,
   timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 
   
@@ -216,6 +217,38 @@ $sql = "CREATE TABLE IF NOT EXISTS outproducts (
 )";
 if ($conn->query($sql) === TRUE) {
     $msg .= "Table outproducts";
+} else {
+    $msg .= "Error creating table: " . $conn->error;
+}
+$msg .= "<br>";
+
+
+$sql = "CREATE TABLE IF NOT EXISTS review (
+  id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  product_id INT(11) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  address VARCHAR(255) NOT NULL,
+  contact VARCHAR(50) NOT NULL,
+  star INT(1) NOT NULL DEFAULT 0,
+  review TEXT NOT NULL,
+  status BOOLEAN NOT NULL DEFAULT 0,
+  type BOOLEAN NOT NULL DEFAULT 0,
+  timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+)";
+if ($conn->query($sql) === TRUE) {
+    $msg .= "Table review";
+} else {
+    $msg .= "Error creating table: " . $conn->error;
+}
+$msg .= "<br>";
+
+$sql = "CREATE TABLE IF NOT EXISTS featured (
+  id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  product_id INT(11) NOT NULL,
+  type INT(1) NOT NULL DEFAULT 0
+)";
+if ($conn->query($sql) === TRUE) {
+    $msg .= "Table featured";
 } else {
     $msg .= "Error creating table: " . $conn->error;
 }

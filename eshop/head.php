@@ -1,16 +1,34 @@
 <?php
 require_once 'conn.php';
 
-echo "Session ID: " . session_id() . "<br>";
+//echo "Session ID: " . session_id() . "<br>";
 
 
 ?>
+
+   <?php
+        $sql = "SELECT * FROM companyinfo WHERE id = 1";
+        $result = $conn->query($sql);
+        $row = $result->fetch_assoc();
+        $companyname = $row['companyname'];
+        $tagline = $row['tagline'];
+        $logo = $row['logo'];
+        $favicon= $row['favicon'];
+        $banner = $row['banner'];
+        $offertag = $row['offertag'];
+        $phone = $row['phone'];
+        $email = $row['email'];
+        $address = $row['address'];
+        $bank = $row['bank'];
+    ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Haven</title>
+    <title><?php echo $companyname; ?></title>
+    <link rel="shortcut icon" href="admin/<?php echo $favicon; ?>" type="image/x-icon">
+    
     <style>
         /* General Styles */
         body {
@@ -199,31 +217,61 @@ echo "Session ID: " . session_id() . "<br>";
 
 
 
-    <?php
-        $sql = "SELECT * FROM companyinfo WHERE id = 1";
-        $result = $conn->query($sql);
-        $row = $result->fetch_assoc();
-        $companyname = $row['companyname'];
-        $tagline = $row['tagline'];
-        $logo = $row['logo'];
-        $banner = $row['banner'];
-        $offer = $row['offertag'];
-        $phone = $row['phone'];
-        $email = $row['email'];
-        $address = $row['address'];
-        $bank = $row['bank'];
-    ?>
+ 
     <!-- Header -->
     <header>
         <div class="logo" onclick="window.location.href='index.php'">
             <img src="admin/<?php echo $logo; ?>" alt="Company Logo" style="height: 50px;">
         </div>
-        <h1 onclick="window.location.href='index.php'">Book Haven</h1>
+        <h1 onclick="window.location.href='index.php'"><?php echo $companyname; ?></h1>
         <div style="display: flex; justify-content: space-between; gap: 5px;">
-            <button class="shop-button">Shop</button>
-            <button class="shop-button">Cart</button>
+            <button class="shop-button" onclick="window.location.href='shop.php'">Shop</button>
+            <button class="shop-button" onclick="window.location.href='cart.php'">Cart</button>
         </div>
     </header>
+
+    <style>
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.7);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #preloader .spinner-border {
+            width: 5rem;
+            height: 5rem;
+            border: 0.5rem solid #ccc;
+            border-top: 0.5rem solid #333;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    <div id="preloader">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden"></span>
+        </div>
+    </div>
+    <script>
+        setTimeout(() => {
+            document.getElementById('preloader').style.display = 'none';
+        }, 1000);
+    </script>
 
   
    
