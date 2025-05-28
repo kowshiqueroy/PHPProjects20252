@@ -166,6 +166,21 @@ $id = $_GET['id'];
                 <h2><?php echo $row['productname']; ?></h2>
                 <p>Author: <?php echo $row['brand']; ?> | Category: <?php echo $row['category']; ?> | Publisher: <?php echo $row['maker']; ?></p>
                 <p class="price">Price: <del><?php echo $row['showprice']; ?></del> <?php echo $row['sellprice']; ?></p>
+                        <?php
+            
+
+                            $per=($row['showprice'] - $row['sellprice'])/$row['showprice']*100;
+                            
+                            
+                            
+                             
+                            if (  $per>0) {
+                                echo "<p class='percentSave' style=' color: green; text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white; font-weight: bold; '>Save " . intval($per) . "%</p>";
+                            }
+                              if ($row['stock'] < 2) {
+                                echo "<p style='color: red; text-align: center; text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white; font-weight: bold; '>Low Stock</p>";
+                            }
+                        ?>
                 <hr>
                 <p>Description: <?php echo $row['details']; ?></p>
                 <p><?php echo $row['review']; ?></p>

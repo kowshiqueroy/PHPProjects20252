@@ -266,36 +266,6 @@ if (fmod($c, 1) == 0.00) {
     $total = $_POST['total'];
     $sql = "INSERT INTO outproducts (outdetails_id, product_id, quantity, price) VALUES ('$id', '$productName', '$quantity', '$price')";
     if ($conn->query($sql) === TRUE) {
-
-        $sql = "SELECT total FROM outdetails WHERE id = '$id'";
-        $result = $conn->query($sql);
-        if ($result->num_rows > 0) {
-            $row = $result->fetch_assoc();
-            $totalprice = $row['total'] ? $row['total'] : 0;
-            $totalprice += $total;
-            $sql = "UPDATE outdetails SET total = '$totalprice' WHERE id = '$id'";
-            if ($conn->query($sql) === TRUE) {
-                
-            } else {
-                echo "Error: " . $sql . "<br>" . $conn->error;
-            }
-
-    $sql = "SELECT stock FROM products WHERE id = '$productName'";
-    $result = $conn->query($sql);
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $newStock = $row['stock'] - $quantity;
-        $sqlUpdateStock = "UPDATE products SET stock = '$newStock' WHERE id = '$productName'";
-        if (!$conn->query($sqlUpdateStock)) {
-            echo "Error updating stock: " . $conn->error;
-        }
-    }
-
-
-
-
-
-        }
         echo "<script>window.location.href='outnew.php?id=".$_POST['id']."';</script>";
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
@@ -361,13 +331,7 @@ if (fmod($c, 1) == 0.00) {
         $productId = $row['product_id'];
         $quantity = $row['quantity'];
 
-        // Update stock
-        $sql = "UPDATE products SET stock = stock + '$quantity' WHERE id = '$productId'";
-        if ($conn->query($sql) === TRUE) {
-            echo "<script>window.location.href='outnew.php?id=".$_GET['id']."';</script>";
-        } else {
-            echo "Error updating stock: " . $conn->error;
-        }
+        
     }
     $sql = "DELETE FROM outproducts WHERE id = '$id'";
     if ($conn->query($sql) === TRUE) {
@@ -404,7 +368,10 @@ if (fmod($c, 1) == 0.00) {
             <div class="col-3 mb-3 me-2">
                 <label for="payment_method" class="form-label">Payment Method:</label>
                 <select class="form-select" id="payment_method" name="payment_method" required>
-                    <option value="<?php echo $row['payment_method']; ?>"><?php echo $pm; ?></option>
+                    <?php if (!is_null($pm)): ?>
+                    <option value="<?php echo $pm; ?>" selected><?php echo $pm; ?></option>
+                    <?php endif; ?>
+                    <option value="Due">Due</option>
                     <option value="Cash">Cash</option>
                     <option value="Debit">Debit</option>
                     <option value="MobileBanking">Mobile Banking</option>
@@ -440,7 +407,9 @@ if (fmod($c, 1) == 0.00) {
 
     $sql = "UPDATE outdetails SET payment_method = '$payment_method', payment_details = '$payment_details', remarks = '$remarks' WHERE id = '$id'";
     if ($conn->query($sql) === TRUE) {
-        echo "<script>window.location.href='outnew.php?id=".$_GET['id']."';</script>";
+
+
+        echo "<script>window.location.href='outproducts.php?id=".$_GET['id']."';</script>";
     } else {
         echo "Error updating record: " . $conn->error;
     }
@@ -458,7 +427,45 @@ if (fmod($c, 1) == 0.00) {
 
     $sql = "UPDATE outdetails SET payment_method = '$payment_method', payment_details = '$payment_details', remarks = '$remarks' ,type = 1 WHERE id = '$id'";
     if ($conn->query($sql) === TRUE) {
-        echo "<script>window.location.href='outnew.php?id=".$_GET['id']."';</script>";
+
+        $sql2 = "SELECT sum(quantity * price) as total FROM outproducts WHERE outdetails_id = '$id'";
+        $result2 = $conn->query($sql2);
+        if ($result2->num_rows > 0) {
+            $row2 = $result2->fetch_assoc();
+            $total = $row2['total'];
+
+            $sql = "UPDATE outdetails SET total = '$total' WHERE id = '$id'";
+            if ($conn->query($sql) === TRUE) {
+
+            } else {
+                echo "Error updating record: " . $conn->error;
+            }
+        }
+
+        $sql2 = "SELECT product_id, quantity FROM outproducts WHERE outdetails_id = '$id'";
+        $result2 = $conn->query($sql2);
+        if ($result2->num_rows > 0) {
+            while ($row2 = $result2->fetch_assoc()) {
+                $productId = $row2['product_id'];
+                $quantity = $row2['quantity'];
+
+                $sql = "SELECT stock FROM products WHERE id = '$productId'";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                    $row = $result->fetch_assoc();
+                    $newStock = $row['stock'] - $quantity;
+                    $sqlUpdateStock = "UPDATE products SET stock = '$newStock'  WHERE id = '$productId'";
+                    if (!$conn->query($sqlUpdateStock)) {
+                        echo "Error updating stock: " . $conn->error;
+                    }
+                }
+            }
+        }
+
+
+
+
+        echo "<script>window.location.href='outproducts.php?id=".$_GET['id']."';</script>";
     } else {
         echo "Error updating record: " . $conn->error;
     }

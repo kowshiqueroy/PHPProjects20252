@@ -19,6 +19,8 @@
 
                     document.getElementById("top-message").style.display = "block";
 
+                    console.log(message);
+                  
 
 
 

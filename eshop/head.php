@@ -1,7 +1,9 @@
 <?php
 require_once 'conn.php';
 
-//echo "Session ID: " . session_id() . "<br>";
+if(!isset($_SESSION['sid'])) {
+    $_SESSION['sid']= session_id();
+}
 
 
 ?>
@@ -20,6 +22,8 @@ require_once 'conn.php';
         $email = $row['email'];
         $address = $row['address'];
         $bank = $row['bank'];
+        $mobilebankingcharge=2;
+        $deliverycharge=5;
     ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,6 +32,9 @@ require_once 'conn.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $companyname; ?></title>
     <link rel="shortcut icon" href="admin/<?php echo $favicon; ?>" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    
+    
     
     <style>
         /* General Styles */
@@ -122,7 +129,7 @@ require_once 'conn.php';
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s, box-shadow 0.3s;
             margin-bottom: 100px;
-            width: 15vw;
+            width: 20vw;
 
         }
 
@@ -164,6 +171,22 @@ require_once 'conn.php';
             transform: scale(1.05);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
         }
+        
+        .percentSave {
+            animation: fadeInOut 2s ease-in-out infinite;
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
 
         /* Footer */
         footer {
@@ -186,7 +209,7 @@ require_once 'conn.php';
             
         }
             .book {
-                   width: 30vw;
+                   width: 40vw;
             }
 
             /* Adjust header layout for mobile */

@@ -87,7 +87,11 @@ require_once 'header.php';
                 
                 
                 
-                echo "</td><td>".($row['type'] == 0 ? " (In)" : " (Back)") . " ".$row['total']."/= " .$row['payment_method']." ".$row['payment_details']." ". $row['remarks'] .  "</td><td>";
+                echo "</td><td>".($row['status'] == 0 ? " (Out)" : " (Back)") . " ".$row['total']."/= " .$row['payment_method']." ".$row['payment_details']." ". $row['remarks'];
+                if (!is_null($row['session_id'])) {
+                    echo " From Web: sessionID=".$row['session_id'];
+                }
+                echo "</td><td>";
                 if ($row['type'] == 0) {
                     echo "<a href='outnew.php?id=".$row['id']."' class='btn btn-primary'>Edit</a>";
                 }
