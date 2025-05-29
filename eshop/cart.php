@@ -80,6 +80,7 @@ function getProductname($id) {
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             $total = 0;
+            $totalitem = 0;
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
                 echo "<td><a style='text-decoration:none;' href='p.php?id=" . $row['product_id'] . "'>" . getProductname($row['product_id']) . "</a></td>";
@@ -91,11 +92,28 @@ function getProductname($id) {
                 echo "<td><a style='text-decoration:none;' href='cart.php?delete=" . $row['id'] . "'>X</a></td>";
                 echo "</tr>";
                 $total += $row['price'] * $row['quantity'];
+                $totalitem +=  $row['quantity'];
             }
-            echo "<tr><td colspan='3' style='text-align: right;'>Sub Total: </td><td style='font-weight: bold;'>" . number_format($total, 2) . "</td></tr>";
-             echo "<tr><td colspan='3' style='text-align: right;'>Mobile Banking Charge: </td><td style='font-weight: bold;'>" . number_format($mobilebankingcharge, 2)  . "</td></tr>";
-              echo "<tr><td colspan='3' style='text-align: right;'>Delivery Charge: </td><td style='font-weight: bold;'>" . number_format($deliverycharge, 2)  . "</td></tr>";
-               echo "<tr><td colspan='3' style='text-align: right;'>Total: </td><td style='font-weight: bold;'>" . number_format( $total + $mobilebankingcharge + $deliverycharge, 2) . "</td></tr>";
+            if($totalitem > 3){
+                $deliverycharge = 90 + (($totalitem - 3) * 10);
+            }else{
+                $deliverycharge = 90;
+            }
+            echo "<tr><td colspan='3' style='text-align: right;'>Sub Total: </td><td style='font-weight: bold;'><span id='subtotal'>".number_format((float)$total, 2, '.', '')."</span></td></tr>";
+              echo "<tr><td colspan='3' style='text-align: right;'>Delivery Charge: <span id='item'>".$totalitem."</span></td><td style='font-weight: bold;'><span id='price'>".$deliverycharge."</span></td></tr>";
+               echo "<tr><td colspan='3' style='text-align: right;'>Total: </td><td style='font-weight: bold;'><span id='total'>".number_format((float)$total+$deliverycharge, 2, '.', '')."</span></td></tr>";
+
+
+               ?>
+
+
+
+
+
+
+
+
+               <?php 
         }
 
 if (isset($_GET['increase'])) {
@@ -149,6 +167,7 @@ if (isset($_POST['order'])) {
   $payment_method = $_POST['payment_method'];
   $payment_details = $_POST['payment_details'];
   $remarks = $_POST['remarks'];
+  $payamount = $_POST['payamount'];
 
   $person_name = $name . " " . $address . " " . $phone;
   $sql = "SELECT id FROM person WHERE details = '$person_name'";
@@ -164,7 +183,7 @@ if (isset($_POST['order'])) {
       echo "Error: " . $sql . "<br>" . $conn->error;
     }
   }
-$session_id2=$session_id." Ordered";
+$session_id2=$session_id." Ordered ".$payamount;
   $sql = "UPDATE outdetails SET session_id = '$session_id2', person_id = '$person_id', payment_method = '$payment_method', payment_details = '$payment_details', remarks = '$remarks' WHERE id = '".   $outdetails_id."'";
   if ($conn->query($sql) === TRUE) {
 
@@ -213,7 +232,8 @@ echo "<script>
           <div class="col-md-2 mb-3">
             <label for="payment_method">Payment Method</label>
             <select class="form-control" id="payment_method" name="payment_method" required>
-          
+            <option value="" disabled selected>Select</option>
+              <option value="COD">Cash On Delivery</option>
               <option>BKash</option>
               <option>Rocket</option>
               <option>Nagad</option>
@@ -222,6 +242,43 @@ echo "<script>
             </select>
           </div>
         
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const subtotalElement = document.getElementById('subtotal');
+        const itemElement = document.getElementById('item');
+        const priceElement = document.getElementById('price');
+        const totalElement = document.getElementById('total');
+
+        document.getElementById('payment_method').addEventListener('change', (event) => {
+            if(event.target.value === 'COD'){
+                const totalItem = parseInt(itemElement.innerHTML);
+                let price = 90;
+                if (totalItem > 3) {
+                    price += (totalItem - 3) * 10;
+                }
+                priceElement.innerHTML = price.toString();
+              
+            }else{
+              const totalItem = parseInt(itemElement.innerHTML);
+                let price = 60;
+                if (totalItem > 3) {
+                    price += (totalItem - 3) * 10;
+                }
+                priceElement.innerHTML = price.toString();
+            }
+
+            const subTotal = parseFloat(subtotalElement.innerHTML);
+            const price = parseFloat(priceElement.innerHTML);
+            totalElement.innerHTML = (subTotal + price).toFixed(2).toString();
+            document.getElementById('payamount').value = (subTotal + price).toFixed(2).toString();
+            
+
+
+        });
+    });
+</script>
+
+
             <div class="col-md-3 mb-3">
             <label for="payment_details">Payment Details</label>
             <input type="text" class="form-control" id="payment_details" name="payment_details" placeholder="Transaction ID / Number / Details" required>
@@ -232,6 +289,8 @@ echo "<script>
             </div>
 
              <div class="col-md-3  h-100">
+<input id="payamount" type="hidden" name="payamount" value="">
+
            <button type="submit" name="order" class="btn btn-success btn-lg w-100">Place Order</button>
             </div>
             

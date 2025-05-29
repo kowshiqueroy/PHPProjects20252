@@ -127,6 +127,7 @@ if (isset($_POST['update'])) {
                     if ($result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
                             echo "<option >".$row['details']."</option>";
+                            
                         }
                     }
                     ?>
@@ -169,6 +170,7 @@ if (isset($_POST['update'])) {
                         $sql = "SELECT type FROM outdetails WHERE id = '$id'";
                         $result = $conn->query($sql);
                         if ($result->num_rows > 0) {
+                             
                             $row = $result->fetch_assoc();
                             if ($row['type'] == 0) {
                                 echo "<option value='0' selected>OUT</option>";
@@ -309,29 +311,35 @@ if (fmod($c, 1) == 0.00) {
         <tbody>
             <?php
             $id = $_GET['id'];
-            $sql = "SELECT *
-                    FROM outproducts 
-                    WHERE outdetails_id = '$id'";
+            $sql = "SELECT * FROM outproducts WHERE outdetails_id = '$id'";
             $result = $conn->query($sql);
+            $grandTotal = 0;
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
                     echo "<tr>";
-                            
-                            $sql2 = "SELECT * FROM products WHERE id = '".$row['product_id']."'";
-                            $result2 = $conn->query($sql2);
-                            if ($result2->num_rows > 0) {
-                                while ($row2 = $result2->fetch_assoc()) {
-                                    echo "<td>" . $row2['category'] ." ". $row2['brand'] ." ". $row2['maker'] ." ". $row2['productname'] ." ". $row2['unitname'] . "</td>";
-                                }
-                            }
-                           
-                           echo "<td>" . $row['quantity'] . "</td>
-                            <td>" . $row['price'] . "</td>
-                            <td>" . ($row['quantity'] * $row['price']) . "</td>
-                         
-                            <td><a href='outnew.php?id=".$_GET['id']."&delete=" . $row['id'] . "'>Delete</a></td>
-                        </tr>";
+                    $sql2 = "SELECT * FROM products WHERE id = '".$row['product_id']."'";
+                    $result2 = $conn->query($sql2);
+                    if ($result2->num_rows > 0) {
+                        while ($row2 = $result2->fetch_assoc()) {
+
+                            echo "<td>" . $row2['category'] ." ". $row2['brand'] ." ". $row2['maker'] ." ". $row2['productname'] ." ". $row2['unitname'] . "</td>";
+                        }
+                    }
+                    $total = $row['quantity'] * $row['price'];
+                    $grandTotal += $total;
+                    echo "<td>" . $row['quantity'] . "</td>
+                          <td>" . $row['price'] . "</td>
+                          <td>" . $total . "</td>
+                          <td><a href='outnew.php?id=".$_GET['id']."&delete=" . $row['id'] . "'>Delete</a></td>
+                          </tr>";
+
+                        
                 }
+                echo "<tr><td colspan='3' style='text-align: right; font-weight: bold;'>Grand Total</td><td colspan='2'>" . $grandTotal . "</td></tr>";
+                   
+
+                
+                
             }
             ?>
         </tbody>
@@ -377,6 +385,7 @@ if (fmod($c, 1) == 0.00) {
             $pd = $row["payment_details"];
             $r = $row["remarks"];
             $t = $row["type"];
+             $s=$row['session_id'] ;
        
         }
         ?>
@@ -415,6 +424,13 @@ if (fmod($c, 1) == 0.00) {
                     </div>
                 </form>
             </div>
+            <?php if (!is_null($s)) {
+                        echo "<p style='text-align: center;'>From Web: Session ID: " . $s. "/=</p>";
+                    } else {
+                       
+                    }
+
+                    ?>
             <?php if ($t == 0): ?>
 
                 <hr>

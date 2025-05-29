@@ -19,8 +19,7 @@ require_once 'conn.php';
         $email = $row['email'];
         $address = $row['address'];
         $bank = $row['bank'];
-        $mobilebankingcharge=2;
-        $deliverycharge=5;
+      
     ?>
 <!DOCTYPE html>
 <html lang="en">
