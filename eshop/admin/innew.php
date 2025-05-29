@@ -27,7 +27,7 @@ if (isset($_POST['submit'])) {
     $sql = "INSERT INTO indetails (person_id, purchase_date, type) VALUES ('$person_id', '$date', '$type')";
     if ($conn->query($sql) === TRUE) {
         $id = $conn->insert_id;
-        header("Location: innew.php?id=$id");
+        echo "<script>window.location.href='innew.php?id=$id';</script>";
         exit();
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
@@ -376,8 +376,12 @@ if (isset($_POST['update'])) {
             <div class="col-3 mb-3 me-2">
                 <label for="payment_method" class="form-label">Payment Method:</label>
                 <select class="form-select" id="payment_method" name="payment_method" required>
-                    <option value="<?php echo $row['payment_method']; ?>"><?php echo $pm; ?></option>
+                    <?php if (!is_null($pm)): ?>
+                    <option value="<?php echo $pm; ?>"><?php echo $pm; ?></option>
+                    <?php endif; ?>
+                   
                     <option value="Cash">Cash</option>
+                     <option >Due</option>
                     <option value="Debit">Debit</option>
                     <option value="MobileBanking">Mobile Banking</option>
                     <option value="Credit">Credit</option>
@@ -412,7 +416,7 @@ if (isset($_POST['update'])) {
 
     $sql = "UPDATE indetails SET payment_method = '$payment_method', payment_details = '$payment_details', remarks = '$remarks' WHERE id = '$id'";
     if ($conn->query($sql) === TRUE) {
-        echo "<script>window.location.href='innew.php?id=".$_GET['id']."';</script>";
+        echo "<script>window.location.href='inproducts.php?id=".$_GET['id']."';</script>";
     } else {
         echo "Error updating record: " . $conn->error;
     }
@@ -430,7 +434,7 @@ if (isset($_POST['update'])) {
 
     $sql = "UPDATE indetails SET payment_method = '$payment_method', payment_details = '$payment_details', remarks = '$remarks' ,type = 1 WHERE id = '$id'";
     if ($conn->query($sql) === TRUE) {
-        echo "<script>window.location.href='innew.php?id=".$_GET['id']."';</script>";
+        echo "<script>window.location.href='inproducts.php?id=".$_GET['id']."';</script>";
     } else {
         echo "Error updating record: " . $conn->error;
     }

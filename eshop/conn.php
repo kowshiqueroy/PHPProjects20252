@@ -11,5 +11,15 @@
   session_start();
 
   date_default_timezone_set('Asia/Dhaka');
- 
+ if(!isset($_SESSION['sid'])) {
+    $_SESSION['sid']= session_id();
+}
+
+
+$session_id = $_SESSION['sid'];
+
+
+
+
+
 ?>

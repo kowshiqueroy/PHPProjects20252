@@ -71,9 +71,65 @@
            <li><a href="outproducts.php">Orders</a></li>
            <li><a href="featured.php">Featured</a></li>
            <li><a href="reviews.php">Reviews</a></li>
+           <li><a href="visitors.php">Visitors</a></li>
         </ul>
     </div>
+ <div id="top-message" style=" display: none; position: fixed; top: 0; left: 0; width: 100vw; background: #4CAF50; color: white; padding: 10px; z-index: 1000; text-align: center;">
+    <p id="top-message-text"></p>
+    <div style="margin-top: 10px;">
+        <button id="top-message-button" style="background:#ff9800; color: white; padding: 5px 10px; border: none; cursor: pointer; border-radius: 5px;" onclick="window.location.href='#'">Check</button>
+    </div>
+</div>
 
+ <script>
+     setInterval(function(){
+        $.ajax({
+            url: "notification.php",
+            type: "GET",
+            success: function(data){
+                if (data != 0) {
+                   var topMessage = document.getElementById("top-message");
+     topMessage.style.opacity = 0;
+     topMessage.style.display = "block";
+     topMessageText = document.getElementById("top-message-text");
+     topMessageText.innerText = `You have New Order`;
+     document.getElementById("top-message-button").addEventListener("click", function(){
+        window.location.href="outproducts.php";
+     });
+     var fadeIn = setInterval(function() {
+        var val = parseFloat(topMessage.style.opacity);
+        if (!(val += 0.1)) topMessage.style.opacity = 0;
+        if (val >= 1) {
+            clearInterval(fadeIn);
+            topMessage.style.opacity = 1;
+        } else {
+            topMessage.style.opacity = val;
+        }
+    }, 50);
+    setTimeout(function() {
+        var fadeOut = setInterval(function() {
+            var val = parseFloat(topMessage.style.opacity);
+            if (!(val -= 0.1)) topMessage.style.opacity = 1;
+            if (val <= 0) {
+                clearInterval(fadeOut);
+                topMessage.style.opacity = 0;
+                topMessage.style.display = "none";
+            } else {
+                topMessage.style.opacity = val;
+            }
+        }, 50);
+    }, 5000);
+                }
+            }
+        });
+    }, 30000);
+
+
+     
+
+    </script>
+
+    
     <div class="container mt-3">
         <div class="content">
            

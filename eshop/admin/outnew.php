@@ -3,7 +3,25 @@ require_once '../conn.php';
 require_once 'header.php';
 ?>
 <?php
-    
+  
+  
+if (isset($_GET['delete'])) {
+    $id = $_GET['delete'];
+    $sql = "DELETE FROM outdetails WHERE id = '$id'";
+    if ($conn->query($sql) === TRUE) {
+        $sql = "DELETE FROM outproducts WHERE outdetails_id = '$id'";
+        if ($conn->query($sql) === TRUE) {
+            echo "<script>window.location.href='outproducts.php';</script>";
+        } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+
+
+
 if (isset($_POST['submit'])) {
     $person = $_POST['person'];
     $date = $_POST['date'];
@@ -27,7 +45,7 @@ if (isset($_POST['submit'])) {
     $sql = "INSERT INTO outdetails (person_id, purchase_date, type) VALUES ('$person_id', '$date', '$type')";
     if ($conn->query($sql) === TRUE) {
         $id = $conn->insert_id;
-        header("Location: outnew.php?id=$id");
+        echo "<script>window.location.href='outnew.php?id=$id';</script>";
         exit();
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
@@ -350,6 +368,7 @@ if (fmod($c, 1) == 0.00) {
         $pm="";
         $pd="";
         $r="";
+        $t="";
         $sql = "SELECT * FROM outdetails WHERE id = '".$_GET['id']."'";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
@@ -357,44 +376,59 @@ if (fmod($c, 1) == 0.00) {
             $pm = $row["payment_method"];
             $pd = $row["payment_details"];
             $r = $row["remarks"];
+            $t = $row["type"];
        
         }
         ?>
 
-    <div class="row">
-        <form action="" method="post" class="d-flex justify-content-between">
-            <input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
+            <div class="row">
+                <form action="" method="post" class="d-flex flex-wrap justify-content-between">
+                    <input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
 
-            <div class="col-3 mb-3 me-2">
-                <label for="payment_method" class="form-label">Payment Method:</label>
-                <select class="form-select" id="payment_method" name="payment_method" required>
-                    <?php if (!is_null($pm)): ?>
-                    <option value="<?php echo $pm; ?>" selected><?php echo $pm; ?></option>
-                    <?php endif; ?>
-                    <option value="Due">Due</option>
-                    <option value="Cash">Cash</option>
-                    <option value="Debit">Debit</option>
-                    <option value="MobileBanking">Mobile Banking</option>
-                    <option value="Credit">Credit</option>
-                    <option value="Cheque">Cheque</option>
-                    <option value="Bank">Bank</option>
-                    <option value="Other">Other</option>
-                </select>
+                    <div class="col-12 col-md-2 mb-3 me-2">
+                        <label for="payment_method" class="form-label">Payment Method:</label>
+                        <select class="form-select" id="payment_method" name="payment_method" required>
+                            <?php if (!is_null($pm)): ?>
+                            <option value="<?php echo $pm; ?>" selected><?php echo $pm; ?></option>
+                            <?php endif; ?>
+                            <option value="Due">Due</option>
+                            <option value="Cash">Cash</option>
+                            <option value="Debit">Debit</option>
+                            <option value="MobileBanking">Mobile Banking</option>
+                            <option value="Credit">Credit</option>
+                            <option value="Cheque">Cheque</option>
+                            <option value="Bank">Bank</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3 mb-3 me-2">
+                        <label for="payment_details" class="form-label">Payment Details:</label>
+                        <input type="text" class="form-control" id="payment_details" name="payment_details" value="<?php echo $pd; ?>" >
+                    </div>
+                    <div class="col-12 col-md-4 mb-3 me-2">
+                        <label for="remarks" class="form-label">Remarks:</label>
+                        <input type="text" class="form-control" id="remarks" name="remarks" value="<?php echo $r; ?>">
+                    </div>
+                    <div class="col-12 col-md-2 mb-3 text-center">
+                        <?php if ($t == 0): ?> <button type="submit" name="draft" class="btn btn-secondary me-2">Draft</button>  <?php endif; ?>
+                        <button type="submit" name="confirm" class="btn btn-primary">Confirm</button>
+                    </div>
+                </form>
             </div>
-            <div class="col-3 mb-3 me-2">
-                <label for="payment_details" class="form-label">Payment Details:</label>
-                <input type="text" class="form-control" id="payment_details" name="payment_details" value="<?php echo $pd; ?>" >
-            </div>
-            <div class="col-3 mb-3 me-2">
-                <label for="remarks" class="form-label">Remarks:</label>
-                <input type="text" class="form-control" id="remarks" name="remarks" value="<?php echo $r; ?>">
-            </div>
-            <div class="col-3 mb-3 text-end">
-                <button type="submit" name="draft" class="btn btn-secondary me-2">Draft</button>
-                <button type="submit" name="confirm" class="btn btn-primary">Confirm</button>
-            </div>
-        </form>
-    </div>
+            <?php if ($t == 0): ?>
+
+                <hr>
+                <div class="d-flex justify-content-center">
+                    <button onclick="if(confirm('Are you sure to delete this?') === false) event.preventDefault(); else window.location.href='outnew.php?delete=<?php echo $_GET['id']; ?>';" class="btn btn-danger">Delete</button>
+                </div>
+         
+             <?php endif; ?>
+            
+            
+    
+
+        
+    
 
 
 

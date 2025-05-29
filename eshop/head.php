@@ -1,9 +1,6 @@
 <?php
 require_once 'conn.php';
 
-if(!isset($_SESSION['sid'])) {
-    $_SESSION['sid']= session_id();
-}
 
 
 ?>
