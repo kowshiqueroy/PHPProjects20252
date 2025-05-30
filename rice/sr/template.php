@@ -2,8 +2,7 @@
 require_once '../conn.php';
 require_once 'header.php';
 ?>
-
-<div class="card p-1 text-center">Home</div>
+<div class="card p-1 text-center">Page</div>
 
 
 

@@ -39,7 +39,10 @@ function drop_all_tables($conn) {
     return $msg;
 }
 
-//$msg = drop_all_tables($conn);
+if (isset($_POST['drop'])) {
+    $msg = drop_all_tables($conn);
+}
+echo '<p style="text-align:center;"><form method="post" action=""><button type="submit" name="drop" class="btn btn-danger btn-lg">Drop All Tables</button></form></p>';
 
 
 
@@ -96,8 +99,7 @@ if ($conn->query($sql) === TRUE) {
 
 $sql = "CREATE TABLE IF NOT EXISTS routes (
   id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  route_name VARCHAR(50) NOT NULL,
-  status BOOLEAN NOT NULL DEFAULT 1
+  route_name VARCHAR(50) NOT NULL
 )";
 if ($conn->query($sql) === TRUE) {
     $msg .= "Table route";
@@ -108,8 +110,7 @@ $msg .= "<br>";
 
 $sql = "CREATE TABLE IF NOT EXISTS products (
   id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  product_name VARCHAR(50) NOT NULL,
-  status BOOLEAN NOT NULL DEFAULT 1
+  product_name VARCHAR(50) NOT NULL
 )";
 if ($conn->query($sql) === TRUE) {
     $msg .= "Table products";
@@ -121,8 +122,7 @@ $msg .= "<br>";
 
 $sql = "CREATE TABLE IF NOT EXISTS persons (
   id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  person_name VARCHAR(100) NOT NULL,
-  status BOOLEAN NOT NULL DEFAULT 1
+  person_name VARCHAR(100) NOT NULL
 
 )";
 if ($conn->query($sql) === TRUE) {
@@ -137,8 +137,11 @@ $sql = "CREATE TABLE IF NOT EXISTS orders (
   id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   person_id INT(11) NOT NULL,
   total DECIMAL(15,2) NOT NULL,
-  status BOOLEAN NOT NULL DEFAULT 0,
+  draft BOOLEAN NOT NULL DEFAULT 1,
+  approval BOOLEAN NOT NULL DEFAULT 0,
   delivery BOOLEAN NOT NULL DEFAULT 0,
+  back BOOLEAN NOT NULL DEFAULT 0,
+  close BOOLEAN NOT NULL DEFAULT 0,
   latitude DECIMAL(10,8) NOT NULL,
   longitude DECIMAL(11,8) NOT NULL,
   timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -146,10 +149,10 @@ $sql = "CREATE TABLE IF NOT EXISTS orders (
   created_by INT(11) NOT NULL,
   approved_by INT(11) NOT NULL,
   route_id INT(11) NOT NULL,
-   FOREIGN KEY (route_id) REFERENCES routes(id),
-   FOREIGN KEY (person_id) REFERENCES persons(id),
-   FOREIGN KEY (created_by) REFERENCES users(id),
-   FOREIGN KEY (approved_by) REFERENCES users(id)
+  serial INT(11) NOT NULL,
+  order_date DATE NOT NULL,
+  delivery_date DATE NOT NULL,
+  remarks VARCHAR(255) NULL
 
 )";
 if ($conn->query($sql) === TRUE) {
@@ -166,8 +169,7 @@ $sql = "CREATE TABLE IF NOT EXISTS order_product (
   product_id INT(11) NOT NULL,
   quantity INT(11) NOT NULL,
   price DECIMAL(15,2) NOT NULL,
-  total DECIMAL(15,2) NOT NULL,
-  FOREIGN KEY (order_id) REFERENCES orders(id)
+  total DECIMAL(15,2) NOT NULL
 )";
 if ($conn->query($sql) === TRUE) {
     $msg .= "Table order_product";

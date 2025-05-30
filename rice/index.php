@@ -17,7 +17,7 @@ if(isset($_POST['submitLogin'])){
         $conn->query($sql);
 
 
-        $_SESSION['admin'] = true;
+       
         $user = $result->fetch_assoc();
         $_SESSION['username'] = $username;
         $_SESSION['role'] = $user['role'];
@@ -51,7 +51,7 @@ if(isset($_POST['submitLogin'])){
 
 
 
-if(isset($_SESSION['admin']) && $_SESSION['admin'] == true && $_SESSION['status'] == 1){
+if(isset($_SESSION['status'])  && $_SESSION['status'] == 1){
     header("Location: ".$_SESSION['rolename']."/index.php");
 }else{
 
@@ -61,7 +61,7 @@ if(isset($_SESSION['admin']) && $_SESSION['admin'] == true && $_SESSION['status'
 <!DOCTYPE html>
 <html>
 <head>
-    <title>SHARM Sales APP</title>
+    <title><?php echo $sitename ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <style>
@@ -109,7 +109,7 @@ if(isset($_SESSION['admin']) && $_SESSION['admin'] == true && $_SESSION['status'
 </head>
 <body>
     <div class="login-form">
-        <h1>SHARM Sales App</h1>
+        <h1><?php echo $sitename ?></h1>
         <form action="" method="post">
             <input type="text" name="username" placeholder="Username" required>
             <input type="password" name="password" placeholder="Password" required>

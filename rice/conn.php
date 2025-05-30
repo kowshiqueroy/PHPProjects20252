@@ -1,4 +1,8 @@
 <?php
+
+$sitename="Sales App";
+
+
   if (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || strpos($_SERVER['HTTP_HOST'], 'ngrok') !== false) {
     $conn = mysqli_connect("localhost", "root", "", "rice");
   } else {

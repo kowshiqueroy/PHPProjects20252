@@ -12,12 +12,15 @@ if (!isset($_SESSION['rolename']) || $_SESSION['rolename'] !== 'sr') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title><?php echo $sitename ?></title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <style>
+
+</style>
     <style>
         body { font-family: 'Arial', sans-serif; background: #f8f9fa; }
         .navbar { background: #343a40; color: white; }
@@ -49,7 +52,7 @@ if (!isset($_SESSION['rolename']) || $_SESSION['rolename'] !== 'sr') {
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-dark d-flex align-items-center justify-content-between px-3">
+    <nav class="navbar navbar-dark d-flex align-items-center justify-content-between px-3 no-print">
         <button class="btn btn-primary" id="menuToggle">☰</button>
         <span class="navbar-brand">Dashboard</span>
         <div class="user-info">
@@ -59,7 +62,7 @@ if (!isset($_SESSION['rolename']) || $_SESSION['rolename'] !== 'sr') {
         </div>
     </nav>
 
-    <div class="menu-box p-3" id="menuBox">
+    <div class="menu-box p-3 no-print" id="menuBox">
         <button class="btn btn-secondary w-100" id="closeMenu">Close</button>
         <ul>
         <span class="text-white small"><?php echo $_SESSION['username']." (".$_SESSION['id'].") ".$_SESSION['rolename'];?></span>
@@ -72,7 +75,87 @@ if (!isset($_SESSION['rolename']) || $_SESSION['rolename'] !== 'sr') {
         </ul>
     </div>
 
+<script>
+        $(document).ready(function () {
+            $("#menuToggle").click(function () {
+                $("#menuBox").toggleClass("show");
+            });
+            $("#closeMenu").click(function () {
+                $("#menuBox").removeClass("show");
+            });
+           
+            $(".select2").select2({
+                theme: "classic"
+            });
+
+            $(".select2edit").select2({
+              theme: "classic",
+                tags: true,
+                
+            });
+
+
+        });
+
+           
+    </script>
+
     <div class="container mt-3">
+
+
+
+        <style>
+            .preloader {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: blur(white);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 9999;
+            }
+            .preloader .spinner {
+                width: 150px;
+                height: 150px;
+                border: 10px solid #f3f3f3;
+                border-top: 10px solid #3498db;
+                border-radius: 50%;
+                animation: spin 0.5s linear infinite;
+            }
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+            .spinner {
+                transition: transform 0.5s ease-in-out;
+            }
+        </style>
+        <div class="preloader no-print">
+            <div class="spinner"></div>
+        </div>
+        <script>
+            var preloader = document.querySelector(".preloader");
+            var loadTime = new Date().getTime();
+            window.addEventListener("load", function () {
+                var currentTime = new Date().getTime();
+                var timeTaken = currentTime - loadTime;
+                if (timeTaken < 500) {
+                    setTimeout(function () {
+                        preloader.style.display = "none";
+                    }, 500 - timeTaken);
+                } else {
+                    preloader.style.display = "none";
+                }
+            });
+        </script>
+
+
+
+
+
         <div class="content">
            
             
