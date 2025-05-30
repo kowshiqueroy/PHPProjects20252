@@ -11,7 +11,7 @@ require_once 'header.php';
 </div>
 
 <hr>
-<form method="post" action="">
+<form class="no-print" method="post" action="">
     <div class="row">
 
         <div class="col-md-1 col-4">
@@ -172,13 +172,24 @@ require_once 'header.php';
 
 <hr>
 
-<div class="table" style="overflow-y: auto; white-space: wrap;">
+
+<hr>
+<div >
     <table class="table table-striped table-bordered">
 
     
+        <style>
+            /* #table_head th{
+                white-space: nowrap;
+                transform: rotate(-45deg);
+                transform-origin: 20px 20px;
+                text-align: left;
+              
+            } */
+        </style>
         <thead>
-            <tr>
-                <th>ID</th>
+            <tr id="table_head" style="text-align: center; height: 100px;">
+                <th >ID</th>
                 <th>Draft</th>
                 <th>Route</th>
                 <th>Person</th>
@@ -200,6 +211,7 @@ require_once 'header.php';
               $productNamesall = array();
               $productQuantitiesall = array();
               $grandAmount=0.00;
+              $idall= "";
             
                     $sql = "SELECT orders.*, persons.person_name, routes.route_name
                     FROM orders 
@@ -293,7 +305,23 @@ require_once 'header.php';
                 while ($row = $result->fetch_assoc()) {
                     ?>
                     <tr>
-                        <td><?php echo $row['id']; ?></td>
+                        <td><?php
+                        
+                        
+                        echo $row['id'];
+                        
+                        
+                        
+                        if(empty($idall)){
+                            $idall .= $row['id'];
+                        } else {
+                            $idall .= ",".$row['id'];
+                        }
+                        
+                        
+                        
+                        
+                        ?></td>
                         <td>
 
                             <?php 
@@ -449,7 +477,9 @@ if ($result4->num_rows > 0) {
     </table>
 </div>
 <hr>
-
+<?php
+    echo '<div style="text-align: center;"><button type="button" class="btn btn-secondary" onclick="window.location.href=\'printshort.php?idall=' . $idall . '\'">Print Short</button><button type="button" class="btn btn-secondary" style="margin-left: 10px;" onclick="window.location.href=\'printfull.php?idall=' . $idall . '\'">Print Full</button></div>';
+?>
 
 <?php
 require_once 'footer.php';

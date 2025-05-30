@@ -1,4 +1,5 @@
 <?php
+
 if (!isset($_SESSION['rolename']) || $_SESSION['rolename'] !== 'sr') {
     header("Location: ../index.php");
     exit();
@@ -11,7 +12,7 @@ if (!isset($_SESSION['rolename']) || $_SESSION['rolename'] !== 'sr') {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title><?php echo $sitename ?></title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
@@ -23,6 +24,16 @@ if (!isset($_SESSION['rolename']) || $_SESSION['rolename'] !== 'sr') {
 </style>
     <style>
         body { font-family: 'Arial', sans-serif; background: #f8f9fa; }
+        @media print {
+           
+            .content {
+                margin-left: -200px;
+                padding: 0;
+            }
+            .no-print {
+                display: none;
+            }
+        }
         .navbar { background: #343a40; color: white; }
         .menu-box {
             width: 250px; position: fixed; left: -260px; top: 0; height: 100vh; 
@@ -158,5 +169,4 @@ if (!isset($_SESSION['rolename']) || $_SESSION['rolename'] !== 'sr') {
 
         <div class="content">
            
-            
-       
+      
