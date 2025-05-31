@@ -69,10 +69,10 @@ if (!isset($_SESSION['rolename']) || $_SESSION['rolename'] !== 'admin') {
         <ul>
         <span class="text-white small"><?php echo $_SESSION['username']." (".$_SESSION['id'].") ".$_SESSION['rolename'];?></span>
         
-            <li><a href="index.php">Home</a></li>
-            <li><a href="users.php">Users</a></li>
-            <li><a href="settings.php">Settings</a></li>
-            <li><a href="notice.php">Notice</a></li>
+            <li><a href="index.php"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="users.php"><i class="fas fa-users"></i> Users</a></li>
+            <li><a href="settings.php"><i class="fas fa-cog"></i> Settings</a></li>
+            <li><a href="notice.php"><i class="fas fa-bell"></i> Notice</a></li>
            
         </ul>
     </div>

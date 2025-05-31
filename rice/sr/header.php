@@ -35,7 +35,7 @@ if (!isset($_SESSION['rolename']) || $_SESSION['rolename'] !== 'sr') {
                 display: none;
             }
         }
-        .navbar { background: #343a40; color: white;
+        .navbar { background:rgb(23, 126, 9); color: white;
 
 
     position: -webkit-sticky;
@@ -78,7 +78,7 @@ if (!isset($_SESSION['rolename']) || $_SESSION['rolename'] !== 'sr') {
 </head>
 <body>
     <nav class="navbar navbar-dark d-flex align-items-center justify-content-between px-3 no-print">
-        <button class="btn btn-primary" id="menuToggle">☰</button>
+        <button class="btn btn-warning" id="menuToggle">☰</button>
         <span class="navbar-brand">Dashboard</span>
         <div class="user-info">
         <span class="text-white small desktop-items"><?php echo $_SESSION['rolename'];?></span>
@@ -92,12 +92,12 @@ if (!isset($_SESSION['rolename']) || $_SESSION['rolename'] !== 'sr') {
         <ul>
         <span class="text-white small"><?php echo $_SESSION['username']." (".$_SESSION['id'].") ".$_SESSION['rolename'];?></span>
         
-            <li><a href="index.php">Home</a></li>
-            <li><a href="users.php">Users</a></li>
-            <li><a href="settings.php">Settings</a></li>
-             <li><a href="orders.php">Orders</a></li>
-              <li><a href="chat.php">Chat</a></li>
-               <li><a href="note.php">Note</a></li>
+            <li><a href="index.php"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="users.php"><i class="fas fa-users"></i> Users</a></li>
+            <!-- <li><a href="settings.php"><i class="fas fa-cog"></i> Settings</a></li> -->
+            <li><a href="orders.php"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+            <li><a href="chat.php"><i class="fas fa-comments"></i> Chat</a></li>
+            <li><a href="note.php"><i class="fas fa-sticky-note"></i> Note</a></li>
            
         </ul>
     </div>

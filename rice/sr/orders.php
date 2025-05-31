@@ -426,7 +426,7 @@ if (isset($_POST['update_id'])) {
                         $latitude = $row['latitude'];
                         $longitude =$row['longitude'];
                         $googleMapsUrl = "https://www.google.com/maps?q={$latitude},{$longitude}";
-                       // echo'<a href="' . $googleMapsUrl . '" target="_blank">Map</a>';
+                        echo'<a href="' . $googleMapsUrl . '" target="_blank">Map</a>';
 
                       
                            

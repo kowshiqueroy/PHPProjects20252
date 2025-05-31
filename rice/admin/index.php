@@ -3,9 +3,6 @@ require_once '../conn.php';
 require_once 'header.php';
 ?>
 
-<div class="card p-1 text-center">
-    <h1>Home</h1>
-</div>
 
 
 <style>

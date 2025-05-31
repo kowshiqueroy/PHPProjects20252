@@ -364,7 +364,7 @@ if($draft==0) {
 
 <hr>
 
-
+            <div class="table-responsive">
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -417,7 +417,7 @@ if($draft==0) {
         }
         ?>
     </table>
-
+</div>
 
     <div class="row mt-3">
         <div class="col-md-12 text-center">

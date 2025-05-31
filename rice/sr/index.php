@@ -3,9 +3,7 @@ require_once '../conn.php';
 require_once 'header.php';
 ?>
 
-<div class="card p-1 text-center">
-    <h1>Home</h1>
-</div>
+
 
 
 <style>
@@ -122,7 +120,18 @@ footer {
                 }
             </style>
             <div style="width: 100%;">
-                <h2 style="text-align: center; color: #337ab7; margin-bottom: 20px;">Notice Board</h2>
+                 <style>
+                    .notice-board-heading {
+                        text-align: center;
+                        color:rgb(201, 59, 16);
+                        font-size: 30px;
+                        font-weight: 600;
+                        margin-bottom: 20px;
+                    }
+                </style>
+                <h2 class="notice-board-heading">Notice Board</h2>
+
+               
                 <section class="notice-container">
                     <?php
                         $sql = "SELECT * FROM notice ORDER BY id DESC LIMIT 10";

@@ -3,28 +3,18 @@ require_once '../conn.php';
 require_once 'header.php';
 
 
-$sql = "CREATE TABLE IF NOT EXISTS notice (
-    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) NOT NULL,
-    content TEXT NOT NULL,
-    datetime DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-)";
-if ($conn->query($sql) === TRUE) {
-    echo "Table notice created successfully";
-} else {
-    echo "Error creating table: " . $conn->error;
-}
+
 
 ?>
 
 <div class="card p-1 text-center">Notice</div>
-  <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
-        <div class="form-group">
-            <label for="content">Content</label>
-            <textarea class="form-control" id="content" name="content" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Create</button>
-    </form>
+  <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" style="max-width: 500px; margin: 0 auto; text-align: center;">
+    <div class="form-group">
+        <label for="content">Content</label>
+        <textarea class="form-control" id="content" name="content" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
 <table class="table">
     <thead>
         <tr>

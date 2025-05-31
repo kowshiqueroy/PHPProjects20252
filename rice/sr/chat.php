@@ -123,7 +123,7 @@ require_once 'header.php';
         xhr.send("get=true");
     }
     getChatLog();
-    setInterval(getChatLog, 10000);
+    setInterval(getChatLog, 500);
 </script>
 
 

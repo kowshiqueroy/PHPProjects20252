@@ -57,72 +57,107 @@ if(isset($_SESSION['status'])  && $_SESSION['status'] == 1){
 
 
     ?>
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title><?php echo $sitename ?></title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+    <title><?php echo $sitename; ?></title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #fafafa;
-            font-family: sans-serif;
+            background: linear-gradient(to right, #141E30,rgb(59, 167, 59));
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #fff;
         }
         .login-form {
-            width: 300px;
-            background-color: #fff;
-            padding: 20px;
-            margin: 100px auto;
-            border: 1px solid #ddd;
-            box-shadow: 2px 2px 2px #ccc;
-        }
-        .message{
-            text-align: center;
-            background-color: #fff;
-            
-            border: 1px solid #ddd;
-            box-shadow: 2px 2px 2px #ccc;
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+            background-color: #1C1C1C;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
         }
         .login-form h1 {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            font-size: 28px;
+            color: #f0f2f5;
         }
-        .login-form input[type="text"], .login-form input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
+        .form-control::placeholder {
+            color: #8c96a6;
         }
-        .login-form input[type="submit"] {
-            width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: #fff;
+        
+        .form-control, .form-control:focus {
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background-color: #2D2D2D;
             border: none;
+            color: #fff;
+        }
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            background-color:rgb(255, 230, 0);
+            border: none;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            text-align: center;
+            margin-top: 20px;
+            color: #aaa;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
             cursor: pointer;
         }
-        .login-form input[type="submit"]:hover {
-            background-color: #45a049;
+        .input-container {
+            position: relative;
         }
     </style>
 </head>
 <body>
     <div class="login-form">
-        <h1><?php echo $sitename ?></h1>
+        <h1><?php echo $sitename; ?></h1>
         <form action="" method="post">
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <input type="submit" name="submitLogin" value="Login">
+            <div class="input-container">
+                <input type="text" name="username" class="form-control" placeholder="Username" required>
+            </div>
+            <div class="input-container">
+                <input type="password" name="password" class="form-control" placeholder="Password" required>
+                <i class="toggle-password fas fa-eye-slash"></i>
+            </div>
+            <input type="submit" name="submitLogin" class="btn btn-primary" value="Login">
         </form>
-
-       <div class="message"> <p>Developer: <b>kowshiqueroy@gmail.com</b>
-        
-       <?php 
-       echo $msg;
-        ?>
-        </p> </div>
+        <div class="message">
+            <p>Developer: <b>kowshiqueroy@gmail.com</b><br>
+            <?php echo $msg; ?>
+            </p>
+        </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.querySelector('.toggle-password').addEventListener('click', function (e) {
+            const passwordInput = document.querySelector('input[name="password"]');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+    </script>
 </body>
 </html>
 

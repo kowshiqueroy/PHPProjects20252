@@ -210,5 +210,19 @@ if ($conn->query($sql) === TRUE) {
 }
 $msg .= "<br>";
 
+$sql = "CREATE TABLE IF NOT EXISTS notice (
+    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    content TEXT NOT NULL,
+    datetime DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+)";
+if ($conn->query($sql) === TRUE) {
+    $msg .= " Table notice";
+} else {
+    $msg .= "Error creating table: ". $conn->error;
+}
+$msg .= "<br>";
+
+
 echo "<div style='text-align: center;'>$msg</div>";
 ?>
