@@ -242,12 +242,19 @@ if($draft==0) {
         <input type="hidden" id="longitude" name="longitude">
 
         <script>
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    document.getElementById("latitude").value = position.coords.latitude;
-                    document.getElementById("longitude").value = position.coords.longitude;
-                });
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        document.getElementById("latitude").value = position.coords.latitude;
+                        document.getElementById("longitude").value = position.coords.longitude;
+                    }, function() {
+                        if (confirm("Please allow LOCATION permission. Call for help: 01632950179")) {
+                            getLocation();
+                        }
+                    });
+                }
             }
+            getLocation();
         </script>
                 <button type="submit" name="create" value="1" class="btn btn-primary">Create</button>
             <?php } ?>
@@ -286,13 +293,14 @@ if($draft==0) {
                 $sql = "INSERT INTO order_product (order_id, product_id, quantity, price, total) VALUES ('$id', '$product_id', '$quantity', '$price', '$total')";
                 if ($conn->query($sql) === TRUE) {
                     echo '<div style="text-align: center; color:green;">Product added successfully</div>';
+                    echo "<script>window.location.href='create.php?id=".$_REQUEST['id']."#create';</script>";
                 } else {
                     echo "Error: " . $sql . "<br>" . $conn->error;
                 }
                 ?>
             <?php } ?>
-   
-    <form action="create.php?id=<?php echo $_REQUEST['id']; ?>" method="post">
+    <div class="text-center" id="create">Add Products</div>
+    <form  action="create.php?id=<?php echo $_REQUEST['id']; ?>" method="post">
         <div class="row">
             <div class="col-md-6">
                 <label for="product_id">Product</label>
@@ -310,14 +318,24 @@ if($draft==0) {
             </div>
             <div class="col-md-6">
                 <label for="quantity">Quantity</label>
-                <input type="number" step="0.01" class="form-control" id="quantity" name="quantity" required>
+                <input type="text" class="form-control" id="quantity" name="quantity" required pattern="^\d+(\.\d+)?$" oninput="this.value = convertBanglaToEnglish(this.value)">
             </div>
         </div>
         <div class="row mt-3">
             <div class="col-md-6">
                 <label for="price">Price</label>
-                <input type="number" step="0.01" class="form-control" id="price" name="price" required>
+                <input type="text" class="form-control" id="price" name="price" required pattern="^\d+(\.\d+)?$" oninput="this.value = convertBanglaToEnglish(this.value)">
             </div>
+
+    <script>
+        function convertBanglaToEnglish(str) {
+            var banglaDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+            var englishDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+            return str.replace(/[^\d.০-৯]/g, '').replace(/[০-৯]/g, function (digit) {
+                return englishDigits[banglaDigits.indexOf(digit)];
+            }).replace(/(\.\d{2})\d+/, '$1');
+        }
+    </script>
             <div class="col-md-6">
                 <label for="total">Total</label>
                 <input type="number" step="0.01" class="form-control" id="total" name="total" readonly>
@@ -391,7 +409,7 @@ if($draft==0) {
             $sql = "DELETE FROM order_product WHERE id = $id";
             if ($conn->query($sql) === TRUE) {
                 echo '<div class="alert alert-success">Deleted successfully</div>';
-                echo '<script>window.location.href="create.php?id=' . $_REQUEST['id'] . '"</script>';
+                echo '<script>window.location.href="create.php?id=' . $_REQUEST['id'] . '#create"</script>';
                 exit;
             } else {
                 echo '<div class="alert alert-danger">Error: ' . $sql . '<br>' . $conn->error . '</div>';
@@ -406,6 +424,8 @@ if($draft==0) {
             <?php if (isset($_REQUEST['id'])) { ?>
                 <form action="" method="post">
                     <input type="hidden" name="id" value="<?php echo $_REQUEST['id']; ?>">
+                    <input type="hidden" name="grandtotal" value="<?php echo $grandTotal; ?>">
+                    
                     <button type="submit" name="update_draft" value="1" class="btn btn-primary">Draft</button>
                     <button type="submit" name="update_draft" value="0" class="btn btn-primary">End</button>
                 </form>
@@ -417,7 +437,7 @@ if($draft==0) {
     if (isset($_POST['update_draft'])) {
         $id = $_POST['id'];
         $draft = $_POST['update_draft'];
-        $sql = "UPDATE orders SET draft='$draft' WHERE id='$id'";
+        $sql = "UPDATE orders SET draft='$draft', total='".$_POST['grandtotal']."' WHERE id='$id'";
         if ($conn->query($sql) === TRUE) {
             echo '<div class="alert alert-success">Draft updated successfully</div>';
             echo '<script>window.location.href="orders.php"</script>';

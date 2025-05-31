@@ -1,6 +1,23 @@
 <?php
 require_once '../conn.php';
 require_once 'header.php';
+
+
+// echo "<pre>";
+// print_r($_POST);
+// echo "</pre>";
+
+if (isset($_POST['update_id'])) {
+    $update_id = $_POST['update_id'];
+    $sql = "UPDATE orders SET serial = serial + 1 WHERE id = '$update_id'";
+    if ($conn->query($sql) === TRUE) {
+        echo '<div style="text-align: center;">Order serial updated successfully</div>';
+    } else {
+        echo "Error updating record: " . $conn->error;
+    }
+}
+
+
 ?>
 
 
@@ -174,7 +191,7 @@ require_once 'header.php';
 
 
 <hr>
-<div >
+<div class="table-responsive">
     <table class="table table-striped table-bordered">
 
     
@@ -190,20 +207,20 @@ require_once 'header.php';
         <thead>
             <tr id="table_head" style="text-align: center; height: 100px;">
                 <th >ID</th>
-                <th>Draft</th>
+                
                 <th>Route</th>
-                <th>Person</th>
+                <th>Customer</th>
                 <th>Total</th>
                 <th>Order Date</th>
                 <th>Delivery Date</th>
-                <th>Serial</th>
+               <th>Remarks</th>
                 <th>Approval</th>
                 <th>Delivery</th>
                 <th>Back</th>
                 <th>Close</th>
                 <th>Created By</th>
                 <th>Approved By</th>
-                <th>Remarks</th>
+                
             </tr>
         </thead>
         <tbody id="table_data">
@@ -308,38 +325,67 @@ require_once 'header.php';
                         <td><?php
                         
                         
-                        echo $row['id'];
-                        
-                        
-                        
-                        if(empty($idall)){
+                        echo "<div style='text-align: center;'>".$row['id']."</div><br>";
+                         ?>
+                        <button type="button" onclick="updateserial(<?php echo $row['id']; ?>)"><?php echo $row['serial']; ?></button>
+                        <br>    <br>
+                         <?php 
+
+                             if(empty($idall)){
                             $idall .= $row['id'];
                         } else {
                             $idall .= ",".$row['id'];
                         }
-                        
-                        
-                        
-                        
-                        ?></td>
-                        <td>
-
-                            <?php 
                             if ($row['draft'] != '0') {
-                            echo "<a href='create.php?id=" . $row['id'] . "'>Edit</a>";
+                            echo "<div style='text-align: center;'><a href='create.php?id=" . $row['id'] . "'><i class='fa fa-edit'></i></a></div>";
                             }
                             else {
-                                 echo 'No';
+                                 echo '';
                             }
                              ?>
-
-                        </td>
+                        
+                        
+                        
+                        
+                       </td>
+                       
                         <td><?php echo $row['route_name']; ?></td>
                         <td><?php echo $row['person_name']; ?></td>
                         <td><?php echo $row['total']; ?></td>
                         <td><?php echo $row['order_date']; ?></td>
                         <td><?php echo $row['delivery_date']; ?></td>
-                        <td><?php echo $row['serial']; ?></td>
+                        
+                        <script>
+                            function updateserial(id) {
+                                var form = document.createElement("form");
+                                form.method = "POST";
+                                form.action = "orders.php";
+                                
+                                var input = document.createElement("input");
+                                input.type = "hidden";
+                                input.name = "update_id";
+                                input.value = id;
+                                form.appendChild(input);
+                                
+                                var postData = <?php echo json_encode($_POST); ?>;
+                                for (var key in postData) {
+                                    if (postData.hasOwnProperty(key)) {
+                                        var input2 = document.createElement("input");
+                                        input2.type = "hidden";
+                                        input2.name = key;
+                                        input2.value = postData[key];
+                                        form.appendChild(input2);
+                                        if (key == "update_id") {
+                                            form.removeChild(input2);
+                                        }
+                                    }
+                                }
+                                
+                                document.body.appendChild(form);
+                                form.submit();
+                            }
+                        </script>
+                        <td><?php echo $row['remarks']; ?></td>
                         <td><?php echo $row['approval'] ? 'Approved' : 'Pending'; ?></td>
                         <td><?php echo $row['delivery'] ? 'Delivered' : 'Not Delivered'; ?></td>
                         <td><?php echo $row['back'] ? 'Yes' : 'No'; ?></td>
@@ -380,14 +426,21 @@ require_once 'header.php';
                         $latitude = $row['latitude'];
                         $longitude =$row['longitude'];
                         $googleMapsUrl = "https://www.google.com/maps?q={$latitude},{$longitude}";
-                        echo'<a href="' . $googleMapsUrl . '" target="_blank">Map</a>';
-                        ?></td>
+                       // echo'<a href="' . $googleMapsUrl . '" target="_blank">Map</a>';
+
+                      
+                           
+                        
+                        ?>
+                     <a href="printshort.php?idall=<?php echo $row['id']; ?>" class="btn btn-secondary"><i class="fa fa-print"></i> |</a>
+                            <a href="printfull.php?idall=<?php echo $row['id']; ?>" class="btn btn-secondary"><i class="fa fa-print"></i> ||</a>    
+                    </td>
                         
                         
                         
                         
                      
-                        <td><?php echo $row['remarks']; ?></td>
+                        
                     </tr>
 
                     <tr><td colspan="15">

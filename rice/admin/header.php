@@ -15,12 +15,17 @@ if (!isset($_SESSION['rolename']) || $_SESSION['rolename'] !== 'admin') {
     <title><?php echo $sitename ?></title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <style>
         body { font-family: 'Arial', sans-serif; background: #f8f9fa; }
-        .navbar { background: #343a40; color: white; }
+        .navbar { background: #343a40; color: white;
+        position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 1000; }
         .menu-box {
             width: 250px; position: fixed; left: -260px; top: 0; height: 100vh; 
             background: #212529; color: white; transition: 0.4s ease-in-out; z-index: 999;
@@ -67,6 +72,7 @@ if (!isset($_SESSION['rolename']) || $_SESSION['rolename'] !== 'admin') {
             <li><a href="index.php">Home</a></li>
             <li><a href="users.php">Users</a></li>
             <li><a href="settings.php">Settings</a></li>
+            <li><a href="notice.php">Notice</a></li>
            
         </ul>
     </div>

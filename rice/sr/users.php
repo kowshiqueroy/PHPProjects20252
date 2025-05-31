@@ -44,9 +44,9 @@ require_once 'header.php';
             </div>
 
 
-            <table class="table table-striped mt-3">
+            <table class="table table-striped mt-3 table-responsive">
                 <thead class="table-dark">
-                    <tr><th>ID</th><th>Name</th><th>Role</th><th>Status</th><th>Last Login</th><th>Created At</th></tr>
+                    <tr><th>ID</th><th>User</th><th>Last Login</th><th>Created At</th></tr>
                 </thead>
                 <tbody>
                     <?php
@@ -75,9 +75,7 @@ require_once 'header.php';
                             ?>
                             <tr>
                                 <td><?php echo $row['id']; ?></td>
-                                <td><?php echo $row['username']; ?></td>
-                                <td><?php echo $roleName; ?></td>
-                                <td>
+                                <td><?php echo $row['username']; ?><br><?php echo $roleName; ?><br>
                                     <form method="post">
                                         <input type="hidden" name="user_id" value="<?php echo $row['id']; ?>">
                                         <input type="hidden" name="new_status" value="<?php echo ($row['status'] == 1) ? 0 : 1; ?>">

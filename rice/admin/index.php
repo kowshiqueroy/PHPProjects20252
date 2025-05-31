@@ -12,8 +12,8 @@ require_once 'header.php';
 
 
 .browser {
-    width: 80%;
-    max-width: 900px;
+    width: 100%;
+ 
     border: 2px solid #ccc;
     border-radius: 10px;
     overflow: hidden;
@@ -47,12 +47,14 @@ require_once 'header.php';
 }
 
 .browser-content {
-    padding: 20px;
+    padding: 2px;
+   
 }
 
 .img-container img {
-    width: 100%;
-    max-width: 200px;
+    display: block;
+    margin: auto;
+    max-width: 100px;
 }
 
 footer {
@@ -75,7 +77,7 @@ footer {
     </div>
 
     <div class="browser-content">
-        <header class="d-flex justify-content-between align-items-center">
+        
             <div class="img-container">
                 <?php
                     $sql = "SELECT companyname, tagline, logo FROM companyinfo WHERE id = 1";
@@ -86,37 +88,59 @@ footer {
                     }
                 ?>
             </div>
-            <div class="company-info">
-                <?php
-                    $sql = "SELECT companyname, tagline FROM companyinfo WHERE id = 1";
-                    $result = $conn->query($sql);
-                    if ($result->num_rows > 0) {
-                        $row = $result->fetch_assoc();
-                        echo '<h1>' . $row['companyname'] . '</h1>';
-                        echo '<p>' . $row['tagline'] . '</p>';
-                    }
-                ?>
-            </div>
-        </header>
+            
+      
         
         <main>
-            <div class="d-flex justify-content-between">
-                <section class="company-info">
+            <style>
+                .notice-container {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 10px;
+                }
+                .notice {
+                    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+                    border-radius: 8px;
+                    width: 100%;
+                    background-color: #f5f5f5;
+                    margin-bottom: 15px;
+                    padding: 15px;
+                }
+                .notice p:first-child {
+                    font-size: 14px;
+                   
+                    display: flex;
+                    align-items: center;
+                }
+                .notice p:first-child i {
+                    margin-right: 10px;
+                }
+                .notice p:last-child {
+                   
+                    margin-top: 10px;
+                }
+            </style>
+            <div style="width: 100%;">
+                <h2 style="text-align: center; color: #337ab7; margin-bottom: 20px;">Notice Board</h2>
+                <section class="notice-container">
                     <?php
-                        $sql = "SELECT offertag, phone, email, address FROM companyinfo WHERE id = 1";
+                        $sql = "SELECT * FROM notice ORDER BY id DESC LIMIT 10";
                         $result = $conn->query($sql);
                         if ($result->num_rows > 0) {
-                            $row = $result->fetch_assoc();
-                            echo '<p><strong>Offer Tag:</strong> ' . $row['offertag'] . '</p>';
-                            echo '<p><strong>Phone:</strong> ' . $row['phone'] . '</p>';
-                            echo '<p><strong>Email:</strong> ' . $row['email'] . '</p>';
-                            echo '<p><strong>Address:</strong> ' . $row['address'] . '</p>';
-                           
+                            while ($row = $result->fetch_assoc()) {
+                                $r = rand(0, 255);
+                                $g = rand(0, 255);
+                                $b = rand(0, 255);
+                                $contrast = (0.2126 * $r + 0.7152 * $g + 0.0722 * $b) > 127.5 ? 'black' : 'white';
+                                echo '<div class="notice" style="background-color: rgb(' . $r . ', ' . $g . ', ' . $b . ')">';
+                                echo '<p style="color: ' . $contrast . '; display: flex; justify-content: space-between;"><span><i class="fa fa-id-badge"></i> ID: ' . $row['id'] . '</span><span><i class="fa fa-user"></i> ' . $row['username'] . ' </span><span><i class="fa fa-calendar"></i> ' . $row['datetime'] . '</span></p>';
+                               
+                                echo '<div style="margin: 1px; padding: 10px; background-color: white;"><pre>' . $row['content'] . '</pre></div>';
+                                echo '</div>';
+                            }
                         }
                     ?>
-                </section>
-                <section class="banner w-50 h-50">
-                   
                 </section>
             </div>
             
