@@ -54,7 +54,7 @@
                 $routeRow = $routeResult->fetch_assoc();
                 echo "<p><strong>Route: </strong> " . $routeRow['route_name'] . "</p>";
             }
-            echo "<p>(" . $row['serial'] . ")</p>";
+            echo "<p>(" . $row['order_serial'] . ")</p>";
 
             $personResult = $conn->query("SELECT person_name FROM persons WHERE id = '" . $row['person_id'] . "'");
             if ($personResult->num_rows > 0) {

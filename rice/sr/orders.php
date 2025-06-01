@@ -36,7 +36,7 @@ if (isset($_POST['update_id'])) {
 <form id="filterForm" class="no-print" method="get" action="">
     <div class="row">
 
-        <div class="col-md-4 col-12">
+        <div class="col-md-2 col-6">
             <label for="order_status">Order Status</label>
             <select class="form-control select2" id="order_status" name="order_status">
                 <option value="">All</option>
@@ -53,9 +53,32 @@ if (isset($_POST['update_id'])) {
 
             </select>
         </div>
+
+         <div class="col-md-2 col-6">
+            <label for="created_by">Created By</label>
+            <select class="form-control select2" id="created_by" name="created_by">
+              
+                <?php if ($_SESSION['role'] == 2): ?>
+                    <option value="<?php echo $_SESSION['id']; ?>"><?php echo $_SESSION['username']; ?></option>
+                <?php else: ?>
+                    <?php
+                    $sql = "SELECT * FROM users WHERE role IN (2,3)";
+                    $result = $conn->query($sql);
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<option value='" . $row['id'] . "'>" . $row['username'] . "</option>";
+                        }
+                    }
+                    ?>
+
+                <?php endif; ?>
+                
+
+            </select>
+        </div>
         
       
-        <div class="col-md-4">
+        <div class="col-md-3">
             <label for="route_id">Route Name</label>
             <select class="form-control select2" id="route_id" name="route_id">
                 <option value="">All</option>
@@ -78,7 +101,7 @@ if (isset($_POST['update_id'])) {
             </select>
         </div>
         <div class="col-md-4">
-            <label for="person_id">Person Name</label>
+            <label for="person_id">Shop Name, Address, Phone</label>
             <select class="form-control select2" id="person_id" name="person_id">
                 <option value="">All</option>
                 <?php
@@ -205,18 +228,15 @@ function blankSessionQueryData() {
         </style>
         <thead>
             <tr id="table_head" style="text-align: center; height: 100px;">
-                <th>ID</th>   
+                <th>Action</th>   
                 <th>Route</th>
                 <th>Customer</th>
                 <th>Total</th>
                 <th>Dates</th>
-                  <th>Remarks</th>
-                <th>Order Status</th>
-                <th>Created By</th>
+                <th>Remarks</th>
                 <th>Approved By</th>
-                <th>Created At</th>
-                <th>Updated At</th>
-                <th>Location</th>
+                <th>Created</th>
+                <th></th>
 
                 
             </tr>
@@ -234,19 +254,91 @@ $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
+
+        if (empty($idall)) {
+            $idall = $row['id'];
+        } else {
+            $idall .= ",".$row['id'];
+        }
         echo '<tr>';
-        echo '<td>' . htmlspecialchars($row['id']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['route_id']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['person_id']) . '</td>';
+        echo '<td>ID: ' . htmlspecialchars($row['id']) ."<br>";
+        switch ($row['order_status']) {
+            case 0:
+                echo '<a href="create.php?id=' . htmlspecialchars($row['id']) . '" class="btn btn-primary">Draft</a>';
+                break;
+            case 1:
+                echo '<span class="btn btn-warning">Submit</span>';
+                break;
+            case 2:
+                echo '<span class="btn btn-success">Approve</span>';
+                break;
+            case 3:
+                echo '<span class="btn btn-danger">Reject</span>';
+                break;
+            case 4:
+                echo '<a href="create.php?id=' . htmlspecialchars($row['id']) . '" class="btn btn-primary">Edit</a>';
+                break;
+            case 5:
+                echo '<span class="btn btn-info">Serial</span>';
+                break;
+            case 6:
+                echo '<span class="btn btn-secondary">Processing</span>';
+                break;
+            case 7:
+                echo '<span class="btn btn-success">Delivered</span>';
+                break;
+            case 8:
+                echo '<span class="btn btn-danger">Returned</span>';
+                break;
+            default:
+                echo '';
+                break;
+        }
+        
+        echo '</td>';
+        $sql2 = "SELECT route_name FROM routes WHERE id = '".$row['route_id']."'";
+        $result2 = $conn->query($sql2);
+        if ($result2->num_rows > 0) {
+            $row2 = $result2->fetch_assoc();
+            echo '<td>' . htmlspecialchars($row2['route_name']) . '</td>';
+        }
+        
+        $sql3 = "SELECT person_name FROM persons WHERE id = '".$row['person_id']."'";
+        $result3 = $conn->query($sql3);
+        if ($result3->num_rows > 0) {
+            $row3 = $result3->fetch_assoc();
+            echo '<td>' . htmlspecialchars($row3['person_name']) . '</td>';
+        }
         echo '<td>' . htmlspecialchars($row['total']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['order_date']) . ' - ' . htmlspecialchars($row['delivery_date']) . '</td>';
+        echo '<td> order:' . htmlspecialchars($row['order_date']) . '<br>delivery:' . htmlspecialchars($row['delivery_date']) . '</td>';
         echo '<td>' . htmlspecialchars($row['remarks']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['order_status']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['created_by']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['approved_by']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['created_at']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['updated_at']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['latitude']) . ', ' . htmlspecialchars($row['longitude']) . '</td>';
+       
+     
+        
+        $sql5 = "SELECT username FROM users WHERE id = '".$row['approved_by']."'";
+        $result5 = $conn->query($sql5);
+        if ($result5->num_rows > 0) {
+            $row5 = $result5->fetch_assoc();
+            echo '<td>' .htmlspecialchars($row['updated_at']). ' '.'<br>' . htmlspecialchars($row5['username']) .''.'</td>';
+        } else {
+            echo '<td></td>';
+        }
+        echo '<td>' . htmlspecialchars($row['created_at']);
+        
+          
+      $sql4 = "SELECT username FROM users WHERE id = '".$row['created_by']."'";
+        $result4 = $conn->query($sql4);
+        if ($result4->num_rows > 0) {
+            $row4 = $result4->fetch_assoc();
+            echo ' <br>' . htmlspecialchars($row4['username']) . '';
+        } else {
+            echo '-';
+        }
+        
+        
+        echo '</td>';
+       
+        echo '<td><a href="https://www.google.com/maps/search/?api=1&query=' . htmlspecialchars($row['latitude']) . ',' . htmlspecialchars($row['longitude']) . '" target="_blank"> <i class="fa fa-map-marker" aria-hidden="true"></i></a></td>';
         echo '</tr>';
     }
 } else {

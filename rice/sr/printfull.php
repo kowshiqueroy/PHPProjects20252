@@ -218,7 +218,7 @@ if ($result->num_rows > 0) {
 
         $orderdate = "";
             $route_name = "";
-            $serial = "";
+            $order_serial = "";
             $person_name = "";
             $total="";
         $sql = "SELECT * FROM orders WHERE id = '$id'";
@@ -234,7 +234,7 @@ if ($result->num_rows > 0) {
                 $row2 = $result2->fetch_assoc();
                 $route_name = htmlspecialchars($row2['route_name']);
             } 
-            $serial = $row['serial'];
+            $order_serial = $row['order_serial'];
             $person_id = $row['person_id'];
             $sql2 = "SELECT person_name FROM persons WHERE id = '$person_id'";
             $result2 = $conn->query($sql2);
@@ -251,7 +251,7 @@ if ($result->num_rows > 0) {
         </div>
         <div class="invoice-details">
              <p>Invoice #: <?= date("ymd", strtotime($orderdate)) ?>-<strong><?= htmlspecialchars($id) ?></strong></p>
-             <p>Route: <?= htmlspecialchars($route_name) ?> <?= htmlspecialchars($serial) ?></p>
+             <p>Route: <?= htmlspecialchars($route_name) ?> <?= htmlspecialchars($order_serial) ?></p>
             <p>Date: <?= date("Y-m-d") ?></p>
         </div>
 

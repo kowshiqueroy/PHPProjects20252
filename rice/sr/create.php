@@ -17,7 +17,7 @@ if (isset($_POST['update'])) {
 
 
 
-if (!is_numeric($route_id)) {
+    if (!is_numeric($route_id)) {
     $sql = "SELECT id FROM routes WHERE route_name = '$route_id'";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
@@ -127,7 +127,7 @@ if (!is_numeric($person_id)) {
         $delivery_date = '';
         $remarks = '';
         $order_serial = '';
-        $draft = '';
+        $order_status = 0;
 
 if (isset($_REQUEST['id'])) {
     $id = $_REQUEST['id'];
@@ -142,16 +142,40 @@ if (isset($_REQUEST['id'])) {
         $delivery_date = $row['delivery_date'];
         $remarks = $row['remarks'];
         $order_serial = $row['order_serial'];
-        $draft = $row['draft'];
+        $order_status = $row['order_status'];
     }
     else {
-        $draft = 0;
+        $order_status = 0;
         echo '<script>alert("Order not found");</script>';
     }
+}else {
+        $order_status = 0;
 }
 
-if($draft==0) {
-    echo '<div style="text-align: center;">This order has been finalized. You can not edit this.</div>';
+// this order has been finalized. We cannot edit this.
+// 0: Draft
+// 1: Submit
+// 2: Approve
+// 3: Reject
+// 4: Edit
+// 5: Serial
+// 6: Processing
+// 7: Delivered
+// 8: Returned
+
+// if the order status is not 0 (draft) or 4 (edit), then we cannot edit this order
+// this is because the order has been finalized and we cannot make any changes
+// 0: Draft
+// 1: Submit
+// 2: Approve
+// 3: Reject
+// 4: Edit
+// 5: Serial
+// 6: Processing
+// 7: Delivered
+// 8: Returned
+if($order_status != 0 && $order_status != 4) {
+    echo '<div style="text-align: center;">This order has been finalized. You cannot edit this.</div>';
     exit;
 }
 
@@ -186,7 +210,7 @@ if($draft==0) {
             </select>
         </div>
         <div class="col-md-6">
-            <label for="person_id">Person</label>
+            <label for="person_id">Shop Name, Address, Phone</label>
             <select class="form-control select2edit" id="person_id" name="person_id">
 
 
@@ -426,18 +450,18 @@ if($draft==0) {
                     <input type="hidden" name="id" value="<?php echo $_REQUEST['id']; ?>">
                     <input type="hidden" name="grandtotal" value="<?php echo $grandTotal; ?>">
                     
-                    <button type="submit" name="update_draft" value="1" class="btn btn-primary">Draft</button>
-                    <button type="submit" name="update_draft" value="0" class="btn btn-primary">End</button>
+                    <button type="submit" name="update_order_status" value="0" class="btn btn-primary">Draft</button>
+                    <button type="submit" name="update_order_status" value="1" class="btn btn-warning">Submit</button>
                 </form>
             <?php } ?>
         </div>
     </div>
 
     <?php
-    if (isset($_POST['update_draft'])) {
+    if (isset($_POST['update_order_status'])) {
         $id = $_POST['id'];
-        $draft = $_POST['update_draft'];
-        $sql = "UPDATE orders SET draft='$draft', total='".$_POST['grandtotal']."' WHERE id='$id'";
+        $order_status = $_POST['update_order_status'];
+        $sql = "UPDATE orders SET order_status='$order_status', total='".$_POST['grandtotal']."' WHERE id='$id'";
         if ($conn->query($sql) === TRUE) {
             echo '<div class="alert alert-success">Draft updated successfully</div>';
             echo '<script>window.location.href="orders.php"</script>';
