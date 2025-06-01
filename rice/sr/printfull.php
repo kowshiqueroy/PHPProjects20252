@@ -8,7 +8,45 @@ if (!isset($_GET["idall"]) OR empty($_GET["idall"])) {
 
 $ids = explode(",", $_GET["idall"]);
 ?>
+<?php
+function convertNumberToWords($number) {
+    if (!is_numeric($number) || $number < 0) {
+        return 'Invalid number';
+    }
 
+    $dictionary = [
+        0 => 'zero', 1 => 'one', 2 => 'two', 3 => 'three', 4 => 'four', 5 => 'five',
+        6 => 'six', 7 => 'seven', 8 => 'eight', 9 => 'nine', 10 => 'ten',
+        11 => 'eleven', 12 => 'twelve', 13 => 'thirteen', 14 => 'fourteen', 
+        15 => 'fifteen', 16 => 'sixteen', 17 => 'seventeen', 18 => 'eighteen',
+        19 => 'nineteen', 20 => 'twenty', 30 => 'thirty', 40 => 'forty', 
+        50 => 'fifty', 60 => 'sixty', 70 => 'seventy', 80 => 'eighty', 90 => 'ninety',
+        100 => 'hundred', 1000 => 'thousand', 100000 => 'lakh', 10000000 => 'crore'
+    ];
+
+
+
+    if ($number < 21) {
+        return $dictionary[$number] ?? '';
+    }
+
+    $words = '';
+    foreach (array_reverse($dictionary, true) as $value => $word) {
+        if ($value && $number >= $value) {
+            if ($value >= 100) {
+                $words .= convertNumberToWords(floor($number / $value)) . ' ';
+            }
+            $words .= $word;
+            $number %= $value;
+            if ($number) {
+                $words .= ' ';
+            }
+        }
+    }
+    
+    return trim($words);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,7 +73,7 @@ $ids = explode(",", $_GET["idall"]);
         .invoice-header {
             display: flex;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: center;
               width: 95%;
               margin: 5px auto;
         }
@@ -173,23 +211,57 @@ if ($result->num_rows > 0) {
            
         </div>
 
+
+
+
+        <?php
+
+        $orderdate = "";
+            $route_name = "";
+            $serial = "";
+            $person_name = "";
+            $total="";
+        $sql = "SELECT * FROM orders WHERE id = '$id'";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $orderdate = $row['order_date'];
+            $route_id = $row['route_id'];
+            $total= $row['total'];
+            $sql2 = "SELECT route_name FROM routes WHERE id = '$route_id'";
+            $result2 = $conn->query($sql2);
+            if ($result2->num_rows > 0) {
+                $row2 = $result2->fetch_assoc();
+                $route_name = htmlspecialchars($row2['route_name']);
+            } 
+            $serial = $row['serial'];
+            $person_id = $row['person_id'];
+            $sql2 = "SELECT person_name FROM persons WHERE id = '$person_id'";
+            $result2 = $conn->query($sql2);
+            if ($result2->num_rows > 0) {
+                $row2 = $result2->fetch_assoc();
+                $person_name = htmlspecialchars($row2['person_name']);
+            } 
+        } 
+        ?>
         <div class="invoice-details">
             <p><i class="fas fa-map-marker-alt"></i> <?= htmlspecialchars($address) ?></p>
             <p><i class="fas fa-phone"></i> <?= htmlspecialchars($phone) ?></p>
             <p><i class="fas fa-envelope"></i> <?= htmlspecialchars($email) ?></p>
-            
-        
         </div>
         <div class="invoice-details">
-             <p>Invoice #: orderdate -<?= htmlspecialchars($id) ?></p>
-             <p>Route: route serial</p>
+             <p>Invoice #: <?= date("ymd", strtotime($orderdate)) ?>-<strong><?= htmlspecialchars($id) ?></strong></p>
+             <p>Route: <?= htmlspecialchars($route_name) ?> <?= htmlspecialchars($serial) ?></p>
             <p>Date: <?= date("Y-m-d") ?></p>
-            
-        
         </div>
+
+
+
+
+
+
         <div class="invoice-billto">
-                <strong>Bill To: fjhfgjhfgg</strong> 
-               
+                <strong>Bill To: </strong>  <strong><?= htmlspecialchars($person_name) ?></strong>  
             </div>
         <br>
         <div class="invoice-items">
@@ -203,198 +275,62 @@ if ($result->num_rows > 0) {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr> <tr>
-                        <td>Item 1</td>
-                        <td>1</td>
-                        <td>$100.00</td>
-                        <td>$100.00</td>
-                    </tr>
-                    <!-- More Items -->
+                                                <?php
+                            foreach ($ids as $id) {
+                                $sql = "SELECT order_product.*, products.product_name 
+                                        FROM order_product 
+                                        LEFT JOIN products ON order_product.product_id = products.id 
+                                        WHERE order_product.order_id = '$id'";
+                                $result = $conn->query($sql);
+
+                                if ($result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<tr>';
+                                        echo '<td>' . htmlspecialchars($row['product_name']) . '</td>';
+                                        echo '<td>' . htmlspecialchars($row['quantity']) . '</td>';
+                                        echo '<td>' . htmlspecialchars($row['price']) . '</td>';
+                                        echo '<td>' . htmlspecialchars($row['total']) . '</td>';
+                                        echo '</tr>';
+                                    }
+                                } else {
+                                    echo '<tr><td colspan="4" style="text-align: center;">No items found for this invoice.</td></tr>';
+                                }
+                            }
+                            ?>
                 </tbody>
             </table>
         </div>
         <div class="invoice-summary">
             <table>
+
+
+             
+
+            
+
                 <tr>
-                    <th>Total:</th>
-                    <td>$100.00</td>
+                    <th><?= strtoupper(convertNumberToWords((int)$total)) . ($total - (int)$total > 0 ? ' Taka ' . strtoupper(convertNumberToWords((int)(($total - (int)$total) * 100))). ' Paisa' : 'Taka') ?></th>
+                    <td><strong>Total: <?= $total ?></strong></td>
                 </tr>
+
+
+
+
+
             </table>
         </div>
-        <div class="invoice-footer">
+        <!-- <div class="invoice-footer">
             <p>Thank you for your business!</p>
-        </div>
+        </div> -->
         <div class="signature-block ">
             <div class="signature">
-                Authorized Signature
+                Prepared by
+            </div>
+             <div class="signature">
+                Approved by
             </div>
             <div class="signature">
-                Date
+                Customer
             </div>
         </div>
     </div>

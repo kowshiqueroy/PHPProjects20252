@@ -185,4 +185,19 @@ if (!isset($_SESSION['rolename']) || $_SESSION['rolename'] !== 'sr') {
 
         <div class="content">
            
-      
+            <?php
+            $_SESSION['querylist'] = array(
+                'draft' => '',
+                'approval' => '',
+                'delivery' => '',
+                'back' => '',
+                'close' => '',
+                'created_by' => '',
+                'route_id' => '',
+                'person_id' => '',
+                'order_date' => '',
+                'order_to_date' => '',
+                'delivery_from_date' => '',
+                'delivery_to_date' => '',
+            );
+            ?>

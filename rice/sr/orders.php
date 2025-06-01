@@ -28,49 +28,49 @@ if (isset($_POST['update_id'])) {
 </div>
 
 <hr>
-<form class="no-print" method="post" action="">
+<form id="filterForm" class="no-print" method="get" action="">
     <div class="row">
 
         <div class="col-md-1 col-4">
-            <label for="draft_status">Edit</label>
-            <select class="form-control select2" id="draft_status" name="draft_status">
+            <label for="draft">Edit</label>
+            <select class="form-control select2" id="draft" name="draft">
                 <option value="">All</option>
-                <option value="0" <?php echo (isset($_POST['draft_status']) && $_POST['draft_status'] == '0') ? 'selected' : ''; ?>>End</option>
-                <option value="1" <?php echo (isset($_POST['draft_status']) && $_POST['draft_status'] == '1') ? 'selected' : ''; ?>>Draft</option>
+                <option value="0">End</option>
+                <option value="1">Draft</option>
             </select>
         </div>
         <div class="col-md-1 col-4">
             <label for="approval">Approval</label>
             <select class="form-control select2" id="approval" name="approval">
                 <option value="">All</option>
-                <option value="1" <?php echo (isset($_POST['approval']) && $_POST['approval'] == '1') ? 'selected' : ''; ?>>Approved</option>
-                <option value="0" <?php echo (isset($_POST['approval']) && $_POST['approval'] == '0') ? 'selected' : ''; ?>>Pending</option>
+                <option value="1">Approved</option>
+                <option value="0">Pending</option>
             </select>
         </div>
         <div class="col-md-1 col-4">
             <label for="delivery_status">Delivery</label>
-            <select class="form-control select2" id="delivery_status" name="delivery_status">
+            <select class="form-control select2" id="delivery" name="delivery">
                 <option value="">All</option>
-                <option value="1" <?php echo (isset($_POST['delivery_status']) && $_POST['delivery_status'] == '1') ? 'selected' : ''; ?>>Delivered</option>
-                <option value="0" <?php echo (isset($_POST['delivery_status']) && $_POST['delivery_status'] == '0') ? 'selected' : ''; ?>>Not Delivered</option>
+                <option value="1">Delivered</option>
+                <option value="0">Not Delivered</option>
             </select>
         </div>
 
         <div class="col-md-1 col-4">
             <label for="back_status">Back</label>
-            <select class="form-control select2" id="back_status" name="back_status">
+            <select class="form-control select2" id="back" name="back">
                 <option value="">All</option>
-                <option value="1" <?php echo (isset($_POST['back_status']) && $_POST['back_status'] == '1') ? 'selected' : ''; ?>>Yes</option>
-                <option value="0" <?php echo (isset($_POST['back_status']) && $_POST['back_status'] == '0') ? 'selected' : ''; ?>>No</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
             </select>
         </div>
 
         <div class="col-md-1 col-4">
-            <label for="close_status">Close</label>
-            <select class="form-control select2" id="close_status" name="close_status">
+            <label for="close">Close</label>
+            <select class="form-control select2" id="close" name="close">
                 <option value="">All</option>
-                <option value="1" <?php echo (isset($_POST['close_status']) && $_POST['close_status'] == '1') ? 'selected' : ''; ?>>Yes</option>
-                <option value="0" <?php echo (isset($_POST['close_status']) && $_POST['close_status'] == '0') ? 'selected' : ''; ?>>No</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
             </select>
         </div>
         <div class="col-md-1 col-4">
@@ -85,12 +85,11 @@ if (isset($_POST['update_id'])) {
                         ?>
                           <option value="">All</option>
                 <?php
-                $sql = "SELECT id, username FROM users";
+                $sql = "SELECT id, username FROM users WHERE role = '2' OR role = '3'";
                 $result = $conn->query($sql);
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
-                        $selected = isset($_POST['created_by']) && $_POST['created_by'] == $row['id'] ? 'selected' : '';
-                        echo "<option value='" . $row['id'] . "' $selected>" . $row['username'] . "</option>";
+                        echo "<option value='" . $row['id'] . "'>" . $row['username'] . "</option>";
                     }
                 }
                 ?>
@@ -102,32 +101,30 @@ if (isset($_POST['update_id'])) {
             </select>
         </div>
         <div class="col-md-3">
-            <label for="route_name">Route Name</label>
-            <select class="form-control select2" id="route_name" name="route_name">
+            <label for="route_id">Route Name</label>
+            <select class="form-control select2" id="route_id" name="route_id">
                 <option value="">All</option>
                 <?php
                 $sql = "SELECT * FROM routes";
                 $result = $conn->query($sql);
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
-                        $selected = isset($_POST['route_name']) && $_POST['route_name'] == $row['id'] ? 'selected' : '';
-                        echo "<option value='" . $row['id'] . "' $selected>" . $row['route_name'] . "</option>";
+                        echo "<option value='" . $row['id'] . "'>" . $row['route_name'] . "</option>";
                     }
                 }
                 ?>
             </select>
         </div>
         <div class="col-md-3">
-            <label for="person_name">Person Name</label>
-            <select class="form-control select2" id="person_name" name="person_name">
+            <label for="person_id">Person Name</label>
+            <select class="form-control select2" id="person_id" name="person_id">
                 <option value="">All</option>
                 <?php
                 $sql = "SELECT * FROM persons";
                 $result = $conn->query($sql);
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
-                        $selected = isset($_POST['person_name']) && $_POST['person_name'] == $row['id'] ? 'selected' : '';
-                        echo "<option value='" . $row['id'] . "' $selected>" . $row['person_name'] . "</option>";
+                        echo "<option value='" . $row['id'] . "'>" . $row['person_name'] . "</option>";
                     }
                 }
                 ?>
@@ -139,27 +136,10 @@ if (isset($_POST['update_id'])) {
         
     </div>
     <div class="row mt-3">
-         <?php if (isset($_POST['search'])): ?>
+        
     <div class="col-md-2 col-6">
         <label for="order_from_date">Order From</label>
-        <input type="date" class="form-control" id="order_from_date" name="order_from_date" value="<?php echo htmlspecialchars(isset($_POST['order_from_date']) ? $_POST['order_from_date'] : date('m-d-Y')); ?>">
-    </div>
-    <div class="col-md-2 col-6">
-        <label for="order_to_date">Order To</label>
-        <input type="date" class="form-control" id="order_to_date" name="order_to_date" value="<?php echo htmlspecialchars(isset($_POST['order_to_date']) ? $_POST['order_to_date'] : date('m-d-Y')); ?>">
-    </div>
-    <div class="col-md-2 col-6">
-        <label for="delivery_from_date">Delivery From</label>
-        <input type="date" class="form-control" id="delivery_from_date" name="delivery_from_date" value="<?php echo htmlspecialchars($_POST['delivery_from_date']); ?>">
-    </div>
-    <div class="col-md-2 col-6">
-        <label for="delivery_to_date">Delivery To</label>
-        <input type="date" class="form-control" id="delivery_to_date" name="delivery_to_date" value="<?php echo htmlspecialchars($_POST['delivery_to_date']); ?>">
-    </div>
-<?php else: ?>
-    <div class="col-md-2 col-6">
-        <label for="order_from_date">Order From</label>
-        <input type="date" class="form-control" id="order_from_date" name="order_from_date" value="<?php echo date('Y-m-d'); ?>">
+        <input type="date" class="form-control" id="order_from_date" name="order_date" value="<?php echo date('Y-m-d'); ?>">
     </div>
     <div class="col-md-2 col-6">
         <label for="order_to_date">Order To</label>
@@ -173,13 +153,24 @@ if (isset($_POST['update_id'])) {
         <label for="delivery_to_date">Delivery To</label>
         <input type="date" class="form-control" id="delivery_to_date" name="delivery_to_date">
     </div>
-<?php endif; ?>
+
+
+
+
+
 <div class="col-md-2 col-6 mt-4">
-    <button type="submit" class="btn btn-primary" name="search">Search</button>
+    <button type="button" class="btn btn-primary" name="search" onclick="setSessionQueryData()">Search</button>
 </div>
+
+
 <div class="col-md-2 col-6 mt-4">
-    <button type="button" class="btn btn-success" onclick="window.location.href='orders.php'">Refresh</button>
+    <button type="button" class="btn btn-success" onclick="blankSessionQueryData()">Refresh</button>
 </div>
+<script>
+    function refreshPage() {
+        window.location.href = 'orders.php';
+    }
+</script>
        
          
        
@@ -187,6 +178,45 @@ if (isset($_POST['update_id'])) {
 
 </form>
 
+
+<script>
+
+
+
+    function setSessionQueryData() {
+
+        var formData = new FormData(document.getElementById('filterForm'));
+        // for (var pair of formData.entries()) {
+        //     console.log(pair[0] + ': ' + pair[1]);
+        // }
+        
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(this.responseText);
+            }
+        };
+        xhttp.open("POST", "set_session_data.php", true);
+        xhttp.send(formData);
+        
+
+
+
+    }
+function blankSessionQueryData() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
+            refreshPage();
+            
+        }
+    };
+    xhttp.open("POST", "clear_session_data.php", true);
+    xhttp.send();
+}
+
+    </script>
 <hr>
 
 
@@ -225,307 +255,15 @@ if (isset($_POST['update_id'])) {
         </thead>
         <tbody id="table_data">
             <?php
-              $productNamesall = array();
-              $productQuantitiesall = array();
-              $grandAmount=0.00;
-              $idall= "";
-            
-                    $sql = "SELECT orders.*, persons.person_name, routes.route_name
-                    FROM orders 
-                    LEFT JOIN persons ON orders.person_id = persons.id 
-                    LEFT JOIN routes ON orders.route_id = routes.id 
-                     ";
+                $idall = '';
+                print_r($_SESSION['querylist']);
+               
+            ?>
 
-                    $where = "WHERE 1=1";
-
-                if (isset($_POST['search'])) {
-                $draft_status = $_POST['draft_status'];
-                $approval = $_POST['approval'];
-                $delivery_status = $_POST['delivery_status'];
-                $back_status = $_POST['back_status'];
-                $close_status = $_POST['close_status'];
-                $created_by = $_POST['created_by'];
-                $route_name = $_POST['route_name'];
-                $person_name = $_POST['person_name'];
-                $order_from_date = $_POST['order_from_date'];
-                $order_to_date = $_POST['order_to_date'];
-                $delivery_from_date = $_POST['delivery_from_date'];
-                $delivery_to_date = $_POST['delivery_to_date'];
-
-                if ($draft_status !== '') {
-                    $where .= " AND draft = '$draft_status'";
-                }
-                if ($approval !== '') {
-                    $where .= " AND approval = '$approval'";
-                }
-                if ($delivery_status !== '') {
-                    $where .= " AND delivery = '$delivery_status'";
-                }
-                if ($back_status !== '') {
-                    $where .= " AND back = '$back_status'";
-                }
-                if ($close_status !== '') {
-                    $where .= " AND close = '$close_status'";
-                }
-                if ($created_by !== '') {
-
-                    if($_SESSION['role'] == '2'){
-                        $where .= " AND orders.created_by = '".$_SESSION['id']."'";
-                         }
-                         else {
-                         $where .= " AND created_by = '$created_by'";
-                        }
-
-                }
-                if ($route_name !== '') {
-                    $where .= " AND route_id = '$route_name'";
-                }
-                if ($person_name !== '') {
-                    $where .= " AND person_id = '$person_name'";
-                }
-                if ($order_from_date !== '') {
-                    $where .= " AND order_date >= '$order_from_date'";
-                } else {
-                    $where .= " AND order_date >= '" . date('Y-m-d') . "'";
-                }
-                if ($order_to_date !== '') {
-                    $where .= " AND order_date <= '$order_to_date'";
-                } else {
-                    $where .= " AND order_date <= '" . date('Y-m-d') . "'";
-                }
-                if ($delivery_from_date !== '') {
-                    $where .= " AND delivery_date >= '$delivery_from_date'";
-                }
-                if ($delivery_to_date !== '') {
-                    $where .= " AND delivery_date <= '$delivery_to_date'";
-                }
-
-                 $sql .= " $where ";
-            }
-            else {
-                 $where .= " AND orders.order_date >= CURDATE() AND orders.order_date <= CURDATE()";
-                  if($_SESSION['role'] == '2'){
-                        $where .= " AND orders.created_by = '".$_SESSION['id']."'";
-                         }
-
-                $sql .= " $where ";
-            }
 
             
-
-            $sql .= "ORDER BY orders.serial ";
-
-           
-
-            $result = $conn->query($sql);
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    ?>
-                    <tr>
-                        <td><?php
-                        
-                        
-                        echo "<div style='text-align: center;'>".$row['id']."</div><br>";
-                         ?>
-                        <button type="button" onclick="updateserial(<?php echo $row['id']; ?>)"><?php echo $row['serial']; ?></button>
-                        <br>    <br>
-                         <?php 
-
-                             if(empty($idall)){
-                            $idall .= $row['id'];
-                        } else {
-                            $idall .= ",".$row['id'];
-                        }
-                            if ($row['draft'] != '0') {
-                            echo "<div style='text-align: center;'><a href='create.php?id=" . $row['id'] . "'><i class='fa fa-edit'></i></a></div>";
-                            }
-                            else {
-                                 echo '';
-                            }
-                             ?>
-                        
-                        
-                        
-                        
-                       </td>
-                       
-                        <td><?php echo $row['route_name']; ?></td>
-                        <td><?php echo $row['person_name']; ?></td>
-                        <td><?php echo $row['total']; ?></td>
-                        <td><?php echo $row['order_date']; ?></td>
-                        <td><?php echo $row['delivery_date']; ?></td>
-                        
-                        <script>
-                            function updateserial(id) {
-                                var form = document.createElement("form");
-                                form.method = "POST";
-                                form.action = "orders.php";
-                                
-                                var input = document.createElement("input");
-                                input.type = "hidden";
-                                input.name = "update_id";
-                                input.value = id;
-                                form.appendChild(input);
-                                
-                                var postData = <?php echo json_encode($_POST); ?>;
-                                for (var key in postData) {
-                                    if (postData.hasOwnProperty(key)) {
-                                        var input2 = document.createElement("input");
-                                        input2.type = "hidden";
-                                        input2.name = key;
-                                        input2.value = postData[key];
-                                        form.appendChild(input2);
-                                        if (key == "update_id") {
-                                            form.removeChild(input2);
-                                        }
-                                    }
-                                }
-                                
-                                document.body.appendChild(form);
-                                form.submit();
-                            }
-                        </script>
-                        <td><?php echo $row['remarks']; ?></td>
-                        <td><?php echo $row['approval'] ? 'Approved' : 'Pending'; ?></td>
-                        <td><?php echo $row['delivery'] ? 'Delivered' : 'Not Delivered'; ?></td>
-                        <td><?php echo $row['back'] ? 'Yes' : 'No'; ?></td>
-                        <td><?php echo $row['close'] ? 'Yes' : 'No'; ?></td>
-                        <td><?php 
-                        $createdByUserId = $row['created_by'];
-                        $sql = "SELECT username FROM users WHERE id = $createdByUserId";
-                        $result2 = $conn->query($sql);
-                        if ($result2->num_rows > 0) {
-                            $user = $result2->fetch_assoc();
-                            echo $user['username'];
-                        } else {
-                            echo "Unknown";
-                        }
-                        ?> <?php echo $row['timestamp']; ?>  
-                       
-                        
-                        </td>
-
-
-                        <td> <?php 
-                        if ($row['approved_by'] != 0) {
-                            $sql = "SELECT username FROM users WHERE id = " . $row['approved_by'];
-                            $result3 = $conn->query($sql);
-                            if ($result3->num_rows > 0) {
-                                $approver = $result3->fetch_assoc();
-                                echo $approver['username'];
-                            } else {
-                                echo "Unknown";
-                            }
-                        } else {
-                            echo "None";
-                        }
-                        ?>
-                        
-                        <?php echo $row['updated_at']; ?>
-                         <?php 
-                        $latitude = $row['latitude'];
-                        $longitude =$row['longitude'];
-                        $googleMapsUrl = "https://www.google.com/maps?q={$latitude},{$longitude}";
-                        echo'<a href="' . $googleMapsUrl . '" target="_blank">Map</a>';
-
-                      
-                           
-                        
-                        ?>
-                     <a href="printshort.php?idall=<?php echo $row['id']; ?>" class="btn btn-secondary"><i class="fa fa-print"></i> |</a>
-                            <a href="printfull.php?idall=<?php echo $row['id']; ?>" class="btn btn-secondary"><i class="fa fa-print"></i> ||</a>    
-                    </td>
-                        
-                        
-                        
-                        
-                     
-                        
-                    </tr>
-
-                    <tr><td colspan="15">
-                        
-                    
-<?php
-
-
-$order_id = $row['id']; // Assuming $row['id'] contains the current order ID
-
-$sql = "SELECT order_product.*, products.product_name 
-        FROM order_product 
-        LEFT JOIN products ON order_product.product_id = products.id 
-        WHERE order_product.order_id = '$order_id'";
-        
-$result4 = $conn->query($sql);
-if ($result4->num_rows > 0) {
-    echo '<table class="table table-bordered ">';
-    echo '<thead><tr><th>Product Name</th><th>Quantity</th><th>Price</th><th>Total</th></tr></thead><tbody>';
-    $productNames = array();
-    $productQuantities = array();
-    $totalQuantity = 0;
-    $totalTotal = 0;
-    while ($orderProductRow = $result4->fetch_assoc()) {
-        echo '<tr>';
-        echo '<td>' . $orderProductRow['product_name'] . '</td>';
-        echo '<td>' . $orderProductRow['quantity'] . '</td>';
-        echo '<td>' . $orderProductRow['price'] . '</td>';
-        echo '<td>' . $orderProductRow['total'] . '</td>';
-        echo '</tr>';
-
-        $totalQuantity += $orderProductRow['quantity'];
-        $totalTotal += $orderProductRow['total'];
-
-        if (!in_array($orderProductRow['product_name'], $productNames)) {
-            $productNames[] = $orderProductRow['product_name'];
-            $productQuantities[$orderProductRow['product_name']] = $orderProductRow['quantity'];
-        } else {
-            $productQuantities[$orderProductRow['product_name']] += $orderProductRow['quantity'];
-        }
-
-        if (!in_array($orderProductRow['product_name'], $productNamesall)) {
-            $productNamesall[] = $orderProductRow['product_name'];
-            $productQuantitiesall[$orderProductRow['product_name']] = $orderProductRow['quantity'];
-        } else {
-            $productQuantitiesall[$orderProductRow['product_name']] += $orderProductRow['quantity'];
-        }
-    }
-    echo '<tr><td style="text-align: center;">' . count($productNames) . ' Unique Products</td><td style="text-align: center;">' . $totalQuantity . '</td><td style="text-align: center;">-</td><td style="text-align: center;">' . $totalTotal . '</td></tr>';
-    $grandAmount+=$totalTotal;
-    echo '<tr><td colspan="4" style="text-align: center;">';
-    foreach ($productNames as $productName) {
-        echo $productName . ': ' . $productQuantities[$productName] . '<br>';
-    }
-    echo '</td></tr>';
     
 
-    echo '</tbody></table>';
-} else {
-    echo '<div style="text-align: center;">No products found for this order.</div>';
-}
-?>
-
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    <hr></td></tr>
-
-                    
-                    <?php
-                    
-                }
-
-                 echo '<tr><td colspan="15" style="text-align: center">' . count($productNamesall) . ' Unique Products Total Amount: ' . $grandAmount . '/=<br>';
-                      echo '';
-    foreach ($productNamesall as $productNameall) {
-        echo $productNameall . ': ' . $productQuantitiesall[$productNameall] . '<br>';
-    }
-    echo '</td></tr>';
-            }
-            ?>
         </tbody>
     </table>
 </div>

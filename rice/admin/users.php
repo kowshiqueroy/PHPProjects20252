@@ -43,10 +43,11 @@ require_once 'header.php';
                             <input type="text" name="username" placeholder="Username" required>
                             <input type="password" name="password" placeholder="Password" required>
                             <select name="role" required>
-                                <option value="1">Admin</option>
+                               
                                 <option value="2">SR</option>
                                 <option value="3">SRAdmin</option>
                                 <option value="4">Viewer</option>
+                                 <option value="1">Admin</option>
                             </select>
                             <input type="submit" name="createUser" value="Create User">
                         </form>
