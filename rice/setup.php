@@ -142,7 +142,6 @@ $sql = "CREATE TABLE IF NOT EXISTS orders (
   delivery_date DATE NOT NULL,
   order_status INT(1) NOT NULL DEFAULT 0,
   order_serial INT(3) NOT NULL DEFAULT 0,
-  order_serial_status BOOLEAN NOT NULL DEFAULT 0,
   latitude DECIMAL(10,8) NOT NULL,
   longitude DECIMAL(11,8) NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

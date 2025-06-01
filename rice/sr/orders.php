@@ -3,9 +3,14 @@ require_once '../conn.php';
 require_once 'header.php';
 
 
-// echo "<pre>";
-// print_r($_POST);
-// echo "</pre>";
+if (isset($_SESSION['querylist'])) {
+    foreach ($_SESSION['querylist'] as $key => $value) {
+        ${$key} = $value;
+       // echo '<br>'. $key .''. $value .'';
+        
+    }
+}
+
 
 if (isset($_POST['update_id'])) {
     $update_id = $_POST['update_id'];
@@ -31,76 +36,26 @@ if (isset($_POST['update_id'])) {
 <form id="filterForm" class="no-print" method="get" action="">
     <div class="row">
 
-        <div class="col-md-1 col-4">
-            <label for="draft">Edit</label>
-            <select class="form-control select2" id="draft" name="draft">
+        <div class="col-md-4 col-12">
+            <label for="order_status">Order Status</label>
+            <select class="form-control select2" id="order_status" name="order_status">
                 <option value="">All</option>
-                <option value="0">End</option>
-                <option value="1">Draft</option>
-            </select>
-        </div>
-        <div class="col-md-1 col-4">
-            <label for="approval">Approval</label>
-            <select class="form-control select2" id="approval" name="approval">
-                <option value="">All</option>
-                <option value="1">Approved</option>
-                <option value="0">Pending</option>
-            </select>
-        </div>
-        <div class="col-md-1 col-4">
-            <label for="delivery_status">Delivery</label>
-            <select class="form-control select2" id="delivery" name="delivery">
-                <option value="">All</option>
-                <option value="1">Delivered</option>
-                <option value="0">Not Delivered</option>
-            </select>
-        </div>
+                <option value="0" <?php echo $order_status == 0 ? 'selected' : ''; ?>>Draft</option>
+                <option value="1" <?php echo $order_status == 1 ? 'selected' : ''; ?>>Submit</option>
+                <option value="2" <?php echo $order_status == 2 ? 'selected' : ''; ?>>Approve</option>
+                <option value="3" <?php echo $order_status == 3 ? 'selected' : ''; ?>>Reject</option>
+                <option value="4" <?php echo $order_status == 4 ? 'selected' : ''; ?>>Edit</option>
+                <option value="5" <?php echo $order_status == 5 ? 'selected' : ''; ?>>Serial</option>
+                <option value="6" <?php echo $order_status == 6 ? 'selected' : ''; ?>>Processing</option>
+                <option value="7" <?php echo $order_status == 7 ? 'selected' : ''; ?>>Delivered</option>
+                <option value="8" <?php echo $order_status == 8 ? 'selected' : ''; ?>>Returned</option>
+                
 
-        <div class="col-md-1 col-4">
-            <label for="back_status">Back</label>
-            <select class="form-control select2" id="back" name="back">
-                <option value="">All</option>
-                <option value="1">Yes</option>
-                <option value="0">No</option>
             </select>
         </div>
-
-        <div class="col-md-1 col-4">
-            <label for="close">Close</label>
-            <select class="form-control select2" id="close" name="close">
-                <option value="">All</option>
-                <option value="1">Yes</option>
-                <option value="0">No</option>
-            </select>
-        </div>
-        <div class="col-md-1 col-4">
-            <label for="created_by">Created By</label>
-            <select class="form-control select2" id="created_by" name="created_by">
-                <?php
-                     if($_SESSION['role'] == '2'){
-
-                        echo '<option selected value="'.$_SESSION['id'].'">'.$_SESSION['username'].'</option>';
-                     }else{
-
-                        ?>
-                          <option value="">All</option>
-                <?php
-                $sql = "SELECT id, username FROM users WHERE role = '2' OR role = '3'";
-                $result = $conn->query($sql);
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<option value='" . $row['id'] . "'>" . $row['username'] . "</option>";
-                    }
-                }
-                ?>
-                        <?php
-                     }
-                ?>
-              
-               
-            </select>
-        </div>
-        <div class="col-md-3">
+        
+      
+        <div class="col-md-4">
             <label for="route_id">Route Name</label>
             <select class="form-control select2" id="route_id" name="route_id">
                 <option value="">All</option>
@@ -109,13 +64,20 @@ if (isset($_POST['update_id'])) {
                 $result = $conn->query($sql);
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
-                        echo "<option value='" . $row['id'] . "'>" . $row['route_name'] . "</option>";
+
+                        if ($row["id"] == $route_id) {
+                             echo "<option selected value='" . $row['id'] . "'>" . $row['route_name'] . "</option>";
+                        }
+                        else {
+                             echo "<option value='" . $row['id'] . "'>" . $row['route_name'] . "</option>";
+                        }
+                       
                     }
                 }
                 ?>
             </select>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <label for="person_id">Person Name</label>
             <select class="form-control select2" id="person_id" name="person_id">
                 <option value="">All</option>
@@ -124,7 +86,13 @@ if (isset($_POST['update_id'])) {
                 $result = $conn->query($sql);
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
-                        echo "<option value='" . $row['id'] . "'>" . $row['person_name'] . "</option>";
+                         if ($row["id"] == $person_id) {
+                             echo "<option selected value='" . $row['id'] . "'>" . $row['person_name'] . "</option>";
+                        }
+                        else {
+                             echo "<option value='" . $row['id'] . "'>" . $row['person_name'] . "</option>";
+                        }     
+                    
                     }
                 }
                 ?>
@@ -138,20 +106,20 @@ if (isset($_POST['update_id'])) {
     <div class="row mt-3">
         
     <div class="col-md-2 col-6">
-        <label for="order_from_date">Order From</label>
-        <input type="date" class="form-control" id="order_from_date" name="order_date" value="<?php echo date('Y-m-d'); ?>">
+        <label for="order_date_from">Order From</label>
+        <input type="date" class="form-control" id="order_date_from" name="order_date_from" value="<?php echo !empty($order_date_from) ? $order_date_from : date('Y-m-d'); ?>">
     </div>
     <div class="col-md-2 col-6">
-        <label for="order_to_date">Order To</label>
-        <input type="date" class="form-control" id="order_to_date" name="order_to_date" value="<?php echo date('Y-m-d'); ?>">
+        <label for="order_date_to">Order To</label>
+        <input type="date" class="form-control" id="order_date_to" name="order_date_to" value="<?php echo !empty($order_date_to) ? $order_date_to : date('Y-m-d'); ?>">
     </div>
     <div class="col-md-2 col-6">
-        <label for="delivery_from_date">Delivery From</label>
-        <input type="date" class="form-control" id="delivery_from_date" name="delivery_from_date">
+        <label for="delivery_date_from">Delivery From</label>
+        <input type="date" class="form-control" id="delivery_date_from" name="delivery_date_from" value="<?php echo !empty($delivery_date_from) ? $delivery_date_from : ''; ?>">
     </div>
     <div class="col-md-2 col-6">
-        <label for="delivery_to_date">Delivery To</label>
-        <input type="date" class="form-control" id="delivery_to_date" name="delivery_to_date">
+        <label for="delivery_date_to">Delivery To</label>
+        <input type="date" class="form-control" id="delivery_date_to" name="delivery_date_to" value="<?php echo !empty($delivery_date_to) ? $delivery_date_to : ''; ?>">
     </div>
 
 
@@ -194,6 +162,7 @@ if (isset($_POST['update_id'])) {
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 console.log(this.responseText);
+                refreshPage();
             }
         };
         xhttp.open("POST", "set_session_data.php", true);
@@ -236,33 +205,55 @@ function blankSessionQueryData() {
         </style>
         <thead>
             <tr id="table_head" style="text-align: center; height: 100px;">
-                <th >ID</th>
-                
+                <th>ID</th>   
                 <th>Route</th>
                 <th>Customer</th>
                 <th>Total</th>
-                <th>Order Date</th>
-                <th>Delivery Date</th>
-               <th>Remarks</th>
-                <th>Approval</th>
-                <th>Delivery</th>
-                <th>Back</th>
-                <th>Close</th>
+                <th>Dates</th>
+                  <th>Remarks</th>
+                <th>Order Status</th>
                 <th>Created By</th>
                 <th>Approved By</th>
+                <th>Created At</th>
+                <th>Updated At</th>
+                <th>Location</th>
+
                 
             </tr>
         </thead>
         <tbody id="table_data">
             <?php
-                $idall = '';
-                print_r($_SESSION['querylist']);
-               
+                $idall = '';       
             ?>
 
-
-            
+<?php
     
+
+$sql = "SELECT * FROM orders";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        echo '<tr>';
+        echo '<td>' . htmlspecialchars($row['id']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['route_id']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['person_id']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['total']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['order_date']) . ' - ' . htmlspecialchars($row['delivery_date']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['remarks']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['order_status']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['created_by']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['approved_by']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['created_at']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['updated_at']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['latitude']) . ', ' . htmlspecialchars($row['longitude']) . '</td>';
+        echo '</tr>';
+    }
+} else {
+    echo '<tr><td colspan="12" style="text-align: center;">No orders found</td></tr>';
+}
+
+   ?> 
 
         </tbody>
     </table>

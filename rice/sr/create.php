@@ -13,7 +13,7 @@ if (isset($_POST['update'])) {
     $order_date = $_POST['order_date'];
     $delivery_date = $_POST['delivery_date'];
     $remarks = $_POST['remarks'];
-    $serial = $_POST['serial'];
+    $order_serial = $_POST['order_serial'];
 
 
 
@@ -51,7 +51,7 @@ if (!is_numeric($person_id)) {
 
 
 
-    $sql = "UPDATE orders SET route_id='$route_id', person_id='$person_id', order_date='$order_date', delivery_date='$delivery_date', remarks='$remarks', serial='$serial' WHERE id='$id'";
+    $sql = "UPDATE orders SET route_id='$route_id', person_id='$person_id', order_date='$order_date', delivery_date='$delivery_date', remarks='$remarks', order_serial='$order_serial' WHERE id='$id'";
     if ($conn->query($sql) === TRUE) {
         echo '<div style="text-align: center;">Order updated successfully</div>';
        echo '<script>window.location.href="create.php?id='.$id.'"</script>';
@@ -69,7 +69,7 @@ if (isset($_POST['create'])) {
     $order_date = $_POST['order_date'];
     $delivery_date = $_POST['delivery_date'];
     $remarks = $_POST['remarks'];
-    $serial = $_POST['serial'];
+    $order_serial = $_POST['order_serial'];
     $latitude = $_POST['latitude'];
     $longitude = $_POST['longitude'];
 
@@ -107,7 +107,7 @@ if (!is_numeric($person_id)) {
 
 
     $created_by = $_SESSION['id'];
-    $sql = "INSERT INTO orders (route_id, person_id, order_date, delivery_date, remarks, serial, created_by, latitude, longitude) VALUES ('$route_id', '$person_id', '$order_date', '$delivery_date', '$remarks', '$serial', '$created_by', '$latitude', '$longitude')";
+    $sql = "INSERT INTO orders (route_id, person_id, order_date, delivery_date, remarks, order_serial, created_by, latitude, longitude) VALUES ('$route_id', '$person_id', '$order_date', '$delivery_date', '$remarks', '$order_serial', '$created_by', '$latitude', '$longitude')";
   
   
   
@@ -126,7 +126,7 @@ if (!is_numeric($person_id)) {
         $order_date = '';
         $delivery_date = '';
         $remarks = '';
-        $serial = '';
+        $order_serial = '';
         $draft = '';
 
 if (isset($_REQUEST['id'])) {
@@ -141,7 +141,7 @@ if (isset($_REQUEST['id'])) {
         $order_date = $row['order_date'];
         $delivery_date = $row['delivery_date'];
         $remarks = $row['remarks'];
-        $serial = $row['serial'];
+        $order_serial = $row['order_serial'];
         $draft = $row['draft'];
     }
     else {
@@ -175,7 +175,7 @@ if($draft==0) {
                
                 
                 <?php
-                $sql = "SELECT * FROM routes order by route_name";
+                $sql = "SELECT * FROM routes ORDER BY id DESC";
                 $result = $conn->query($sql);
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
@@ -202,7 +202,7 @@ if($draft==0) {
                 ?>
 
                 <?php
-                $sql = "SELECT * FROM persons";
+                $sql = "SELECT * FROM persons ORDER BY id DESC";
                 $result = $conn->query($sql);
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
@@ -228,8 +228,8 @@ if($draft==0) {
         </div>
 
         <div class="col-md-6">
-            <label for="serial">Serial</label>
-            <input type="number" class="form-control" id="serial" name="serial" value="<?php echo !empty($serial) ? $serial : ''; ?>" >
+            <label for="order_serial">Serial</label>
+            <input type="number" class="form-control" id="order_serial" name="order_serial" value="<?php echo !empty($order_serial) ? $order_serial : ''; ?>" >
         </div>
     </div>
     <div class="row mt-3">
