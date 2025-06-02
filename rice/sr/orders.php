@@ -29,7 +29,7 @@ if (isset($_POST['update_id'])) {
 <div class="card p-1 text-center">Orders</div>
 <hr>
 <div class="d-flex justify-content-center">
-    <button type="button" class="btn btn-primary" onclick="window.location.href='create.php'">Create New Order</button>
+    <button type="button" class="btn btn-success" onclick="window.location.href='create.php'"><i class="fas fa-plus"></i> Create New Order</button>
 </div>
 
 <hr>
@@ -149,14 +149,14 @@ if (isset($_POST['update_id'])) {
 
 
 
-<div class="col-md-2 col-6 mt-4">
-    <button type="button" class="btn btn-primary" name="search" onclick="setSessionQueryData()">Search</button>
+<div class="col-md-4 d-flex justify-content-center mt-4">
+    <button type="button" class="btn btn-primary me-2" name="search" onclick="setSessionQueryData()"><i class="fas fa-search"></i> Search</button>
+    <button type="button" class="btn btn-success" onclick="blankSessionQueryData()"><i class="fas fa-sync-alt"></i> Refresh</button>
 </div>
 
 
-<div class="col-md-2 col-6 mt-4">
-    <button type="button" class="btn btn-success" onclick="blankSessionQueryData()">Refresh</button>
-</div>
+
+
 <script>
     function refreshPage() {
         window.location.href = 'orders.php';
@@ -229,13 +229,11 @@ function blankSessionQueryData() {
         <thead>
             <tr id="table_head" style="text-align: center; height: 100px;">
                 <th>Action</th>   
-                <th>Route</th>
-                <th>Customer</th>
+                <th>Route & Shop</th>
                 <th>Total</th>
                 <th>Dates</th>
-                <th>Remarks</th>
-                <th>Approved By</th>
-                <th>Created</th>
+                <!-- <th>Approved By</th> -->
+                <th></th>
                 <th></th>
 
                 
@@ -261,7 +259,7 @@ if ($result->num_rows > 0) {
             $idall .= ",".$row['id'];
         }
         echo '<tr>';
-        echo '<td>ID: ' . htmlspecialchars($row['id']) ."<br>";
+        echo '<td style="text-align: center;">ID: ' . htmlspecialchars($row['id']) ."<br>";
         switch ($row['order_status']) {
             case 0:
                 echo '<a href="create.php?id=' . htmlspecialchars($row['id']) . '" class="btn btn-primary">Draft</a>';
@@ -300,29 +298,32 @@ if ($result->num_rows > 0) {
         $result2 = $conn->query($sql2);
         if ($result2->num_rows > 0) {
             $row2 = $result2->fetch_assoc();
-            echo '<td>' . htmlspecialchars($row2['route_name']) . '</td>';
+            echo '<td><span style="font-weight: bold;">' . htmlspecialchars($row2['route_name']) . '</span> - ';
         }
         
         $sql3 = "SELECT person_name FROM persons WHERE id = '".$row['person_id']."'";
         $result3 = $conn->query($sql3);
         if ($result3->num_rows > 0) {
             $row3 = $result3->fetch_assoc();
-            echo '<td>' . htmlspecialchars($row3['person_name']) . '</td>';
+            echo ' ' . htmlspecialchars($row3['person_name']) . '</td>';
         }
-        echo '<td>' . htmlspecialchars($row['total']) . '</td>';
+        echo '<td style="text-align: center;">' .
+         htmlspecialchars($row['total']) . 
+         '<br>
+         <button type="button" class="btn btn-info text-white" onclick="showOrderProducts(' . htmlspecialchars($row['id']) . ')"><i class="fa fa-list" aria-hidden="true"> Show</i></button>
+         </td>';
+
+        
+
+
         echo '<td> order:' . htmlspecialchars($row['order_date']) . '<br>delivery:' . htmlspecialchars($row['delivery_date']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['remarks']) . '</td>';
+        
        
      
         
-        $sql5 = "SELECT username FROM users WHERE id = '".$row['approved_by']."'";
-        $result5 = $conn->query($sql5);
-        if ($result5->num_rows > 0) {
-            $row5 = $result5->fetch_assoc();
-            echo '<td>' .htmlspecialchars($row['updated_at']). ' '.'<br>' . htmlspecialchars($row5['username']) .''.'</td>';
-        } else {
-            echo '<td></td>';
-        }
+        
+
+          if ($_SESSION['role'] != 2) {
         echo '<td>' . htmlspecialchars($row['created_at']);
         
           
@@ -334,12 +335,57 @@ if ($result->num_rows > 0) {
         } else {
             echo '-';
         }
-        
+    }
+    else {
+       $sql5 = "SELECT username FROM users WHERE id = '".$row['approved_by']."'";
+        $result5 = $conn->query($sql5);
+        if ($result5->num_rows > 0) {
+            $row5 = $result5->fetch_assoc();
+            echo '<td>' .htmlspecialchars($row['updated_at']). ' '.'<br>' . htmlspecialchars($row5['username']) .''.'</td>';
+        } else {
+            echo '<td></td>';
+        }
+    }
         
         echo '</td>';
+
+
+        echo '<td>';
        
-        echo '<td><a href="https://www.google.com/maps/search/?api=1&query=' . htmlspecialchars($row['latitude']) . ',' . htmlspecialchars($row['longitude']) . '" target="_blank"> <i class="fa fa-map-marker" aria-hidden="true"></i></a></td>';
-        echo '</tr>';
+       if ($_SESSION['role'] != 2) {
+           echo ' <a href="https://www.google.com/maps/search/?api=1&query=' . htmlspecialchars($row['latitude']) . ',' . htmlspecialchars($row['longitude']) . '" target="_blank"> <i class="fa fa-map-marker" aria-hidden="true"></i></a>';
+       }
+      
+      
+       echo ' '. htmlspecialchars($row['remarks']) . ' '. '<a href="printfull.php?idall=' . htmlspecialchars($row['id']) . '" class="btn btn-success"><i class="fa fa-print" aria-hidden="false"></i></a>';
+       
+       
+        echo '</td></tr>';
+
+                    //Show Products Here 
+                            
+                    //         echo '<tr>';
+                    // $sqlProducts = "SELECT op.product_id, op.quantity, op.price, op.total, p.product_name FROM order_product op 
+                    //                 JOIN products p ON op.product_id = p.id 
+                    //                 WHERE op.order_id = '" . $row['id'] . "'";
+                    // $resultProducts = $conn->query($sqlProducts);
+                    // if ($resultProducts->num_rows > 0) {
+                    //     echo '<td colspan="9">';
+                    //     while ($productRow = $resultProducts->fetch_assoc()) {
+                    //         echo htmlspecialchars($productRow['product_name']) . ': ' .
+                    //              '' . htmlspecialchars($productRow['quantity']) . ' X ' .
+                    //              '' . htmlspecialchars($productRow['price']) .
+                    //              ' = ' . htmlspecialchars($productRow['total']) . '<br>';
+                    //     }
+                    //     echo '</td>';
+                    // } else {
+                    //     echo '<td>No products found</td>';
+                    // }
+                    // echo '</tr>';
+
+
+
+
     }
 } else {
     echo '<tr><td colspan="12" style="text-align: center;">No orders found</td></tr>';
@@ -352,9 +398,122 @@ if ($result->num_rows > 0) {
 </div>
 <hr>
 <?php
-    echo '<div style="text-align: center;"><button type="button" class="btn btn-secondary" onclick="window.location.href=\'printshort.php?idall=' . $idall . '\'">Print Short</button><button type="button" class="btn btn-secondary" style="margin-left: 10px;" onclick="window.location.href=\'printfull.php?idall=' . $idall . '\'">Print Full</button></div>';
+    echo '
+    <div style="text-align: center;">
+    <button type="button" class="btn btn-secondary" onclick="window.location.href=\'printshort.php?idall=' . $idall . '\'"><i class="fa fa-list" aria-hidden="true"></i> Short List</button>
+    <button type="button" class="btn btn-success" style="margin-left: 10px;" onclick="window.location.href=\'printfull.php?idall=' . $idall . '\'"><i class="fa fa-print" aria-hidden="true"></i> Print Invoice</button>
+    </div>';
 ?>
+<style>
+    #order_products {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
 
+    #order_products .modal-content {
+        background-color: #fefefe;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
+        max-width: 600px;
+        width: 100%;
+        border: 1px solid #ccc;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    #order_products .close {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        background-color: #fff;
+        border: none;
+        cursor: pointer;
+        padding: 15px;
+    }
+
+    #order_products .close:hover {
+        background-color: #f2f2f2;
+    }
+
+    #order_products .content-text {
+        text-align: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+        line-height: 1.5;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    @media (max-width: 768px) {
+        #order_products .content-text {
+            font-size: 1rem;
+        }
+    }
+
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+</style>
+
+<div id="order_products">
+    <button type="button" class="close" aria-label="Close" onclick="document.getElementById('order_products').style.display='none'"></button>
+    <div class="modal-content">
+        <button type="button" class="close" aria-label="Close" onclick="document.getElementById('order_products').style.display='none'">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <div style="display: flex; justify-content: center;" class="content-text">
+            ProductNameQtyXPrice=Total
+        </div>
+    </div>
+</div>
+<script>
+    function showOrderProducts(orderId) {
+            if (!orderId) {
+                console.error('Order ID is not provided');
+                return;
+            }
+
+            $.ajax({
+                url: 'get_order_product.php',
+                type: 'GET',
+                data: { id: orderId },
+                success: function(response) {
+                    try {
+                        console.log(response);
+                        $('#order_products').show();
+
+
+
+                        $('#order_products .modal-content .content-text').html(response);
+
+
+
+                    } catch (error) {
+                        console.error('Error updating order products:', error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX request failed:', status, error);
+                }
+            });
+        }
+</script>
 <?php
 require_once 'footer.php';
 ?>

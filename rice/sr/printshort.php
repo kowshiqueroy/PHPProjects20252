@@ -59,7 +59,7 @@
             $personResult = $conn->query("SELECT person_name FROM persons WHERE id = '" . $row['person_id'] . "'");
             if ($personResult->num_rows > 0) {
                 $personRow = $personResult->fetch_assoc();
-                echo "<p><strong>Name:</strong> " . $personRow['person_name'] . "</p>";
+                echo "<p><strong>Shop:</strong> " . $personRow['person_name'] . "</p>";
             }
             echo "</div>";
           
@@ -78,8 +78,7 @@
                     $sql2 = "SELECT product_name FROM products WHERE id = '" . $row['product_id'] . "'";
                     $result2 = $conn->query($sql2);
                     $row2 = $result2->fetch_assoc();
-                    echo "<p><strong>" . $row2['product_name'] . "</strong></p>";
-                    echo "<p><strong></strong> " . $row['quantity'] . " X " . $row['price'] . " = " . $row['total'] . "/=</p>";
+                    echo "<p style='padding-left: 10px; padding-right: 10px;'><strong>" . $row2['product_name'] . "</strong>  " . $row['quantity'] . " X " . $row['price'] . " = " . $row['total'] . "/=</p>";
                     echo "</div>";
                         $totalQuantity += $row['quantity'];
                          $totalTotal += $row['total'];
