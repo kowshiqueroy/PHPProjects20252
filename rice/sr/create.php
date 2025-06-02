@@ -333,7 +333,7 @@ if($order_status != 0 && $order_status != 4) {
                 <label for="product_id">Product</label>
                 <select class="form-control select2edit" id="product_id" name="product_id" data-placeholder="Select product">
                     <?php
-                    $sql2 = "SELECT * FROM products";
+                    $sql2 = "SELECT * FROM products ORDER By id DESC";
                     $result2 = $conn->query($sql2);
                     if ($result2->num_rows > 0) {
                         while ($row2 = $result2->fetch_assoc()) {

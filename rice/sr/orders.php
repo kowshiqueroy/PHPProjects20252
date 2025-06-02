@@ -9,9 +9,27 @@ if (isset($_SESSION['querylist'])) {
        // echo '<br>'. $key .''. $value .'';
         
     }
+} else {
+    $order_status = '';
+    $order_date_from = '';
+    $order_date_to = '';
+    $delivery_date_from = '';
+    $delivery_date_to = '';
+    $route_id='';
+    $person_id='';
+
 }
 
-
+// if (isset($_POST['serial_submit'])) {
+//     $order_serial = $_POST['order_serial'];
+//     $id = $_POST['id'];
+//     $sql = "UPDATE orders SET order_serial = '$order_serial' WHERE id = '$id'";
+//     if ($conn->query($sql) === TRUE) {
+//         echo '<div style="text-align: center;">Order serial updated successfully</div>';
+//     } else {
+//         echo "Error updating record: " . $conn->error;
+//     }
+// }
 if (isset($_POST['update_id'])) {
     $update_id = $_POST['update_id'];
     $sql = "UPDATE orders SET serial = serial + 1 WHERE id = '$update_id'";
@@ -23,7 +41,38 @@ if (isset($_POST['update_id'])) {
 }
 
 
+if (isset($_GET['order_serial_update'])) {
+    $os_update_id = $_GET['order_serial_update'];
+
+    $os_update_id_list = explode('.', $os_update_id);
+    foreach ($os_update_id_list as $os_id) {
+        $os_update_id_list2 = explode('s', $os_id);
+        $idq = $os_update_id_list2[0];
+        $order_serialq = $os_update_id_list2[1];
+
+        $sql = "UPDATE orders SET order_serial = '$order_serialq' WHERE id = '$idq' AND order_status IN (0, 1, 2, 3, 4, 5)";
+        if ($conn->query($sql) === TRUE) {
+            echo '<div id="success_msg" style="text-align: center; display: none;">Order serial updated successfully</div>';
+            echo '<script>
+            setTimeout(function() {
+                document.getElementById("success_msg").style.display="block";
+            }, 500);
+            setTimeout(function() {
+                document.getElementById("success_msg").style.display="none";
+            }, 1500);
+            </script>';
+        } else {
+            echo "Error updating record: " . $conn->error;
+        }
+
+            
+    }
+    
+   
+}
+
 ?>
+
 
 
 <div class="card p-1 text-center">Orders</div>
@@ -161,6 +210,10 @@ if (isset($_POST['update_id'])) {
     function refreshPage() {
         window.location.href = 'orders.php';
     }
+
+ 
+  
+    
 </script>
        
          
@@ -213,6 +266,40 @@ function blankSessionQueryData() {
 
 
 <hr>
+
+<?php if ($_SESSION['role'] == 2): ?>
+    <div style="display: flex; justify-content: center;">
+        <button type="button" class="btn btn-primary" id="array_data">Update Order Serial</button>
+    </div>
+<?php endif; ?>
+ <script>
+var idWithSerial = new Map();
+
+function setIdWithSerial(orderSerial, orderId) {
+        var os=parseInt(orderSerial);
+        if (isNaN(os)) {
+            os = 0;
+           
+        } else if (os < 1) {
+            os = 0;
+        }
+    
+        idWithSerial.set(parseInt(orderId),os );
+    
+        console.log("", Array.from(idWithSerial.entries()).map(entry => entry[0] + "s" + entry[1]).join("."));
+
+        document.getElementById("array_data").addEventListener('click', function() {
+            const queryString = Array.from(idWithSerial.entries()).map(entry => entry[0] + "s" + entry[1]).join(".");
+            window.location.href = 'orders.php?order_serial_update=' + encodeURIComponent(queryString);
+        });
+    
+
+}
+
+</script>
+
+
+
 <div class="table-responsive">
     <table class="table table-striped table-bordered">
 
@@ -247,7 +334,46 @@ function blankSessionQueryData() {
 <?php
     
 
-$sql = "SELECT * FROM orders";
+
+if ($_SESSION['role'] == 2) {
+    $sql = "SELECT * FROM orders WHERE 1=1 AND created_by = '".$_SESSION['id']."'";
+} else {
+    $sql = "SELECT * FROM orders WHERE 1=1";
+}
+
+if (!empty($order_status)) {
+    $sql .= " AND order_status = '$order_status'";
+}
+
+if (!empty($order_date_from)) {
+    $sql .= " AND order_date >= '$order_date_from'";
+}
+
+if (!empty($order_date_to)) {
+    $sql .= " AND order_date <= '$order_date_to'";
+}
+
+if (!empty($delivery_date_from)) {
+    $sql .= " AND delivery_date >= '$delivery_date_from'";
+}
+
+if (!empty($delivery_date_to)) {
+    $sql .= " AND delivery_date <= '$delivery_date_to'";
+}
+
+if (!empty($route_id)) {
+    $sql .= " AND route_id = '$route_id'";
+}
+
+if (!empty($person_id)) {
+    $sql .= " AND person_id = '$person_id'";
+}
+
+$sql.= " ORDER BY order_serial ";
+$result = $conn->query($sql);
+
+
+
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -260,38 +386,46 @@ if ($result->num_rows > 0) {
         }
         echo '<tr>';
         echo '<td style="text-align: center;">ID: ' . htmlspecialchars($row['id']) ."<br>";
-        switch ($row['order_status']) {
-            case 0:
+       
+            if ($row['order_status'] == 0) {
                 echo '<a href="create.php?id=' . htmlspecialchars($row['id']) . '" class="btn btn-primary">Draft</a>';
-                break;
-            case 1:
+            } else if ($row['order_status'] == 1) {
                 echo '<span class="btn btn-warning">Submit</span>';
-                break;
-            case 2:
+            } else if ($row['order_status'] == 2) {
                 echo '<span class="btn btn-success">Approve</span>';
-                break;
-            case 3:
+            } else if ($row['order_status'] == 3) {
                 echo '<span class="btn btn-danger">Reject</span>';
-                break;
-            case 4:
+            } else if ($row['order_status'] == 4) {
                 echo '<a href="create.php?id=' . htmlspecialchars($row['id']) . '" class="btn btn-primary">Edit</a>';
-                break;
-            case 5:
+            } else if ($row['order_status'] == 5) {
                 echo '<span class="btn btn-info">Serial</span>';
-                break;
-            case 6:
+            } else if ($row['order_status'] == 6) {
                 echo '<span class="btn btn-secondary">Processing</span>';
-                break;
-            case 7:
+            } else if ($row['order_status'] == 7) {
                 echo '<span class="btn btn-success">Delivered</span>';
-                break;
-            case 8:
+            } else if ($row['order_status'] == 8) {
                 echo '<span class="btn btn-danger">Returned</span>';
-                break;
-            default:
+            } else {
                 echo '';
-                break;
-        }
+            }
+if ($_SESSION['role'] == 2 && $row['order_status'] !=2 && $row['order_status'] !=3 && $row['order_status'] !=5 && $row['order_status'] !=6 && $row['order_status'] !=7 && $row['order_status'] !=8) {
+        echo '<br><br><div style="display: flex; justify-content: center;">
+         
+            <input type="number" name="order_serial[]" value="' . htmlspecialchars($row['order_serial']) . '" style="width: 40px;" required
+             onkeyup="setIdWithSerial(this.value, ' . htmlspecialchars($row['id']) . ')">
+           </div>';
+?>
+<script>
+    setIdWithSerial(<?php echo $row['order_serial']; ?>, <?php echo $row['id']; ?>);
+</script>
+
+<?php
+    
+ 
+} else {
+    // Other role-specific logic can go here
+}
+
         
         echo '</td>';
         $sql2 = "SELECT route_name FROM routes WHERE id = '".$row['route_id']."'";
@@ -397,10 +531,27 @@ if ($result->num_rows > 0) {
     </table>
 </div>
 <hr>
+   <script>
+    function updateSerial(serial, id) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(this.responseText);
+            }
+        };
+        xhttp.open("POST", "update_serial.php", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("id=" + id + "&serial=" + serial);
+    }
+    </script>
+   
+    
+   
+
 <?php
     echo '
     <div style="text-align: center;">
-    <button type="button" class="btn btn-secondary" onclick="window.location.href=\'printshort.php?idall=' . $idall . '\'"><i class="fa fa-list" aria-hidden="true"></i> Short List</button>
+    <button type="button" class="btn btn-info" style="margin-left: 10px;" onclick="window.location.href=\'printshort.php?idall=' . $idall . '\'"><i class="fa fa-list" aria-hidden="true"></i> Print List</button>
     <button type="button" class="btn btn-success" style="margin-left: 10px;" onclick="window.location.href=\'printfull.php?idall=' . $idall . '\'"><i class="fa fa-print" aria-hidden="true"></i> Print Invoice</button>
     </div>';
 ?>

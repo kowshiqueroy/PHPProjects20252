@@ -276,7 +276,7 @@ if ($result->num_rows > 0) {
                 </thead>
                 <tbody>
                                                 <?php
-                            foreach ($ids as $id) {
+                            
                                 $sql = "SELECT order_product.*, products.product_name 
                                         FROM order_product 
                                         LEFT JOIN products ON order_product.product_id = products.id 
@@ -295,7 +295,7 @@ if ($result->num_rows > 0) {
                                 } else {
                                     echo '<tr><td colspan="4" style="text-align: center;">No items found for this invoice.</td></tr>';
                                 }
-                            }
+                            
                             ?>
                 </tbody>
             </table>
