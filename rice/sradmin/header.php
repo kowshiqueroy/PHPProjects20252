@@ -98,7 +98,8 @@ if (!isset($_SESSION['rolename']) || $_SESSION['rolename'] !== 'sradmin') {
             <li><a href="orders.php"><i class="fas fa-shopping-cart"></i> Orders</a></li>
             <li><a href="chat.php"><i class="fas fa-comments"></i> Chat</a></li>
             <li><a href="note.php"><i class="fas fa-sticky-note"></i> Note</a></li>
-             <li><a href="notice.php"><i class="fas fa-sticky-note"></i> Notice</a></li>
+             <li><a href="notice.php"><i class="fas fa-bullhorn"></i> Notice</a></li>
+             <li><a href="map.php"><i class="fas fa-map-marker-alt"></i> Map</a></li>
            
         </ul>
     </div>
