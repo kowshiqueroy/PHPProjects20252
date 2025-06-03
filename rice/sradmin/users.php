@@ -22,11 +22,10 @@ require_once 'header.php';
                     }
                     ?>
 
-                    <form method="post" class="d-flex flex-column gap-2" style="max-width: 300px; margin: auto;">
-                        <div class="input-group">
-                            <input type="password" name="new_password" placeholder="New Password" required class="form-control">
-                        </div>
-                        <button type="submit" name="updatePassword" value="Update Password" class="btn btn-primary">Update Password</button>
+                    <form method="post">
+                    
+                        <input type="password" name="new_password" placeholder="New Password" required>
+                        <input type="submit" name="updatePassword" value="Update Password">
                     </form>
 
 
@@ -37,11 +36,49 @@ require_once 'header.php';
 
 
                 </div>
-                <!-- <div class="card p-3 flex-fill">
+                <div class="card p-3 flex-fill">
 
 
-                        Can't add User
-                </div> -->
+                       
+
+
+                        <form method="post">
+                            <input type="text" name="username" placeholder="Username" required>
+                            <input type="password" name="password" placeholder="Password" required>
+                            <select name="role" required>
+                               
+                                <option value="2">SR</option>
+                                <option value="3">SRAdmin</option>
+                                <option value="4">Viewer</option>
+                                 <option value="1">Admin</option>
+                            </select>
+                            <input type="submit" name="createUser" value="Create User">
+                        </form>
+
+                        <?php
+                        if (isset($_POST['createUser'])) {
+                            $username = $_POST['username'];
+                            $password = md5($_POST['password']);
+                            $role = $_POST['role'];
+
+                            // Check if username already exists
+                            $checkSql = "SELECT * FROM users WHERE username='$username'";
+                            $result = $conn->query($checkSql);
+
+                            if ($result->num_rows == 0) {
+                                $sql = "INSERT INTO users (username, password, role) VALUES ('$username', '$password', '$role')";
+                                if ($conn->query($sql) === TRUE) {
+                                    echo "User created successfully.";
+                                } else {
+                                    echo "Error creating user: " . $conn->error;
+                                }
+                            } else {
+                                echo "Username already exists.";
+                            }
+                        }
+                        ?>
+                </div>
+               
             </div>
 
 

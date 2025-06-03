@@ -1,6 +1,66 @@
 <?php
-require_once("../conn.php");
 
+
+?>
+<div class="no-print" style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+    <button class="no-print"  type="button" style="background-color: #4CAF50; color: white; border-radius: 5px; padding: 10px 20px; border: none; cursor: pointer;">Viewer</button>
+    <button class="no-print"  type="button" style="background-color: #f44336; color: white; border-radius: 5px; padding: 10px 20px; border: none; cursor: pointer;" onclick="window.location.href='../logout.php'">Logout</button>
+</div>
+
+
+<div class="no-print" style="margin-top: 20px;">
+    <form  method="get" style="display: flex; flex-direction: column; align-items: center;">
+        <label style="margin-right: 10px;">Delivery Date From: </label>
+        <input type="date" name="delivery_date_from" value="<?php if (isset($_GET['delivery_date_from'])) echo $_GET['delivery_date_from']; ?>" style="margin-bottom: 10px;">
+        <label style="margin-right: 10px;">Delivery Date To: </label>
+        <input type="date" name="delivery_date_to" value="<?php if (isset($_GET['delivery_date_to'])) echo $_GET['delivery_date_to']; ?>" style="margin-bottom: 10px;">
+        <label style="margin-right: 10px;">Order Status: </label>
+        <select name="order_status" style="margin-bottom: 10px;">
+            <option value="0" <?php if (isset($_GET['order_status']) && $_GET['order_status'] == 0) echo 'selected'; ?>>Draft</option>
+            <option value="1" <?php if (isset($_GET['order_status']) && $_GET['order_status'] == 1) echo 'selected'; ?>>Submit</option>
+            <option value="2" <?php if (isset($_GET['order_status']) && $_GET['order_status'] == 2) echo 'selected'; ?>>Approve</option>
+            <option value="3" <?php if (isset($_GET['order_status']) && $_GET['order_status'] == 3) echo 'selected'; ?>>Reject</option>
+            <option value="4" <?php if (isset($_GET['order_status']) && $_GET['order_status'] == 4) echo 'selected'; ?>>Edit</option>
+            <option value="5" <?php if (isset($_GET['order_status']) && $_GET['order_status'] == 5) echo 'selected'; ?>>Serial</option>
+            <option value="6" <?php if (isset($_GET['order_status']) && $_GET['order_status'] == 6) echo 'selected'; ?>>Processing</option>
+            <option value="7" <?php if (isset($_GET['order_status']) && $_GET['order_status'] == 7) echo 'selected';  ?>>Delivered</option>
+            <option value="8" <?php if (isset($_GET['order_status']) && $_GET['order_status'] == 8) echo 'selected'; ?>>Returned</option>
+        </select>
+        <input type="submit" value="Search" style="background-color: #4CAF50; color: white; border-radius: 5px; padding: 10px 20px; border: none; cursor: pointer;">
+    </form>
+</div>
+
+<?php
+require_once("../conn.php");
+if (!isset($_SESSION['rolename']) || $_SESSION['rolename'] !== 'viewer') {
+    header("Location: ../index.php");
+    exit();
+}
+?>
+
+<?php
+if (isset($_GET['delivery_date_from']) && isset($_GET['delivery_date_to']) && isset($_GET['order_status']) && $_GET['stop'] != 1) {
+    $idall='';
+
+    $delivery_date_from = $_GET['delivery_date_from'];
+    $delivery_date_to = $_GET['delivery_date_to'];
+    $order_status = $_GET['order_status'];
+    $sql = "SELECT * FROM orders WHERE delivery_date >= '$delivery_date_from' AND delivery_date <= '$delivery_date_to' AND order_status = '$order_status' ORDER BY id DESC";
+    $result = $conn->query($sql);
+    while ($row = $result->fetch_assoc()) {
+        if (empty($idall)) {
+            $idall = $row['id'];
+        } else {
+            $idall .= "," . $row['id'];
+        }
+    }
+    header("Location: index.php?idall=$idall&delivery_date_from=$delivery_date_from&delivery_date_to=$delivery_date_to&order_status=$order_status&stop=1");
+    exit();
+}
+
+?>
+
+<?php
 if (!isset($_GET["idall"]) || empty($_GET["idall"])) {
     echo "<div style='text-align: center;'>ID Not Found</div>";
     exit;
@@ -26,12 +86,8 @@ if (!isset($_GET["idall"]) || empty($_GET["idall"])) {
     </style>
 </head>
 <body style="height: 100%; margin: 20px; padding: 0;">
-<div class="no-print print-hidden" style="display: flex; justify-content: space-between; align-items: center;">
-    <div style="margin-left: 10px;">
-        <button type="button" class="no-print print-hidden"
-            style="background-color: #007bff; color: white; border-radius: 5px; padding: 10px 20px; border: none; cursor: pointer;"
-            onclick="window.location.href='orders.php'">Go to Orders</button>
-    </div>
+<div class="no-print print-hidden" style="display: flex; justify-content: center; align-items: center;">
+    
     <button class="no-print print-hidden"
             style="background-color: #007bff; color: white; border-radius: 5px; padding: 10px 20px; border: none; cursor: pointer;" 
             onclick="window.print()">Print List</button>

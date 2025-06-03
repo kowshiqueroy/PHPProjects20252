@@ -10,7 +10,7 @@ if (isset($_SESSION['querylist'])) {
         
     }
 } else {
-    $order_status = '';
+    $order_status = '1';
     $order_date_from = '';
     $order_date_to = '';
     $delivery_date_from = '';
@@ -19,6 +19,10 @@ if (isset($_SESSION['querylist'])) {
     $person_id='';
 
 }
+
+// echo '<pre>';
+// print_r($_SESSION);
+// echo '</pre>';
 
 // if (isset($_POST['serial_submit'])) {
 //     $order_serial = $_POST['order_serial'];
@@ -34,11 +38,192 @@ if (isset($_POST['update_id'])) {
     $update_id = $_POST['update_id'];
     $sql = "UPDATE orders SET serial = serial + 1 WHERE id = '$update_id'";
     if ($conn->query($sql) === TRUE) {
-        echo '<div style="text-align: center;">Order serial updated successfully</div>';
+            echo '<div id="success_msg" style="text-align: center; display: none;">Order status for ID ' . htmlspecialchars($update_id) . ' updated successfully</div>';
     } else {
         echo "Error updating record: " . $conn->error;
     }
 }
+
+if (isset($_GET['aid'])) {
+    $aid = $_GET['aid'];
+    $sql = "UPDATE orders SET order_status = 2 WHERE id = '$aid' AND order_status=1";
+    if ($conn->query($sql) === TRUE) {
+            echo '<div id="success_msg" style="text-align: center; display: none;">Order status for ID ' . htmlspecialchars($aid) . ' approved successfully</div>';
+    } else {
+        echo "Error updating record: " . $conn->error;
+    }
+}
+
+if (isset($_GET["aidall"])) {
+
+    $aid = $_GET["aidall"];
+
+    $aidList = explode(',', $aid);
+    echo '<div id="success_msg" style="text-align: center; display: none;">';
+    foreach ($aidList as $id) {
+        $sql = "UPDATE orders SET order_status = 2 WHERE id = '$id' AND order_status=1";
+        if ($conn->query($sql) === TRUE) {
+            echo 'Order status for ID ' . htmlspecialchars($id) . ' updated successfully <br>';
+        } else {
+            echo "Error updating record for ID " . htmlspecialchars($id) . ": " . $conn->error . "<br>";
+        }
+    }
+    echo '</div>';
+
+
+
+}
+
+if (isset($_GET['rid'])) {
+    $aid = $_GET['rid'];
+    $sql = "UPDATE orders SET order_status = 3 WHERE id = '$aid' AND order_status=1";
+    if ($conn->query($sql) === TRUE) {
+            echo '<div id="success_msg" style="text-align: center; display: none;">Order status for ID ' . htmlspecialchars($aid) . ' updated successfully</div>';
+    } else {
+        echo "Error updating record: " . $conn->error;
+    }
+}
+
+if (isset($_GET["ridall"])) {
+
+    $aid = $_GET["ridall"];
+
+    $aidList = explode(',', $aid);
+     echo '<div id="success_msg" style="text-align: center; display: none;">';
+    foreach ($aidList as $id) {
+        $sql = "UPDATE orders SET order_status = 3 WHERE id = '$id' AND order_status=1";
+        if ($conn->query($sql) === TRUE) {
+            echo 'Order status for ID ' . htmlspecialchars($id) . ' updated successfully <br>';
+        } else {
+            echo "Error updating record for ID " . htmlspecialchars($id) . ": " . $conn->error;
+        }
+    }
+        echo '</div>';
+
+}
+if (isset($_GET['eid'])) {
+    $aid = $_GET['eid'];
+    $sql = "UPDATE orders SET order_status = 4 WHERE id = '$aid' AND order_status=1";
+    if ($conn->query($sql) === TRUE) {
+            echo '<div id="success_msg" style="text-align: center; display: none;">Order status for ID ' . htmlspecialchars($aid) . ' updated successfully</div>';
+    } else {
+        echo "Error updating record: " . $conn->error;
+    }
+}
+
+if (isset($_GET["eidall"])) {
+
+    $aid = $_GET["eidall"];
+
+    $aidList = explode(',', $aid);
+     echo '<div id="success_msg" style="text-align: center; display: none;">';
+    foreach ($aidList as $id) {
+        $sql = "UPDATE orders SET order_status = 4 WHERE id = '$id' AND order_status=1";
+        if ($conn->query($sql) === TRUE) {
+            echo 'Order status for ID ' . htmlspecialchars($id) . ' updated successfully <br>';
+        } else {
+            echo "Error updating record for ID " . htmlspecialchars($id) . ": " . $conn->error;
+        }
+    }
+        echo '</div>';
+
+}
+
+
+
+
+if (isset($_GET['pid'])) {
+    $aid = $_GET['pid'];
+    $sql = "UPDATE orders SET order_status = 6 WHERE id = '$aid' AND order_status=5";
+    if ($conn->query($sql) === TRUE) {
+            echo '<div id="success_msg" style="text-align: center; display: none;">Order status for ID ' . htmlspecialchars($aid) . ' updated successfully</div>';
+    } else {
+        echo "Error updating record: " . $conn->error;
+    }
+}
+if (isset($_GET["pidall"])) {
+
+    $aid = $_GET["pidall"];
+
+    $aidList = explode(',', $aid);
+     echo '<div id="success_msg" style="text-align: center; display: none;">';
+    foreach ($aidList as $id) {
+        $sql = "UPDATE orders SET order_status = 6 WHERE id = '$id' AND order_status=5";
+        if ($conn->query($sql) === TRUE) {
+            echo 'Order status for ID ' . htmlspecialchars($id) . ' updated successfully <br>';
+        } else {
+            echo "Error updating record for ID " . htmlspecialchars($id) . ": " . $conn->error;
+        }
+    }
+        echo '</div>';
+
+}
+
+
+if (isset($_GET['did'])) {
+    $aid = $_GET['did'];
+    $sql = "UPDATE orders SET order_status = 7 WHERE id = '$aid' AND order_status=6";
+    if ($conn->query($sql) === TRUE) {
+            echo '<div id="success_msg" style="text-align: center; display: none;">Order status for ID ' . htmlspecialchars($aid) . ' updated successfully</div>';
+    } else {
+        echo "Error updating record: " . $conn->error;
+    }
+}
+if (isset($_GET["didall"])) {
+
+    $aid = $_GET["didall"];
+
+    $aidList = explode(',', $aid);
+     echo '<div id="success_msg" style="text-align: center; display: none;">';
+    foreach ($aidList as $id) {
+        $sql = "UPDATE orders SET order_status = 7 WHERE id = '$id' AND order_status=6";
+        if ($conn->query($sql) === TRUE) {
+            echo 'Order status for ID ' . htmlspecialchars($id) . ' updated successfully <br>';
+        } else {
+            echo "Error updating record for ID " . htmlspecialchars($id) . ": " . $conn->error;
+        }
+    }
+        echo '</div>';
+
+}
+
+if (isset($_GET['fid'])) {
+    $aid = $_GET['fid'];
+    $sql = "UPDATE orders SET order_status = 8 WHERE id = '$aid' AND order_status=6";
+    if ($conn->query($sql) === TRUE) {
+            echo 'Order status for ID ' . htmlspecialchars($id) . ' updated successfully <br>';
+    } else {
+        echo "Error updating record: " . $conn->error;
+    }
+}
+if (isset($_GET["fidall"])) {
+
+    $aid = $_GET["fidall"];
+
+    $aidList = explode(',', $aid);
+     echo '<div id="success_msg" style="text-align: center; display: none;">';
+    foreach ($aidList as $id) {
+        $sql = "UPDATE orders SET order_status = 8 WHERE id = '$id' AND order_status=6";
+        if ($conn->query($sql) === TRUE) {
+            echo '<div id="success_msg" style="text-align: center; display: none;">Order status for ID ' . htmlspecialchars($id) . ' updated successfully</div>';
+        } else {
+            echo "Error updating record for ID " . htmlspecialchars($id) . ": " . $conn->error;
+        }
+    }
+        echo '</div>';
+
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 if (isset($_GET['order_serial_update'])) {
@@ -55,14 +240,7 @@ if (isset($_GET['order_serial_update'])) {
         $sql = "UPDATE orders SET order_serial = '$order_serialq', order_status = 5 WHERE id = '$idq' AND order_status =2";
         if ($conn->query($sql) === TRUE) {
             echo '<div id="success_msg" style="text-align: center; display: none;">Order serial updated successfully</div>';
-            echo '<script>
-            setTimeout(function() {
-                document.getElementById("success_msg").style.display="block";
-            }, 500);
-            setTimeout(function() {
-                document.getElementById("success_msg").style.display="none";
-            }, 1500);
-            </script>';
+          
         } else {
             echo "Error updating record: " . $conn->error;
         }
@@ -72,8 +250,28 @@ if (isset($_GET['order_serial_update'])) {
     
    
 }
+  echo '<script>
+            setTimeout(function() {
+                document.getElementById("success_msg").style.display="block";
+                document.getElementById("success_msg").style.position="fixed";
+                document.getElementById("success_msg").style.top="10%";
+                document.getElementById("success_msg").style.left="50%";
+                document.getElementById("success_msg").style.transform="translate(-50%, -50%)";
+                document.getElementById("success_msg").style.backgroundColor="#d4edda";
+                document.getElementById("success_msg").style.color="#155724";
+                document.getElementById("success_msg").style.border="1px solid #c3e6cb";
+                document.getElementById("success_msg").style.padding="10px";
+                document.getElementById("success_msg").style.boxShadow="0px 0px 10px #c3e6cb";
+                document.getElementById("success_msg").style.zIndex="1000";
+            }, 50);
+            setTimeout(function() {
+                document.getElementById("success_msg").style.display="none";
+window.location.href = "orders.php";
 
+            }, 1500);
+            </script>';
 ?>
+
 
 
 
@@ -112,12 +310,14 @@ if (isset($_GET['order_serial_update'])) {
                 <?php if ($_SESSION['role'] == 2): ?>
                     <option value="<?php echo $_SESSION['id']; ?>"><?php echo $_SESSION['username']; ?></option>
                 <?php else: ?>
+                    <option value="">All</option>
+                    
                     <?php
                     $sql = "SELECT * FROM users WHERE role IN (2,3)";
                     $result = $conn->query($sql);
                     if ($result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
-                            echo "<option value='" . $row['id'] . "'>" . $row['username'] . "</option>";
+                            echo "<option value='" . $row['id'] . "'" . ($created_by == $row['id'] ? " selected" : "") . ">" . $row['username'] . "</option>";
                         }
                     }
                     ?>
@@ -405,7 +605,7 @@ if ($result->num_rows > 0) {
             if ($row['order_status'] == 0) {
                 echo '<a href="create.php?id=' . htmlspecialchars($row['id']) . '" class="btn btn-primary">Draft</a>';
             } else if ($row['order_status'] == 1) {
-                echo '<span class="btn btn-warning">Submit</span>';
+                echo '<a href="create.php?id=' . htmlspecialchars($row['id']) . '" class="btn btn-warning">Submit</a>';
             } else if ($row['order_status'] == 2) {
                 echo '<span class="btn btn-success">Approve</span>';
             } else if ($row['order_status'] == 3) {
@@ -423,7 +623,7 @@ if ($result->num_rows > 0) {
             } else {
                 echo '';
             }
-if ($_SESSION['role'] == 2 && $row['order_status'] ==2 && $order_status==2) {
+if ($order_status == 2) {
         echo '<br><br><div style="display: flex; justify-content: center;">
          
             <input type="number" name="order_serial[]" value="' . htmlspecialchars($row['order_serial']) . '" style="width: 40px;" required
@@ -506,7 +706,25 @@ if ($_SESSION['role'] == 2 && $row['order_status'] ==2 && $order_status==2) {
        }
       
       
-       echo ' '. htmlspecialchars($row['remarks']) . ' '. '<a href="printfull.php?idall=' . htmlspecialchars($row['id']) . '" class="btn btn-success"><i class="fa fa-print" aria-hidden="false"></i></a>';
+       echo ' '. htmlspecialchars($row['remarks']) . ' '. '<a href="printfull.php?idall=' .
+        htmlspecialchars($row['id']) . '" class="btn btn-info"><i class="fa fa-print" aria-hidden="false"></i></a>';
+       
+       if ($row['order_status'] == 1) {
+           echo ' <a href="orders.php?aid=' . htmlspecialchars($row['id']) . '" class="btn btn-success btn-sm"><i class="fa fa-check" aria-hidden="true">Approve</i></a>';
+           echo ' <a href="orders.php?rid=' . htmlspecialchars($row['id']) . '" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true">Reject</i></a>';
+           echo ' <a href="orders.php?eid=' . htmlspecialchars($row['id']) . '" class="btn btn-primary btn-sm"><i class="fa fa-pen" aria-hidden="true">Edit</i></a>';
+       }
+
+         if ($row['order_status'] == 5) {
+           echo ' <a href="orders.php?pid=' . htmlspecialchars($row['id']) . '" class="btn btn-secondary"><i class="fa fa-shipping-fast" aria-hidden="true"></i> Processing</a>';
+         
+       }
+
+         if ($row['order_status'] == 6) {
+            echo ' <a href="orders.php?did=' . htmlspecialchars($row['id']) . '" class="btn btn-success"><i class="fa fa-check-circle" aria-hidden="true"></i> Delivered</a>';
+           echo ' <a href="orders.php?fid=' . htmlspecialchars($row['id']) . '" class="btn btn-danger"><i class="fa fa-window-close" aria-hidden="true"></i> Returned</a>';         
+       }
+       
        
        
         echo '</td></tr>';
@@ -536,6 +754,34 @@ if ($_SESSION['role'] == 2 && $row['order_status'] ==2 && $order_status==2) {
 
 
     }
+
+
+
+if ($order_status == 1) {
+
+    
+    echo '<div style="display: flex; justify-content: center; align-items: center; margin: 10px 10px; flex-wrap: wrap;">';
+           echo ' <a href="orders.php?aidall=' . $idall. '" class="btn btn-success btn-sm" style="margin: 5px;"><i class="fa fa-check" aria-hidden="true">Approve All</i></a> ';
+           echo ' <a href="orders.php?ridall=' . $idall . '" class="btn btn-danger btn-sm" style="margin: 5px;"><i class="fa fa-times" aria-hidden="true">Reject All</i></a> ';
+           echo ' <a href="orders.php?eidall=' . $idall.  '" class="btn btn-primary btn-sm" style="margin: 5px;"><i class="fa fa-pen" aria-hidden="true">Edit All</i></a> ';
+      
+      echo '</div>';
+        }
+
+         if ($order_status == 5) {
+                echo '<div style="display: flex; justify-content: center; align-items: center; margin: 10px 10px; flex-wrap: wrap;">';
+
+           echo ' <a href="orders.php?pidall=' . $idall.  '" class="btn btn-secondary" style="margin: 5px;"><i class="fa fa-shipping-fast" aria-hidden="true"></i> Processing All</a>';
+          echo '</div>';
+       }
+
+         if ($order_status == 6) {
+                echo '<div style="display: flex; justify-content: center; align-items: center; margin: 10px 10px; flex-wrap: wrap;">';
+
+           echo ' <a href="orders.php?didall=' . $idall.  '" class="btn btn-success" style="margin: 5px;"><i class="fa fa-check-circle" aria-hidden="true"></i> Delivered All</a>';
+           echo ' <a href="orders.php?fidall=' . $idall.  '" class="btn btn-danger" style="margin: 5px;"><i class="fa fa-window-close" aria-hidden="true"></i> Returned All</a>';         
+        echo '</div>';
+        }
 } else {
     echo '<tr><td colspan="12" style="text-align: center;">No orders found</td></tr>';
 }
@@ -545,6 +791,14 @@ if ($_SESSION['role'] == 2 && $row['order_status'] ==2 && $order_status==2) {
         </tbody>
     </table>
 </div>
+
+
+ 
+
+      <div style="display: flex; justify-content: center; align-items: center; margin: 10px 10px; flex-wrap: wrap;">
+      
+
+
 <hr>
    <script>
     function updateSerial(serial, id) {
