@@ -95,6 +95,7 @@ require_once 'header.php';
 <script>
     function sendMessage() {
         var message = document.getElementById('message').value;
+          document.getElementById('message').value = '';
         if(message.trim() !== '') {
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "getchat.php", true);

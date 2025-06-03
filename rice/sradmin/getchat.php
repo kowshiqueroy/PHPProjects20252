@@ -2,7 +2,7 @@
 require_once '../conn.php';
 if (isset($_POST['message'])) {
     $message = $_POST['message'];
-    $sql = "INSERT INTO chat (username, message) VALUES ('".$_SESSION['username']."', '$message')";
+    $sql = "INSERT INTO chat (username, message, timestamp) VALUES ('".$_SESSION['username']."', '$message', NOW())";
     if ($conn->query($sql) === TRUE) {
        $sql = "SELECT username, message, timestamp FROM chat ORDER BY id DESC LIMIT 20";
     $result = $conn->query($sql);

@@ -60,7 +60,7 @@ if (isset($_GET['username']) && isset($_GET['date'])) {
         ?>
         
         
-        <table id = "myTable" class="table table-bordered ">
+        <table id = "myTable" class="table table-bordered d-none">
             <thead>
                 <tr>
                     <th>Latitude</th>
