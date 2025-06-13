@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>PoSStore - Smart Business Solution</title>
+  <title>Inventory Management</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -53,7 +53,7 @@
 <body>
 
   <header class="text-center py-4">
-    <h1><i class="fa-solid fa-store"></i> PoSStore - Manage Your Business Effortlessly</h1>
+    <h1><i class="fa-solid fa-store"></i> Inventory Management</h1>
   </header>
 
   <div class="container">
@@ -81,10 +81,10 @@
 
       <div class="col-md-6">
         <div class="card">
-          <h4><i class="fa-solid fa-cloud"></i> Why PoSStore?</h4>
+          <h4><i class="fa-solid fa-cloud"></i> Why this System?</h4>
           <div class="card-text">
             <p><i class="fa-solid fa-mobile-alt icon"></i> Access from Any Device</p>
-            <p><i class="fa-solid fa-barcode icon"></i> Easy Inventory Management</p>
+            <p><i class="fa-solid fa-chart-bar icon"></i> Easy Inventory Management</p>
             <p><i class="fa-solid fa-barcode icon"></i> Quick Sales with Barcode Scanner</p>
             <p><i class="fa-solid fa-chart-line icon"></i> Custom Reports & Analytics</p>
           </div>

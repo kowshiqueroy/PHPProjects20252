@@ -40,8 +40,8 @@ include 'header.php';
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12 text-end">
-                        <button class="btn btn-primary" type="submit">Search</button>
+                    <div class="col-md-12 mt-2  d-flex justify-content-center">
+                        <button class="btn btn-primary mx-auto" type="submit">Search</button>
                     </div>
                 </div>
             </form>

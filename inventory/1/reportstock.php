@@ -4,9 +4,11 @@ include 'header.php';
 
 <div class="container-fluid py-5">
     <div class="shadow-lg rounded p-4 bg-light" style="backdrop-filter: blur(10px); border-radius: 15px;">
-        <h3 class="mb-4 text-primary">Stock Report</h3>
+        <h3 class="mb-4 text-primary text-center ">
+            Stock Report <?php echo date('d/m/Y h:i:s A'); ?>
+        </h3>
 
-        <input type="text" id="search-keyword" onkeyup="filter()" class="form-control mb-3 shadow-sm rounded-pill"
+        <input type="text" id="search-keyword" onkeyup="filter()" class="form-control mb-3 shadow-sm rounded-pill noprint"
             placeholder="Search by type or product name.." style="max-width: 400px; margin: 0 auto;"/>
 
         <div class="table-responsive">

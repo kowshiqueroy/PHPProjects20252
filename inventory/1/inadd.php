@@ -25,10 +25,10 @@ if (isset($_GET['next'])) {
     }
 
 
-        $sql = "INSERT INTO invoiceout (person, date, status, company) VALUES ('$name', '$date', '$status', '".$_SESSION['company']."')";
+        $sql = "INSERT INTO invoicein (person, date, status, company) VALUES ('$name', '$date', '$status', '".$_SESSION['company']."')";
         if (mysqli_query($conn, $sql)) {
             $id = mysqli_insert_id($conn);
-            echo "<script>window.location.href = 'outadd.php?id=$id';</script>";
+            echo "<script>window.location.href = 'inadd.php?id=$id';</script>";
             exit();
         } else {
             echo "Error: " . $sql . "<br>" . mysqli_error($conn);
@@ -39,7 +39,7 @@ if (isset($_GET['next'])) {
 }
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    $sql = "SELECT confirm, timestamp FROM invoiceout WHERE id = '$id'";
+    $sql = "SELECT confirm, timestamp FROM invoicein WHERE id = '$id'";
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_assoc($result);
     $confirm = $row['confirm'];
@@ -74,9 +74,9 @@ if (isset($_GET['id'])) {
                 }
             }
         }
-        $sql = "UPDATE invoiceout SET person = '".$_GET['name']."', date = '".$_GET['date']."', status = '".$_GET['status']."' WHERE id = '$id'";
+        $sql = "UPDATE invoicein SET person = '".$_GET['name']."', date = '".$_GET['date']."', status = '".$_GET['status']."' WHERE id = '$id'";
         if (mysqli_query($conn, $sql)) {
-            echo "<script>window.location.href = 'outadd.php?id=$id';</script>";
+            echo "<script>window.location.href = 'inadd.php?id=$id';</script>";
             exit();
         } else {
             echo "Error: " . $sql . "<br>" . mysqli_error($conn);
@@ -88,28 +88,32 @@ if (isset($_GET['id'])) {
 
     if (isset($_GET['add'])) {
         $id = $_GET['id'];
-        $name = $_GET['name'];    
+        $name = $_GET['name'];
+            
         $type = $_GET['type'];
         $unit = $_GET['unit'];
         $quantity = $_GET['quantity'];
-        $price = $_GET['sellprice'];
-    
+        $costprice = $_GET['costprice'];
+        $sellprice = $_GET['sellprice'];
+        $location = $_GET['location'];
+        $mfg = $_GET['mfg'];
+        $exp = $_GET['exp'];
         $remarks = $_GET['remarks'];
     
-        $sql = "INSERT INTO productout (personid, type, productname, unit, quantity, price, remarks, company) 
+        $sql = "INSERT INTO productin (personid, type, productname, unit, quantity, costprice, sellprice, location, mfg, exp, remarks, company) 
                 VALUES ('$id', '$type', 
-                '$name', '$unit', '$quantity',  '$price', '$remarks', '".$_SESSION['company']."')";
+                '$name', '$unit', '$quantity', '$costprice', '$sellprice', '$location', '$mfg', '$exp', '$remarks', '".$_SESSION['company']."')";
     
         if (mysqli_query($conn, $sql)) {
 
-            $sql = "SELECT totalprice FROM invoiceout WHERE id = '$id'";
+            $sql = "SELECT totalprice FROM invoicein WHERE id = '$id'";
             $result = mysqli_query($conn, $sql);
             $row = mysqli_fetch_assoc($result);
             $totalprice = $row['totalprice'] ? $row['totalprice'] : 0;
-            $totalprice += $quantity * $price;
-            $sql = "UPDATE invoiceout SET totalprice = '$totalprice' WHERE id = '$id'";
+            $totalprice += $quantity * $costprice;
+            $sql = "UPDATE invoicein SET totalprice = '$totalprice' WHERE id = '$id'";
             if (mysqli_query($conn, $sql)) {}
-            echo "<script>window.location.href = 'outadd.php?id=$id';</script>";
+            echo "<script>window.location.href = 'inadd.php?id=$id';</script>";
         } else {
             echo "Error: " . $sql . "<br>" . mysqli_error($conn);
         }
@@ -122,28 +126,28 @@ if (isset($_GET['id'])) {
     if (isset($_GET['delid'])) {
         $delid = $_GET['delid'];
         $id = $_GET['id'];
-        $sql = "SELECT price, quantity FROM productout WHERE id = '$delid'";
+        $sql = "SELECT totalprice FROM invoicein WHERE id = '$id'";
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+        $totalprice = $row['totalprice'] ? $row['totalprice'] : 0;
+
+        $sql = "SELECT costprice, quantity FROM productin WHERE id = '$delid'";
         $result = mysqli_query($conn, $sql);
         $row = mysqli_fetch_assoc($result);
         $costprice = $row['costprice'];
         $quantity = $row['quantity'];
 
-        $sql = "SELECT totalprice FROM invoiceout WHERE id = '$id'";
-        $result = mysqli_query($conn, $sql);
-        $row = mysqli_fetch_assoc($result);
-        $totalprice = $row['totalprice'] ? $row['totalprice'] : 0;
-
         $totalprice -= $quantity * $costprice;
-        $sql = "UPDATE invoiceout SET totalprice = '$totalprice' WHERE id = '$id'";
+        $sql = "UPDATE invoicein SET totalprice = '$totalprice' WHERE id = '$id'";
         if (mysqli_query($conn, $sql)) {}
 
 
-        $sql = "DELETE FROM productout WHERE id = '$delid'";
+        $sql = "DELETE FROM productin WHERE id = '$delid'";
         if (mysqli_query($conn, $sql)) {
   
 
            
-            echo "<script>window.location.href = 'outadd.php?id=$id';</script>";
+            echo "<script>window.location.href = 'inadd.php?id=$id';</script>";
         } else {
             echo "Error: " . $sql . "<br>" . mysqli_error($conn);
         }
@@ -155,35 +159,38 @@ if (isset($_GET['id'])) {
         $paymentmethod = $_GET['paymentmethod'];
         $remarks = $_GET['remarks'];
 
-        
-        $sql = "SELECT id FROM productout WHERE personid = '$id'";
+
+
+        $sql = "SELECT id FROM productin WHERE personid = '$id'";
         $result = mysqli_query($conn, $sql);
         while ($row = mysqli_fetch_assoc($result)) {
-            
+            echo $row['id']."<br>";
 
-            $sql = "SELECT type, productname, unit, quantity FROM productout WHERE id = '".$row['id']."'";
+            $sql = "SELECT type, productname, unit, quantity FROM productin WHERE id = '".$row['id']."'";
             $result2 = mysqli_query($conn, $sql);
             $row2 = mysqli_fetch_assoc($result2);
             $stype = $row2['type'];
             $pname = $row2['productname'];
             $punit = $row2['unit'];
             $pquantity = $row2['quantity'];
-            $sql = "SELECT id, stock FROM product WHERE type = (SELECT id FROM type WHERE name = '$stype' AND company = '".$_SESSION['company']."') AND name = '$pname' AND unit = (SELECT id FROM unit WHERE name = '$punit' AND company = '".$_SESSION['company']."')";
+            $sql = "SELECT id, stock FROM product WHERE type = '$stype' AND name = '$pname' AND unit = '$punit' and company = '".$_SESSION['company']."'";
             $result2 = mysqli_query($conn, $sql);
             $row2 = mysqli_fetch_assoc($result2);
             $squantity = $row2['stock'];
             $psid= $row2['id'];
 
 
-            $sql = "UPDATE product SET stock = '$squantity' - '$pquantity'  WHERE id = '$psid'";
+            $sql = "UPDATE product SET stock = '$squantity' + '$pquantity' WHERE id = '$psid'";
             if (mysqli_query($conn, $sql)) {}
             
 
         }
 
-        $sql = "UPDATE invoiceout SET  confirm = 1, paymentmethod = '$paymentmethod', remarks = '$remarks' , user = '".$_SESSION['uid']."' WHERE id = '$id'";
+       
+
+        $sql = "UPDATE invoicein SET  confirm = 1, paymentmethod = '$paymentmethod', remarks = '$remarks', user = '".$_SESSION['uid']."' WHERE id = '$id'";
         if (mysqli_query($conn, $sql)) {
-            echo "<script>window.location.href = 'outlist.php';</script>";
+            echo "<script>window.location.href = 'inlist.php';</script>";
         } else {
             echo "Error: " . $sql . "<br>" . mysqli_error($conn);
         }
@@ -193,9 +200,9 @@ if (isset($_GET['id'])) {
         $paymentmethod = $_GET['paymentmethod'];
         $remarks = $_GET['remarks'];
 
-        $sql = "UPDATE invoiceout SET paymentmethod = '$paymentmethod', remarks = '$remarks' WHERE id = '$id'";
+        $sql = "UPDATE invoicein SET paymentmethod = '$paymentmethod', remarks = '$remarks' WHERE id = '$id'";
         if (mysqli_query($conn, $sql)) {
-            echo "<script>window.location.href = 'outlist.php';</script>";
+            echo "<script>window.location.href = 'inlist.php';</script>";
         } else {
             echo "Error: " . $sql . "<br>" . mysqli_error($conn);
         }
@@ -212,8 +219,9 @@ if (isset($_GET['id'])) {
 ?>
 
 
-
+<!-- new -->
 <div class="container-fluid py-5">
+    <h2 class="text-center">IN Add</h2>
 
     <div class="container-fluid bg-primary mb-5 wow fadeIn noprint" data-wow-delay="0.1s" style="padding: 35px;">
         <div class="container">
@@ -223,29 +231,31 @@ if (isset($_GET['id'])) {
                         <div class="row g-2">
                             <div class="col-md-9">
                                 <label for="name" class="form-label text-white">Name Shop/Address Contact Details ID</label>
-                                <select class="form-select border-0 select2" id="name" name="name">
-                                    <?php
-                                    if (isset($_GET['id'])) {
-                                        $id = $_GET['id'];
-                                        $sql = "SELECT * FROM invoiceout WHERE id = '$id'";
-                                        $result = mysqli_query($conn, $sql);
-                                        if ($row = mysqli_fetch_assoc($result)) {
-                                            echo "<option  selected>".$row['person']."</option>";
-                                        }
+                                <select class="form-select border-0 select2" id="pname" name="name">
+                                      <?php 
+                                   if (isset($_GET['id'])) {
+                                    $id = $_GET['id'];
+                                       $sql = "SELECT * FROM invoicein WHERE id = '$id'";
+                                     $result = mysqli_query($conn, $sql);
+                                      if ($row = mysqli_fetch_assoc($result)) {
+                                            echo "<option selected>".$row['person']."</option>";
+                                       }
                                     } else {
                                         echo "<option value='-' selected>Example: Kowshique Roy Babu Para, Nilphamari 01632950179 4322</option>";
                                     }
-                                    ?>
-                                    <?php
-                                    $sql = "SELECT * FROM person WHERE company = '".$_SESSION['company']."' order by name DESC";
+                                
+                                   
+                                    $sql = "SELECT * FROM person WHERE company = '".$_SESSION['company']."' ORDER BY name DESC";
                                     $result = mysqli_query($conn, $sql);
                                     while ($row = mysqli_fetch_assoc($result)) {
                                         echo "<option>".$row['name']."</option>";
                                     }
                                     ?>
                                 </select>
-                            </div>
 
+                               
+                            </div>
+                    
                             <div class="col-md-2">
                                 <label for="date" class="form-label text-white">Date</label>
 
@@ -254,7 +264,7 @@ if (isset($_GET['id'])) {
                                 <?php
                                 if (isset($_GET['id'])) {
                                     $id = $_GET['id'];
-                                    $sql = "SELECT date FROM invoiceout WHERE id = '$id'";
+                                    $sql = "SELECT date FROM invoicein WHERE id = '$id'";
                                     $result = mysqli_query($conn, $sql);
                                     $row = mysqli_fetch_assoc($result);
                                     $dateValue = date('Y-m-d', strtotime($row['date']));
@@ -270,14 +280,14 @@ if (isset($_GET['id'])) {
                                 <label for="status" class="form-label text-white">Status</label>
                                 <select class="form-select border-0" id="status" name="status">
                                     <?php if (isset($_GET['id'])) {
-                                        $sql = "SELECT status FROM invoiceout WHERE id = ".$_GET['id'];
+                                        $sql = "SELECT status FROM invoicein WHERE id = ".$_GET['id'];
                                         $result = mysqli_query($conn, $sql);
                                         $row = mysqli_fetch_assoc($result);
                                         $selectedStatus = $row['status'];
                                     } else {
                                         $selectedStatus = 0;
                                     } ?>
-                                    <option value="0" <?php echo $selectedStatus == 0 ? 'selected' : ''; ?>>OUT</option>
+                                    <option value="0" <?php echo $selectedStatus == 0 ? 'selected' : ''; ?>>IN</option>
                                     <option value="1" <?php echo $selectedStatus == 1 ? 'selected' : ''; ?>>Back</option>
                                 </select>
                             </div>
@@ -311,41 +321,12 @@ if (isset($_GET['id'])) {
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                        
                         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="get">
-                            <input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
-                            <div class="row g-2 align-items-center">
-                                <div class="col-md-2">
-                                   
-                                    <input type="number" class="form-control border-0" id="barcode" name="barcode" placeholder="Barcode" onkeydown="if(event.keyCode==13){this.form.submit();}">
-                                    <script>
-                                        const barcodeInput = document.getElementById('barcode');
-                                        barcodeInput.addEventListener('keypress', function(e) {
-                                            if (e.keyCode == 13) {
-                                                e.preventDefault();
-                                                this.form.submit();
-                                            }
-                                        });
-                                    </script>
-                                </div>
-                                <div class="col-md-3 prf">
+                            <div class="row g-2">
+                                <div class="col-md-3">
                                     <select class="form-select border-0 select2n" id="type" name="type" onChange="this.form.submit()" required>
                                         <option value="">Select Type</option>
                                         <?php
-
-
-                                        if (isset($_GET['type'])) {
-                                            $selectedType = $_GET['type'];
-                                            echo "<option value='$selectedType' selected>".$selectedType."</option>";
-                                        }
-
-
-
-
-
-
-
-
                                             $sql = "SELECT DISTINCT type FROM product WHERE company = '".$_SESSION['company']."' ORDER BY type ASC";
                                             $result = mysqli_query($conn, $sql);
                                             while ($row = mysqli_fetch_assoc($result)) {
@@ -353,27 +334,17 @@ if (isset($_GET['id'])) {
                                                 $typeSql = "SELECT name FROM type WHERE id = '$typeName'";
                                                 $typeResult = mysqli_query($conn, $typeSql);
                                                 $typeRow = mysqli_fetch_assoc($typeResult);
-                                                echo "<option>".$typeRow['name']."</option>";
-
-
-
-                                               
-                                               
-                                           
+                                                echo "<option value='".$typeName."' ".(isset($_GET['type']) && $_GET['type'] == $typeName ? 'selected' : '').">".$typeRow['name']."</option>";
                                             }
                                         ?>
                                     </select>
                                 </div>
-                                <div class="col-md-6 prf">
-                                    <select class="form-select border-0 select2n" id="pname" name="name" onChange="this.form.submit()" required>
+                                <div class="col-md-6">
+                                    <select class="form-select border-0 select2n" id="name" name="name" onChange="this.form.submit()" required>
                                         <option value="">Select Product Name</option>
                                         <?php
                                             if (isset($_GET['type'])) {
-                                                $typeSql = "SELECT id FROM type WHERE name = '".$_GET['type']."' AND company = '".$_SESSION['company']."'";
-                                                $typeResult = mysqli_query($conn, $typeSql);
-                                                $typeRow = mysqli_fetch_assoc($typeResult);
-                                                $typeId = $typeRow['id'];
-                                                $sql = "SELECT DISTINCT name FROM product WHERE type = '$typeId' AND company = '".$_SESSION['company']."' ORDER BY name ASC";
+                                                $sql = "SELECT DISTINCT name FROM product WHERE type = '".$_GET['type']."' AND company = '".$_SESSION['company']."' ORDER BY name ASC";
                                                 $result = mysqli_query($conn, $sql);
                                                 while ($row = mysqli_fetch_assoc($result)) {
                                                     $productName = $row['name'];
@@ -383,7 +354,7 @@ if (isset($_GET['id'])) {
                                         ?>
                                     </select>
                                 </div>
-                                <div class="col-md-1 prf">
+                                <div class="col-md-1">
                                     <select class="form-select border-0 select2n" id="unit" name="unit" required>
                                        
                                         <?php
@@ -396,13 +367,13 @@ if (isset($_GET['id'])) {
                                                     $unitSql = "SELECT name FROM unit WHERE id = '".$unit['unit']."'";
                                                     $unitResult = mysqli_query($conn, $unitSql);
                                                     $unitRow = mysqli_fetch_assoc($unitResult);
-                                                    echo "<option  selected readonly>".$unitRow['name']."</option>";
+                                                    echo "<option value='".$unit['unit']."' selected readonly>".$unitRow['name']."</option>";
                                                 } else {
                                                     foreach ($units as $unit) {
                                                         $unitSql = "SELECT name FROM unit WHERE id = '".$unit['unit']."'";
                                                         $unitResult = mysqli_query($conn, $unitSql);
                                                         $unitRow = mysqli_fetch_assoc($unitResult);
-                                                        echo " <option value=''>Select Unit</option> <option  ".(isset($_GET['unit']) && $_GET['unit'] == $unit['unit'] ? 'selected' : '').">".$unitRow['name']."</option>";
+                                                        echo " <option value=''>Select Unit</option> <option value='".$unit['unit']."' ".(isset($_GET['unit']) && $_GET['unit'] == $unit['unit'] ? 'selected' : '').">".$unitRow['name']."</option>";
                                                     }
                                                 }
                                             }
@@ -410,152 +381,35 @@ if (isset($_GET['id'])) {
                                         
                                     </select>
                                 </div>
-                                
                                 <div class="col-md-2">
-                                    <label for="costprice" class="form-label">Get Price</label>
-                                    <input type="text" class="form-control" id="costprice" name="costprice" placeholder="" required readonly onclick="getLastCostPrice();">
-                                </div>
-
-
-                                <div class="col-md-2">
-                                    <label for="sellprice" class="form-label">Sell Price</label>
-                                    <input type="number" step="0.01" class="form-control" id="sellprice" name="sellprice" placeholder="Sell Price" required>
+                                    <input type="number" step="0.01" class="form-control" id="quantity" name="quantity" placeholder="Quantity" required>
                                 </div>
                                 <div class="col-md-2">
-                                    <label for="quantity" class="form-label">Quantity</label>
-                                    <input type="number" step="0.01" class="form-control" id="quantity" name="quantity" value="1" required>
+                                    <input type="number" step="0.01" class="form-control" id="costprice" name="costprice" placeholder="Cost Price/Unit" required>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="number" step="0.01" class="form-control" id="sellprice" name="sellprice" placeholder="Sell Price/Unit" required>
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="remarks" class="form-label">Remarks</label>
-                                    <input type="text" class="form-control" id="remarks" name="remarks" placeholder="Remarks">
+                                    <input type="text" class="form-control" id="location" name="location" placeholder="Location">
                                 </div>
-
+                                <div class="col-md-2">
+                                    <input type="text" class="form-control" id="mfg" name="mfg" placeholder="MFG">
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="text" class="form-control" id="exp" name="exp" placeholder="EXP">
+                                </div>
+                                <div class="col-md-10">
+                                    <textarea class="form-control" id="remarks" name="remarks" placeholder="Remarks"></textarea>
+                                </div>
                                 <div class="col-md-2 text-end">
                                     <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
                                     <button class="btn btn-success border-0" name="add" type="submit">Add</button>
                                 </div>
                             </div>
                         </form>
-                      
-                        <script>
 
 
-
-
-
-                  
-                            document.getElementById('barcode').addEventListener('input', function() {
-                                var barcode = this.value;
-                                fetch(`barcodeget.php?id=${barcode}`)
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        if (data) {
-
-                                            console.log('API Response:', data);
-                                            document.getElementById('type').innerHTML = `<option value="${data.type}" selected>${data.type}</option>`;
-                                            document.getElementById('pname').innerHTML = `<option value="${data.productname}" selected>${data.productname}</option>`;
-                                            document.getElementById('unit').innerHTML = `<option value="${data.unit}" selected>${data.unit}</option>`;
-                                           
-
-                                        
-
-
-
-                                           
-                                           
-                                           
-                                            document.getElementById('costprice').value = data.costprice.toString().split('').map(digit => {
-                                                switch (digit) {
-                                                    case '0': return 'A';
-                                                    case '1': return 'B';
-                                                    case '2': return 'C';
-                                                    case '3': return 'D';
-                                                    case '4': return 'E';
-                                                    case '5': return 'F';
-                                                    case '6': return 'G';
-                                                    case '7': return 'H';
-                                                    case '8': return 'I';
-                                                    case '9': return 'j';
-                                                }
-                                            }).join('');
-                                            document.getElementById('sellprice').value = data.sellprice;
-                                            if (data.stock <= 0) {
-                    document.getElementById("remarks").style.backgroundColor = 'red';
-
-
-                    document.getElementById("remarks").placeholder = data.stock + ' Stock Available';
-                } else {
- document.getElementById("remarks").style.backgroundColor = 'white';
-                    document.getElementById("remarks").placeholder = data.stock + ' Stock Available';     
-                
-                }
-                                        } else {
-                                            document.getElementById('costprice').value = '';
-                                            document.getElementById("sellprice").value = '';
-                                            document.getElementById("remarks").placeholder = '';
-
-                                        }
-                                    })
-                                    .catch(error => {
-                                        console.error('Error:', error);
-                                        
-                                    });
-                            });
-                        </script>
-<script>
-    function getLastCostPrice() {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                 console.log("Raw Response:", this.responseText); 
-                var response = JSON.parse(this.responseText);
-                document.getElementById('costprice').value = response.costprice.toString().split('').map(digit => {
-                                                switch (digit) {
-                                                    case '0': return 'A';
-                                                    case '1': return 'B';
-                                                    case '2': return 'C';
-                                                    case '3': return 'D';
-                                                    case '4': return 'E';
-                                                    case '5': return 'F';
-                                                    case '6': return 'G';
-                                                    case '7': return 'H';
-                                                    case '8': return 'I';
-                                                    case '9': return 'j';
-                                                }
-                                            }).join('');
-                document.getElementById("sellprice").value = response.sellprice;
-
-                if (response.stock <= 0) {
-                    document.getElementById("remarks").style.backgroundColor = 'red';
-                    document.getElementById("remarks").placeholder = response.stock + ' Stock Available';
-                } else {
- document.getElementById("remarks").style.backgroundColor = 'white';
-                    document.getElementById("remarks").placeholder = response.stock + ' Stock Available';     
-                
-                }
-                console.log(response);
-            }
-            else {
-                document.getElementById('costprice').value = '';
-                document.getElementById("sellprice").value = '';
-                document.getElementById("remarks").placeholder = '';
-
-            }
-        };
-
-
-
-        var pname = document.getElementById("pname").value;
-        var type = document.getElementById("type").value;
-        var unit = document.getElementById("unit").value;
-        var barcode = document.getElementById("barcode").value;
-
-        xhttp.open("GET", `lastcostprice.php?name=${pname}&type=${type}&unit=${unit}&id=${barcode}`, true);
-       
-       
-        xhttp.send();
-    }
-</script>
 
 
                     </div>
@@ -564,12 +418,15 @@ if (isset($_GET['id'])) {
                             <thead class="table-dark">
                                 <tr>
                                     <th>ID</th>
-                                  
                                     <th>Type</th>
-                                    <th>Product Name</th>
                                     <th>Unit</th>
+                                    <th>Product Name</th>
                                     <th>Quantity</th>
-                                    <th>Price</th>
+                                    <th>Cost Price</th>
+                                    <th>Sell Price</th>
+                                    <th>Location</th>
+                                    <th>MFG</th>
+                                    <th>EXP</th>
                                     <th>Total</th>
                                     <th>Remarks</th>
                                     <th>Action</th>
@@ -577,38 +434,44 @@ if (isset($_GET['id'])) {
                             </thead>
                             <tbody>
                             <?php
-                            $sql = "SELECT po.id, po.type, po.productname, po.unit, po.quantity, po.price, po.remarks FROM productout po JOIN invoiceout io ON po.personid = io.id WHERE io.id = '$id' ORDER BY po.id DESC";
+                            $sql = "SELECT p.id, t.name AS type, u.name AS unit, p.productname, p.quantity, p.costprice, p.sellprice, p.location, p.mfg, p.exp, p.remarks 
+                            FROM productin p 
+                            JOIN type t ON p.type = t.id 
+                            JOIN unit u ON p.unit = u.id 
+                            WHERE p.personid = '$id' ORDER BY p.id DESC";
                             $result = mysqli_query($conn, $sql);
+                            $subtotal = 0;
                             while ($row = mysqli_fetch_assoc($result)) {
+                                $total = $row['quantity'] * $row['costprice'];
+                                $subtotal += $total;
                             ?>
                                 <tr>
                                     <td><?php echo $row['id']; ?></td>
-                                
                                     <td><?php echo $row['type']; ?></td>
-                                    <td><?php echo $row['productname']; ?></td>
                                     <td><?php echo $row['unit']; ?></td>
+                                    <td><?php echo $row['productname']; ?></td>
                                     <td><?php echo $row['quantity']; ?></td>
-                                    <td><?php echo $row['price']; ?></td>
-                                    <td><?php echo $row['quantity'] * $row['price']; ?></td>
+                                    <td><?php echo $row['costprice']; ?></td>
+                                    <td><?php echo $row['sellprice']; ?></td>
+                                    <td><?php echo $row['location']; ?></td>
+                                    <td><?php echo $row['mfg']; ?></td>
+                                    <td><?php echo $row['exp']; ?></td>
+                                    <td><?php echo number_format($total, 2); ?></td>
                                     <td><?php echo $row['remarks']; ?></td>
                                     <td>
-                                        <a href="outadd.php?id=<?php echo $id; ?>&delid=<?php echo $row['id']; ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this record?')">Delete</a>
+                                        <a href="inadd.php?id=<?php echo $id; ?>&delid=<?php echo $row['id']; ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this record?')">Delete</a>
                                     </td>
                                 </tr>
                             <?php
                             }
                             ?>
-                                <tr>
-                                    <td colspan="6" class="text-end">Sub Total</td>
-                                    <td colspan="2"><b><?php
-                                        $sql = "SELECT totalprice FROM invoiceout WHERE id = '$id'";
-                                        $result = mysqli_query($conn, $sql);
-                                        $row = mysqli_fetch_assoc($result);
-                                        echo number_format($row['totalprice'], 2);
-                                    ?></b></td>
-                                </tr>
-
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="10" class="text-end"><strong>Sub Total:</strong></td>
+                                    <td colspan="3"><?php echo number_format($subtotal, 2); ?></td>
+                                </tr>
+                            </tfoot>
                         </table>
 
 <div class="container">

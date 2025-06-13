@@ -38,22 +38,22 @@ $products = mysqli_fetch_all($result, MYSQLI_ASSOC);
 ?>
 
 <div class="container py-5 d-flex justify-content-center">
-    <div class="w-50">
+    <div class="w-100">
         <form action="" method="post" class="mb-4">
             <div class="row mb-3">
-                <div class="col-sm-auto">
+                <div class="col-md-6">
                     <label for="type" class="form-label">Type</label>
                     <select class="form-select select2n" id="type" name="type" required>
-                        <option value="">Select a type</option>
+                       
                         <?php foreach ($types as $type): ?>
                             <option value="<?php echo $type['name']; ?>"><?php echo $type['name']; ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
-                <div class="col-sm-auto">
+                <div class="col-md-6">
                     <label for="unit" class="form-label">Unit</label>
                     <select class="form-select select2n" id="unit" name="unit" required>
-                        <option value="">unit</option>
+                      
                         <?php foreach ($units as $unit): ?>
                             <option value="<?php echo $unit['name']; ?>"><?php echo $unit['name']; ?></option>
                         <?php endforeach; ?>
@@ -64,7 +64,9 @@ $products = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 <label for="name" class="form-label">Product Name</label>
                 <input type="text" class="form-control" id="name" name="name" placeholder="Product Name" required>
             </div>
-            <button type="submit" class="btn btn-primary">Add Product</button>
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary">Add Product</button>
+            </div>
         </form>
 
         <?php if (isset($message)): ?>

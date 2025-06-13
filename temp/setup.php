@@ -80,9 +80,9 @@ $sql = "CREATE TABLE IF NOT EXISTS users (
   username VARCHAR(50) NOT NULL,
   password VARCHAR(50) NOT NULL,
   role INT(1) NOT NULL DEFAULT 1,
+  companyid INT(11) NOT NULL DEFAULT 0,
   status BOOLEAN NOT NULL DEFAULT 1,
-  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  last_login DATETIME NOT NULL
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 )";
 if ($conn->query($sql) === TRUE) {
     $msg.="Table users";
@@ -98,7 +98,7 @@ $result = $conn->query($sql);
 if ($result->num_rows == 0) {
     $username = 'kowshiqueroy';
     $password = md5('5877');
-    $sql = "INSERT INTO users (username,password) VALUES ('$username','$password')";
+    $sql = "INSERT INTO users (username,password,companyname) VALUES ('$username','$password','-')";
     if ($conn->query($sql) === TRUE) {
         $msg.="Admin: " . $username;
     } else {
@@ -107,12 +107,11 @@ if ($result->num_rows == 0) {
     $msg.="<br>";
 }
 
-$sql = "CREATE TABLE IF NOT EXISTS companyinfo (
+$sql = "CREATE TABLE IF NOT EXISTS company_info (
   id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   companyname VARCHAR(255) NOT NULL,
   tagline VARCHAR(255) NOT NULL,
   logo VARCHAR(255) NOT NULL,
-  offertag VARCHAR(255) NOT NULL,
   phone VARCHAR(50) NOT NULL,
   email VARCHAR(50) NOT NULL,
   address VARCHAR(255) NOT NULL
