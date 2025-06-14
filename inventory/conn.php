@@ -2,7 +2,7 @@
   if (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || strpos($_SERVER['HTTP_HOST'], 'ngrok') !== false) {
     $conn = mysqli_connect("localhost", "root", "", "posstore");
   } else {
-    $conn = mysqli_connect("remotemysql.com", "6Xp6UyKpFp", "8Xvq4YmL4L", "6Xp6UyKpFp");
+    $conn = mysqli_connect("localhost", "u312077073_storekr", "ITOijat5877", "u312077073_store");
   }
 
   if (!$conn) {
