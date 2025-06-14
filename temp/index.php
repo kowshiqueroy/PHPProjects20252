@@ -58,7 +58,7 @@ if(isset($_SESSION['admin']) && $_SESSION['admin'] == true && $_SESSION['status'
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventory Management</title>
+    <title>Store Management</title>
     <style>
         * {
             box-sizing: border-box;
@@ -135,7 +135,7 @@ if(isset($_SESSION['admin']) && $_SESSION['admin'] == true && $_SESSION['status'
 </head>
 <body>
     <div class="login-form">
-        <h1>Inventory Management Login</h1>
+        <h1>Store Management Login</h1>
         <form action="" method="post">
             <input type="text" name="username" placeholder="Username" required>
             <input type="password" name="password" placeholder="Password" required>
